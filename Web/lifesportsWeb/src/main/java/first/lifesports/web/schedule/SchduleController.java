@@ -48,7 +48,7 @@ public class SchduleController {
 		return "/schedule/scheduleByWeek";
 	}
 	
-	@RequestMapping(value = "/schedule/tornament.do")
+	@RequestMapping(value = "/schedule/tournament.do")
 	public String tornament(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -59,7 +59,7 @@ public class SchduleController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "/schedule/tornament";
+		return "/schedule/tournament";
 	}
 	
 }
