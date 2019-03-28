@@ -1,0 +1,335 @@
+.K_contents 
+{ 
+	flex : 0 0 65%;
+}
+
+.K_contents_title
+{
+	margin-bottom: 20px;
+	margin-top: 90px;
+}
+
+.K_contents_title img
+{
+	width: auto;
+	height: 22px;
+	
+}
+
+.K_leftMenu
+{
+	display: -webkit-box; 
+	flex: 0 0 16%;
+}
+
+.K_main_section
+{
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 2rem 1rem;
+	flex-wrap: wrap;
+	flex: 1 1 auto;
+	display: -webkit-box;
+}
+
+.K_topMenu_nav_divider
+{
+	
+	max-width: 1360px;
+	margin: 0 auto;
+	padding: 2rem 1rem;
+	flex-wrap: wrap;
+	flex: 1 1 auto;
+	/* display: -webkit-box; */
+}
+
+.K_main_section_1_3
+{
+	height : 160px;
+	width : 304px;
+	margin-right: 15px;
+}
+
+.K_main_section_2_3
+{
+	height : 160px;
+	width: 608px;
+	margin-right:37px;
+}
+
+.K_main_section_divider_V
+{
+	padding-left : 14px;
+	padding-right : 14px;
+	width : 2px;
+	height : 200px;
+}
+
+.K_main_section_divider_H
+{
+	height : 2px; 
+	width : 280px;
+}
+
+.K_main_section_1_3_contents
+{
+	display: block;
+	text-decoration: none;
+	padding-right : 10px; 
+	background-position: inherit; 
+	background-repeat: no-repeat; 
+	background-size: 100%;
+	height:200px; 
+	position:relative;
+}
+
+.K_main_section_2_3_contents
+{
+	display: block;
+	text-decoration: none;
+	padding-right : 10px; 
+	background-position: inherit; 
+	background-repeat: no-repeat; 
+	background-size: 100%;
+	height:200px; 
+	position:relative;
+}
+
+.K_main_section_1_3_list
+{
+	 float: right;
+	 right:10px; 
+	 position:absolute;  
+	 font-size: 11px;
+	 color: black;
+	 text-overflow: ellipsis;
+}
+
+.K_main_section_1_3_table
+{
+	/* float: right; */
+    position: relative;
+    font-size: 11px;
+    color: black;
+    text-overflow: ellipsis;
+}
+
+.K_main_section_1_3_table table
+{
+	width: 282px;
+    height: 82px;
+    position: relative;
+    bottom: -23px;
+    left: 15px;
+}
+
+.K_main_section_1_3_table table tr
+{
+
+}
+
+.K_main_section_1_3_table table tr td:nth-child(1)
+{
+	width: 174px;
+	text-overflow: ellipsis;
+}
+
+.K_main_section_2_3_list
+{
+	 float: right;
+	 right:10px; 
+	 position:absolute;  
+	 font-size: 11px;
+	 color: black;
+	 text-overflow: ellipsis;
+}
+
+.K_main_section_1_3_list a
+{
+	 color: black;
+	 text-overflow: ellipsis;
+}
+
+.K_main_section_2_3_list a
+{
+	 color: black;
+	 text-overflow: ellipsis;
+}
+
+.K_main_section_pics_thumbNail
+{
+	position: relative;
+	bottom: -58px;
+	left: 59px;
+}
+
+.K_main_section_pics_thumbNail tr td
+{
+	padding-right: 30px;
+}
+
+.K_main_section_pics_thumbNail tr td img
+{
+	width : 160px;
+	height : 100px;
+}
+
+.K_main_login
+{
+	display: -webkit-box; 
+	max-width: 300px; 
+	position: absolute; 
+	bottom: 20px; 
+	right: 20px;
+}
+
+.K_main_login input
+{
+	height: 26px;
+	padding: 2px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+}
+
+.K_nav_login_section
+{
+	height : auto;
+	width : 700px;
+	position: relative;
+	left: 213px;
+    bottom: -21px;
+}
+
+.K_nav_member_section
+{
+	height: 26px;
+    width: 433px;
+    position: relative;
+    left: 201px;
+    bottom: -21px;
+}
+
+.K_nav_login_section input
+{
+	float: left;
+	width: 144px;
+	height: 23px;
+	position: relative;
+	margin-right : 10px;
+}
+
+.K_nav_login_section_deco
+{
+	width: 40px;
+	position: absolute;
+	bottom: 43px;
+}
+
+.K_nav_member_section_deco
+{
+	width: 40px;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+}
+
+.K_nav_member_section_deco p
+{
+	font-size: 17px;
+	color: white;
+	font-weight: bold;
+}
+
+.K_nav_login_section button
+{
+	float: left;
+	right: 20px;
+	width: 84px;
+	height: 22px;
+	padding: 0;
+	background-color: transparent;
+	margin-right: 5px;
+}
+
+.K_nav_member_section button
+{
+	position: relative;
+    right: 65px;
+    width: 84px;
+    height: 22px;
+    padding: 0;
+    background-color: transparent;
+    margin-right: 5px;
+}
+
+.K_nav_topMenu
+{
+	text-align: center;
+	background-image: url(/img/TOPMENU/TOPMENU_BACKGROUND.png);
+}
+
+.K_nav_topMenu .K_nav_topMenu_logo
+{
+	max-width: 160px;
+  	height: auto;
+  	margin: 20px;
+  	position: relative;
+  	bottom: -18px;
+}
+
+.K_nav_topMenu_Contents
+{
+	justify-content: space-between;
+  	align-items: center;
+  	padding: 0.6rem 1rem;
+}
+
+.K_topMenu_div
+{
+	min-height: auto;
+	max-height: 16px;
+	margin : 0 auto; 
+	min-width: 100%;
+	
+	max-width: 1200px;
+	/* padding: 2rem 1rem; */
+	
+	display: flex;
+	flex-wrap: wrap;
+	flex: 1 1 auto;
+}
+
+.K_nav_dropdown_divider_V
+{
+	height: 66px;
+	width: 6px;
+}
+
+.K_nav_topMenu_icon
+{
+	position: relative; 
+	/* left: 1008px; */
+	/* bottom: 15px; */
+	bottom: 3px;
+}
+
+.K_nav_dropdown_divider_V img
+{
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.dropdown-content img
+{
+	width: 70%;
+	height: 90%;
+	object-fit: contain;
+}
+
+.K_member_agree
+{
+	width:700px;
+	height:170px;
+}
