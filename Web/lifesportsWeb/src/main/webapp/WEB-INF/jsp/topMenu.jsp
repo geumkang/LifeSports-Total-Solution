@@ -16,16 +16,12 @@
                         <input type="checkbox" id="drop" />
                         <ul class="menu">
                             <li><a href="/main.do">Home</a></li>
-                            <li><a href="#about">My Gym</a></li>
-                            <li><a href="#join">Schedule</a></li>
-                            <li><a href="#join">Reservations</a></li>
-                            <li><a href="#join">Log In</a></li>
-                            <!-- <li>
-                                First Tier Drop Down
-                                <label for="drop-2" class="toggle toogle-2">Pages <span class="fa fa-angle-down"
-                                        aria-hidden="true"></span>
-                                </label>
-                                <a href="#">Pages <span class="fa fa-angle-down" aria-hidden="true"></span></a>
+                            <li><a href="/myGym/myGymUpdate.do">My Gym</a></li>
+                            <li><a href="/schedule/scheduleByMonth.do">Schedule</a></li>
+                            <li><a href="/reservation/reservationView.do">Reservations</a></li>
+                            <li><a href="/login.do">Log In</a></li>
+                            <li>
+                                <a href="#">Reservation<span class="fa fa-angle-down" aria-hidden="true"></span></a>
                                 <input type="checkbox" id="drop-2" />
                                 <ul>
                                     <li><a href="#events" class="drop-text">Events</a></li>
@@ -35,7 +31,7 @@
                                     <li><a href="#gallery" class="drop-text">Gallery</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#contact">Contact</a></li>
+                            <!-- <li><a href="#contact">Contact</a></li>
                             <li><a href="login.html">Login</a></li>
                             <li><a href="register.html">Register</a></li> -->
                         </ul>

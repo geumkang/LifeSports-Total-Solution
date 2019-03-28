@@ -28,15 +28,15 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!-- //Meta tag Keywords -->
 
     <!-- Custom-Files -->
-    <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+    <link href="/css/bootstrap.css" rel='stylesheet' type='text/css' />
     <!-- Bootstrap-CSS -->
-    <link href="css/style.css" rel='stylesheet' type='text/css' />
+    <link href="/css/style.css" rel='stylesheet' type='text/css' />
     <!-- Style-CSS -->
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/font.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/font.css" rel="stylesheet">
     <!-- Font-Awesome-Icons-CSS -->
     <!-- //Custom-Files -->
-	<link href="css/K_layout.css" rel='stylesheet' type='text/css' />
+	<link href="/css/K_layout.css" rel='stylesheet' type='text/css' />
 
     <!-- Web-Fonts -->
     <link href="//fonts.googleapis.com/css?family=Lora:400,400i,700,700i&amp;subset=cyrillic,cyrillic-ext,latin-ext,vietnamese"

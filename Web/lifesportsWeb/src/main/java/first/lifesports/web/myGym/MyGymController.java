@@ -20,7 +20,7 @@ public class MyGymController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	@RequestMapping(value = "/myGym.do")
+	@RequestMapping(value = "/myGym/myGymUpdate.do")
 	public String myGym(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		

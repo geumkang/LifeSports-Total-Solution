@@ -20,7 +20,7 @@ public class ReservationController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	@RequestMapping(value = "/reservationView.do")
+	@RequestMapping(value = "/reservation/reservationView.do")
 	public String reservationView(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		

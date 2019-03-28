@@ -20,7 +20,7 @@ public class SchduleController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	@RequestMapping(value = "/scheduleByMonth.do")
+	@RequestMapping(value = "/schedule/scheduleByMonth.do")
 	public String scheduleByMonth(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -34,7 +34,7 @@ public class SchduleController {
 		return "/schedule/scheduleByMonth";
 	}
 	
-	@RequestMapping(value = "/scheduleByWeek.do")
+	@RequestMapping(value = "/schedule/scheduleByWeek.do")
 	public String scheduleByWeek(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -48,7 +48,7 @@ public class SchduleController {
 		return "/schedule/scheduleByWeek";
 	}
 	
-	@RequestMapping(value = "/tornament.do")
+	@RequestMapping(value = "/schedule/tornament.do")
 	public String tornament(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
