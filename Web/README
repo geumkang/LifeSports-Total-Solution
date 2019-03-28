@@ -1,0 +1,7 @@
+WAS : Tomcat 7.0
+Java : 1.8
+
+View : JSTL
+DataBase : Mysql
+DB connector : mysqlconnector
+DB connecting tool : mybatis
