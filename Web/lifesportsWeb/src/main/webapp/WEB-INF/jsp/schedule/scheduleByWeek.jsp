@@ -14,6 +14,8 @@
 
 var calendar;
 var currentEvent = null;
+var currentColor = 0;
+var colorList = ['rgba(255,0,0,0.5)', 'rgba(0,0,255,0.5)', 'rgba(0,255,0,0.5)', 'rgba(255,255,0,0.5)']
 
 document.addEventListener('DOMContentLoaded', function() {
 	var calendarEl = document.getElementById('calendar');
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			loadPlan(info);
 		},
 		events: [
-		]	
+		]
     });
 
     calendar.render();
@@ -68,7 +70,19 @@ $(document).ready(function() {
 	$('#cancelBtn').click(function(){
 		$("#content").css("display", "none");
 		$("#calendar").css("marginLeft", "auto");
-	})
+	});
+	
+	$(".colorBtn").each(function(index, item){
+		$(item).css("backgroundColor", colorList[index]);
+		$(item).click(function(){
+			$('.colorBtn').each(function(index2, item2){
+				$(item2).text("");
+			});
+			$(item).text("V");
+			currentColor = index;
+		})
+	});
+	$("#color1").text("V");
 });
 
 function dateFormat(input){
@@ -127,7 +141,8 @@ function registerPlan(){
 				start: currentEvent.start,
 				end: currentEvent.end,
 				description: $("#register tr").eq(1).children().eq(1).children().eq(0).val(),
-				allDay: currentEvent.allDay
+				allDay: currentEvent.allDay,
+				backgroundColor: colorList[currentColor]
 			});
 		}
 		currentEvent = null;
@@ -199,6 +214,18 @@ function deletePlan(){
 		margin-bottom: 10px;
 		width: 100%;
 	}
+	
+	.colorBtn{
+		width:25px;
+		height:25px;
+		border: none;
+		color: white;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 16px;
+		cursor: pointer;
+	}
 
 </style>
 
@@ -228,6 +255,20 @@ function deletePlan(){
 					<tr>
 						<td>END</td>
 						<td></td>
+					</tr>
+					
+					<tr>
+						<td>COLOR</td>
+						<td colspan="3">
+							<table style="width:100%">
+								<tr>
+									<td><button id="color1" class="colorBtn"></button></td>
+									<td><button id="color2" class="colorBtn"></button></td>
+									<td><button id="color3" class="colorBtn"></button></td>
+									<td><button id="color4" class="colorBtn"></button></td>
+								</tr>
+							</table>
+						</td>
 					</tr>
 				</table>
 				<div id="btnBlock">
