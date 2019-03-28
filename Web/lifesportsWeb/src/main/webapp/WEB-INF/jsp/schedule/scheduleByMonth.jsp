@@ -7,101 +7,202 @@
 <script src='/webResource/fullcalendar/packages/core/main.js'></script>
 <script src='/webResource/fullcalendar/packages/interaction/main.js'></script>
 <script src='/webResource/fullcalendar/packages/daygrid/main.js'></script>
+<script src='/webResource/jquery-3.3.1.js'></script>
 <script>
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
+var calendar;
+var currentEvent = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+	var calendarEl = document.getElementById('calendar');
     
-    var today = new Date();
-    console.log(today.getFullYear())
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [ 'interaction', 'dayGrid' ],
-      defaultDate: '2019-03-12',
-      editable: true,
-      eventLimit: true, // allow "more" link when too many events
-      events: [
-        {
-          title: 'All Day Event',
-          start: '2019-03-01'
-        },
-        {
-          title: 'Long Event',
-          start: '2019-03-07',
-          end: '2019-03-10'
-        },
-        {
-          groupId: 999,
-          title: 'Repeating Event',
-          start: '2019-03-09T16:00:00'
-        },
-        {
-          groupId: 999,
-          title: 'Repeating Event',
-          start: '2019-03-16T16:00:00'
-        },
-        {
-          title: 'Conference',
-          start: '2019-03-11',
-          end: '2019-03-13'
-        },
-        {
-          title: 'Meeting',
-          start: '2019-03-12T10:30:00',
-          end: '2019-03-12T12:30:00'
-        },
-        {
-          title: 'Lunch',
-          start: '2019-03-12T12:00:00'
-        },
-        {
-          title: 'Meeting',
-          start: '2019-03-12T14:30:00'
-        },
-        {
-          title: 'Happy Hour',
-          start: '2019-03-12T17:30:00'
-        },
-        {
-          title: 'Dinner',
-          start: '2019-03-12T20:00:00'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2019-03-13T07:00:00'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2019-03-28'
-        }
-      ]
+    // today calculate
+    
+
+    calendar = new FullCalendar.Calendar(calendarEl, {
+		plugins: [ 'interaction', 'dayGrid' ],
+		defaultDate: dateFormat(new Date()),
+		editable: true,
+		eventLimit: true, // allow "more" link when too many events
+		selectable: true,
+		unselectAuto: true,
+		dateClick: function(info) {
+			displayList(info);
+		},
+		eventClick: function(info) {
+			currentEvent = info;
+			loadPlan(info);
+		},
+		events: [
+		]	
     });
 
     calendar.render();
-  });
+});
+
+
+
+$(document).ready(function() {
+	$('#addBtn').click(function(){
+		registerPlan();
+	});
+	$('#editBtn').click(function(){
+		editPlan();
+	});
+	$('#delBtn').click(function(){
+		deletePlan();
+	});
+	$('#cancelBtn').click(function(){
+		$("#content").css("display", "none");
+		$("#calendar").css("marginLeft", "auto");
+	})
+});
+
+function dateFormat(input){
+	var date = new Date(input);
+    var year = date.getFullYear(); 
+    var month = new String(date.getMonth()+1); 
+    var day = new String(date.getDate()); 
+	
+    if(month.length == 1){ 
+		month = "0" + month;
+    } 
+    if(day.length == 1){ 
+		day = "0" + day;
+    } 
+    
+	return year + "-" + month + "-" + day;
+}
+
+
+function displayList(info){
+	$("#addBtn").css("display", "block");
+	$("#editBtn").css("display", "none");
+	$("#delBtn").css("display", "none");
+	$("#cancelBtn").css("display", "block");
+	
+	if($("#content").css("display") == "none"){
+		$("#calendar").css("marginLeft", "-80px");
+		$("#content").css("display", "block");
+		$("#register tr").eq(2).children().eq(1).html(info.dateStr);
+	}
+	else{
+		$("#register tr").eq(0).children().eq(1).children().eq(0).val("");
+		$("#register tr").eq(1).children().eq(1).children().eq(0).val("");
+		$("#register tr").eq(2).children().eq(1).html(info.dateStr);
+	}
+}
+
+function registerPlan(){
+	var title = $("#register tr").eq(0).children().eq(1).children().eq(0).val();
+	if(title == "")
+		alert("Title is Empty");
+	else{
+		calendar.addEvent({
+			title: title,
+			start: $("#register tr").eq(2).children().eq(1).html(),
+			description: $("#register tr").eq(1).children().eq(1).children().eq(0).val(),
+			allDay: true
+		});
+	}
+}
+
+function loadPlan(info){
+	$("#addBtn").css("display", "none");
+	$("#editBtn").css("display", "block");
+	$("#delBtn").css("display", "block");
+	$("#cancelBtn").css("display", "block");
+	
+	if($("#content").css("display") == "none"){
+		$("#calendar").css("marginLeft", "-80px");
+		$("#content").css("display", "block");
+		$("#register tr").eq(0).children().eq(1).children().eq(0).val(info.event.title);
+		$("#register tr").eq(1).children().eq(1).children().eq(0).val(info.event.extendedProps.description);
+		$("#register tr").eq(2).children().eq(1).html(dateFormat(info.event.start));
+	}
+	else{
+		$("#register tr").eq(0).children().eq(1).children().eq(0).val(info.event.title);
+		$("#register tr").eq(1).children().eq(1).children().eq(0).val(info.event.extendedProps.description);
+		$("#register tr").eq(2).children().eq(1).html(dateFormat(info.event.start));
+	}
+}
+
+function editPlan(){
+	if(currentEvent != null){
+		currentEvent.event.setProp('title', $("#register tr").eq(0).children().eq(1).children().eq(0).val());
+		currentEvent.event.setExtendedProp('description', $("#register tr").eq(1).children().eq(1).children().eq(0).val());
+	}
+	currentEvent = null;
+}
+
+function deletePlan(){
+	if(currentEvent != null){
+		currentEvent.event.remove();
+	}
+	currentEvent = null;
+	$("#content").css("display", "none");
+	$("#calendar").css("marginLeft", "auto");
+	$("#register tr").eq(0).children().eq(1).children().eq(0).val("");
+	$("#register tr").eq(1).children().eq(1).children().eq(0).val("");
+}
+
 
 </script>
 <style>
 
-  body {
-    margin: 40px 10px;
-    padding: 0;
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 14px;
-  }
+	body {
+		margin: 40px 10px;
+		padding: 0;
+		font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+		font-size: 14px;
+	}
 
-  #calendar {
-    max-width: 900px;
-    margin: 0 auto;
-  }
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+	#register tr{
+		height: 40px;
+	}
+	
+	#btnBlock input{
+		margin-bottom: 10px;
+		width: 100%;
+	}
 
 </style>
 
 <section class="w3ls-bnrbtm py-5" id="about">
 	<div class="container py-xl-5 py-lg-3">
-		<h3 class="title-w3 mb-md-5 mb-sm-4 mb-2 text-center font-weight-bold">Gym Schedule</h3>
+		<h3 class="title-w3 mb-md-5 mb-sm-4 mb-2 text-center font-weight-bold">Monthly Schedule</h3>
 		<div class="row">
-			<div id='calendar'></div>
+			<div id="calendar"></div>
+			<div id="content" style="float:left; display:none">
+				<h3 style="margin-bottom: 15px;">Register Plan</h3>
+				<table id="register">
+					<tr>
+						<td>TITLE</td>
+						<td><input type="text"></td>
+					</tr>
+					
+					<tr>
+						<td>DESCRIPTION</td>
+						<td><input type="text"></td>
+					</tr>
+					
+					<tr>
+						<td>DATE</td>
+						<td></td>
+					</tr>
+				</table>
+				<div id="btnBlock">
+					<input id="addBtn" type="button" value="ADD" style="display:none">
+					<input id="editBtn" type="button" value="EDIT" style="display:none">
+					<input id="delBtn" type="button" value="DELETE" style="display:none">
+					<input id="cancelBtn" type="button" value="CANCEL" style="display:none">
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
