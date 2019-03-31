@@ -8,6 +8,7 @@
 <script src='/webResource/fullcalendar/packages/interaction/main.js'></script>
 <script src='/webResource/fullcalendar/packages/daygrid/main.js'></script>
 <script src='/webResource/jquery-3.3.1.js'></script>
+
 <script>
 
 var calendar;
@@ -168,9 +169,9 @@ function deletePlan(){
 <style>
 
 	body {
-		margin: 40px 10px;
+		/* margin: 40px 10px; */
 		padding: 0;
-		font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+		/* font-family: Arial, Helvetica Neue, Helvetica, sans-serif; */
 		font-size: 14px;
 	}
 

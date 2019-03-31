@@ -195,9 +195,9 @@ function deletePlan(){
 <style>
 
 	body {
-		margin: 40px 10px;
+		/* margin: 40px 10px; */
 		padding: 0;
-		font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+		/* font-family: Arial, Helvetica Neue, Helvetica, sans-serif; */
 		font-size: 14px;
 	}
 
