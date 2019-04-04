@@ -6,8 +6,8 @@
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName"
 			value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://주소/스키마" />
-		<property name="username" value="아이디" />
-		<property name="password" value="비밀번호" />
+		<property name="url" value="jdbc:mysql://3.16.229.70/lifesports" />
+		<property name="username" value="root" />
+		<property name="password" value="1111" />
 	</bean>
 </beans>

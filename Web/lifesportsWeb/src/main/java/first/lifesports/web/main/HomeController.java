@@ -1,8 +1,14 @@
 package first.lifesports.web.main;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class HomeController {
+	
+	@Resource(name="HomeService")
+	private HomeService homeService;
+	
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -30,7 +40,17 @@ public class HomeController {
 		
 		String formattedDate = dateFormat.format(date);
 		
+		logger.info("");
+		
+		try {
+			List a = homeService.selectBoardList(new HashMap());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		model.addAttribute("serverTime", formattedDate );
+		model.addAtrribtue("gym_id", );
 		
 		return "main";
 	}
