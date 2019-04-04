@@ -5,12 +5,18 @@
 
 						    
 <script>
+
+listChanged = true;
+
 $(document).ready(function() {
 	
 	loadData();
 	
 	$("#addBtn").on("click", function(){
-		$("#newInfoBox").css("display", "block");
+		if(listChanged){
+			$("#groundList").append("<tr><td><input type='text'></td><td><input type='text'></td><td><input type='text'></td><td><button class='okBtn' type='button'>OK</button></td></tr>");
+			listChanged = false;	
+		}
 	});
 	
 	$(document).on("click", ".editCompleteBtn", function(){
@@ -45,20 +51,53 @@ $(document).ready(function() {
 	});
 	
 	$(document).on("click", ".deleteBtn", function(){
-		$(this).parents(".facilityInfo").parent().parent().remove();
-		emptyCheck();
+		$("#registerInfoBox").css("display", "block");
+		$("#gymInfo").css("display", "none");
 	});
 	
-	$("#okBtn").on("click", function(){
-		$("#facilityInfoBox").append("<tr><td><table class='facilityInfo'><tr><th>A. 잔디 구장</th><th></th><th style='text-align:right; vertical-align:middle;'><button class='deleteBtn' style='margin-left: 10px;' type='button'>DELETE</button><button class='editBtn' type='button'>EDIT</button><button class='editCompleteBtn' type='button'>OK</button></th></tr><tr><td rowspan='5'><img src='/images/about.jpg'></td><td>Name</td><td>ChoongAng</td></tr><tr><td>Location</td><td>서울특별시 동작구 흑석로 123</td></tr><tr><td>Usable Time</td><td>9:00 ~ 21:00</td></tr><tr><td>123</td><td>123</td></tr><tr><td>123</td><td>123</td></tr></table></td></tr>")
-		$("#newInfo input").val("");
-		$("#newInfoBox").css("display", "none");
-		emptyCheck();
+	$(document).on("click", ".okBtn", function(){
+		if($(this).text() == "OK"){
+			if(!listChanged){
+				for(var i = 0; i < $(this).parent().siblings().length; i++){
+					var text = $(this).parent().siblings().eq(i).children().val();
+					if(text == ""){
+						alert("미입력된 항목이 존재합니다");
+						return;
+					}
+				}
+				for(var i = 0; i < $(this).parent().siblings().length; i++){
+					var text = $(this).parent().siblings().eq(i).children().val();
+					$(this).parent().siblings().eq(i).children().remove();
+					$(this).parent().siblings().eq(i).text(text.trim());
+				}
+				
+				$(this).text("EDIT");
+				listChanged = true;
+			}
+		}
+		else if($(this).text() == "EDIT"){
+			if(listChanged){
+				for(var i = 0; i < $(this).parent().siblings().length; i++){
+					var text = $(this).parent().siblings().eq(i).text();
+					console.log(text)
+					$(this).parent().siblings().eq(i).wrapInner('<input type="text">')
+					$(this).parent().siblings().eq(i).children().val(text.trim());
+				}
+			
+				$(this).text("OK");
+				listChanged = false;
+			}
+		}
+	});
+	
+	$("#registerBtn").on("click", function(){
+		$("#registerInfoBox").css("display", "none");
+		$("#gymInfo").css("display", "block");
 	});
 	
 	$("#cancelBtn").on("click", function(){
 		$("#newInfo input").val("");
-		$("#newInfoBox").css("display", "none");	
+		$("#registerInfoBox").css("display", "none");	
 	});
 	
 	getLocation();
@@ -66,15 +105,18 @@ $(document).ready(function() {
 });
 
 function loadData(){
-	
 	emptyCheck();
 }
 
 function emptyCheck(){
-	if($("#facilityInfoBox").find('tr').length == 0)
-		$("#emptyText").css("display", "block");
-	else 
-		$("#emptyText").css("display", "none");
+	if($("#facilityInfoBox").find('tr').length == 0){
+		$("#registerInfoBox").css("display", "block");
+		$("#gymInfo").css("display", "none");
+	}
+	else{ 
+		$("#registerInfoBox").css("display", "none");
+		$("#gymInfo").css("display", "block");
+	}
 }
 
 var map;
@@ -167,17 +209,10 @@ function placeMarker(location, marker) {
 
 #gymInfo th {
 	height: 60px;
-	border-top-width: 2px;
-	border-top-style: solid;
-	border-top-color: rgba(113, 156, 254, 0.9);
-	
-	border-bottom-width: 2px;
-	border-bottom-style: solid;
-	border-bottom-color: rgba(113, 156, 254, 0.9);
 }
 
 
-#newInfoBox {
+#registerInfoBox {
 	display: none;
 	width:100%;
 	margin: 0px 50px 0px 50px;
@@ -228,13 +263,38 @@ function placeMarker(location, marker) {
 	text-align: center;
 }
 
-.facilityInfo input {
-	width: 100%;
+.facilityInfo input, #groundList input {
+	width: 90%;
 	text-align: center;
 }
 
+#groundList {
+	width: 95%;
+	float: right;
+	margin-bottom: 30px;
+}
 
-#okBtn, #cancelBtn, #addBtn, .editBtn, .deleteBtn {
+#groundList th{
+	height: 40px;
+	border-top-width: 2px;
+	border-top-style: solid;
+	border-top-color: rgba(113, 156, 254, 0.9);
+}	
+
+#groundList tr {
+	height: 60px;
+}
+
+#groundList td {
+	width: 15%;
+	text-align: center;
+}
+
+.okBtn {
+	width: 80px;
+}
+
+#registerBtn, #cancelBtn, #addBtn, .editBtn, .deleteBtn {
 	width: 80px;
 	float: right;
 }
@@ -265,20 +325,11 @@ function placeMarker(location, marker) {
 	<div class="container py-xl-5 py-lg-3">
 		<h3 class="title-w3 mb-md-5 mb-sm-4 mb-2 text-center font-weight-bold">Gym Information</h3>
 		<div class="row" style="width: 100%">
-			<table id="gymInfo">
-				<tr>
-					<th>1. 중앙대학교</th>
-					<th>
-						<button id="addBtn" type="button">ADD</button>
-					</th>
-				</tr>
-			</table>
-			
-			<div id="newInfoBox">
+			<div id="registerInfoBox">
 				<table id="newInfo">
 					<tr style="height: 50px;">
 						<th colspan="4">
-							New Gym
+							Register Gym
 						</th>
 					</tr>
 					
@@ -310,54 +361,100 @@ function placeMarker(location, marker) {
 					<tr style="height: 50px;">
 						<td colspan="4">
 							<button id="cancelBtn" type="button">CANCEL</button>
-							<button id="okBtn" type="button" style="margin-right: 10px;">OK</button>
+							<button id="registerBtn" type="button" style="margin-right: 10px;">OK</button>
 						</td>
 					</tr>
 					
 				</table>
 			</div>
 			
-			<table id="facilityInfoBox">
+			<table id="gymInfo">
+				<tr>
+					<th style="border-top-width: 2px;
+						border-top-style: solid;
+						border-top-color: rgba(113, 156, 254, 0.9);
+						
+						border-bottom-width: 2px;
+						border-bottom-style: solid;
+						border-bottom-color: rgba(113, 156, 254, 0.9);">1. 중앙대학교</th>
+				</tr>
 				<tr>
 					<td>
-					<table class="facilityInfo">
-						<tr>
-							<th>A. 잔디 구장</th>
-							<th></th>
-							<th style="text-align:right; vertical-align:middle;">
-								<button class="deleteBtn" style="margin-left: 10px;" type="button">DELETE</button>
-								<button class="editBtn" type="button">EDIT</button>
-								<button class="editCompleteBtn" type="button">OK</button>
-							</th>
-						</tr>
-						<tr>
-							<td rowspan="5">
-								<img src="/images/about.jpg">
-							</td>
-							<td>Name</td>
-							<td>ChoongAng</td>
-						</tr>
-						<tr>
-							<td>Location</td>
-							<td>서울특별시 동작구 흑석로 123</td>
-						</tr>
-						<tr>
-							<td>Usable Time</td>
-							<td>9:00 ~ 21:00</td>
-						</tr>
-						<tr>
-							<td>123</td>
-							<td>123</td>
-						</tr>
-						<tr>
-							<td>123</td>
-							<td>123</td>
-						</tr>
-					</table>
+						<table id="facilityInfoBox">
+							<tr>
+								<td>
+								<table class="facilityInfo">
+									<tr>
+										<th></th>
+										<th></th>
+										<th style="text-align:right; vertical-align:middle;">
+											<button class="deleteBtn" style="margin-left: 10px;" type="button">DELETE</button>
+											<button class="editBtn" type="button">EDIT</button>
+											<button class="editCompleteBtn" type="button">OK</button>
+										</th>
+									</tr>
+									<tr>
+										<td rowspan="5">
+											<img src="/images/about.jpg">
+										</td>
+										<td>Name</td>
+										<td>ChoongAng</td>
+									</tr>
+									<tr>
+										<td>Location</td>
+										<td>서울특별시 동작구 흑석로 123</td>
+									</tr>
+									<tr>
+										<td>Usable Time</td>
+										<td>9:00 ~ 21:00</td>
+									</tr>
+									<tr>
+										<td>123</td>
+										<td>123</td>
+									</tr>
+									<tr>
+										<td>123</td>
+										<td>123</td>
+									</tr>
+								</table>
+								
+								<table id="groundList">
+									<tr>
+										<th colspan = "4">
+											구장 목록
+											<button id="addBtn" type="button" style="float:right">ADD</button>
+										</th>
+									</tr>
+									<tr style="border-bottom-width: 2px;
+												border-bottom-style: solid;
+												border-bottom-color: rgba(113, 156, 254, 0.9);
+												font-weight: bold;">
+										<td>이름</td>
+										<td>이용 시간</td>
+										<td>수용 인원</td>
+										<td>확인</td>
+									</tr>
+									<tr>
+										<td>
+											축구장
+										</td>
+										<td>
+											09:00 ~ 18:00
+										</td>
+										<td>
+											22명
+										</td>
+										<td>
+											<button class="okBtn" type="button">EDIT</button>
+										</td>
+									</tr>
+								</table>
+								</td>
+							</tr>
+						</table>
 					</td>
 				</tr>
 			</table>
-			<label id="emptyText">List is Empty</label>
 		</div>
 	</div>
 </section>

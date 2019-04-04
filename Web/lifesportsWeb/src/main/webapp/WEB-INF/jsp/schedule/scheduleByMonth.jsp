@@ -99,7 +99,7 @@ function displayList(info){
 	$("#cancelBtn").css("display", "block");
 	
 	if($("#content").css("display") == "none"){
-		$("#calendar").css("marginLeft", "-80px");
+		$("#calendar").css("marginLeft", "-30px");
 		$("#content").css("display", "block");
 		$("#register tr").eq(2).children().eq(1).html(info.dateStr);
 	}
@@ -177,7 +177,7 @@ function deletePlan(){
 
 	#calendar {
 		max-width: 900px;
-		margin: 0 auto;
+		margin: auto;
 	}
 
 	#register tr{
