@@ -2,7 +2,13 @@ package first.lifesports.web.authority;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +22,15 @@ import first.lifesports.web.main.HomeController;;
  * Handles requests for the application home page.
  */
 @Controller
-public class authorityController {
+public class AuthorityController {
+	
+	@Resource(name="AuthorityService")
+	AuthorityService authorityService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@RequestMapping(value = "/login.do")
-	public String login(Locale locale, Model model) {
+	public String loginView(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		Date date = new Date();
@@ -32,5 +41,18 @@ public class authorityController {
 		model.addAttribute("serverTime", formattedDate );
 		
 		return "/authority/login";
+	}
+	
+	@RequestMapping(value = "/loginTry.do")
+	public String loginTry(HttpServletRequest request, Model model) {
+		
+		Map reqMap = new HashMap();
+		
+		reqMap.put("userId", "admin");
+		reqMap.put("passWord", "admin");
+		
+		List<Map<String, Object>> resMap = authorityService.selectUser(reqMap);
+		
+		return "main";
 	}
 }

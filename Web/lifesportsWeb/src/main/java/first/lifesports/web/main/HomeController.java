@@ -50,7 +50,6 @@ public class HomeController {
 		}
 		
 		model.addAttribute("serverTime", formattedDate );
-		model.addAtrribtue("gym_id", );
 		
 		return "main";
 	}
