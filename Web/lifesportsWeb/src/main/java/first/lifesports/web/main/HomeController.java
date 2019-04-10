@@ -38,24 +38,14 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/main.do")
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		logger.info("");
-		
+	public String home(HttpServletRequest request, Model model) {
+
 		try {
 			List a = homeService.selectBoardList(new HashMap());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		model.addAttribute("serverTime", formattedDate );
 		
 		return "main";
 	}

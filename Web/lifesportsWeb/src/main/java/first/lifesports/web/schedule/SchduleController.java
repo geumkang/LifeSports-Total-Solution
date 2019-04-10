@@ -35,30 +35,14 @@ public class SchduleController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@RequestMapping(value = "/schedule/scheduleByMonth.do")
-	public String scheduleByMonth(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
+	public String scheduleByMonth(HttpServletRequest request, Model model) {
 		
 		return "/schedule/scheduleByMonth";
 	}
 	
 	@RequestMapping(value = "/schedule/scheduleByWeek.do")
-	public String scheduleByWeek(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
+	public String scheduleByWeek(HttpServletRequest request, Model model) {
+	
 		return "/schedule/scheduleByWeek";
 	}
 	
