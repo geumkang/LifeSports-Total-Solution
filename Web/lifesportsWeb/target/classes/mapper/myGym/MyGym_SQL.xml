@@ -3,8 +3,23 @@
 
 <mapper namespace="MyGym">
 
-	<select id="addGym" parameterType="hashMap" resultType="hashMap">
+	<select id="registerGym" parameterType="hashMap" resultType="hashMap">
+	
+	</select>
+	
+	<select id="editGym" parameterType="hashMap" resultType="hashMap">
 	
 	</select>
 
+	<select id="addFacility" parameterType="hashMap" resultType="hashMap">
+	
+	</select>
+	
+	<select id="editFacility" parameterType="hashMap" resultType="hashMap">
+	
+	</select>
+	
+	<select id="delFacility" parameterType="hashMap" resultType="hashMap">
+	
+	</select>	
 </mapper>

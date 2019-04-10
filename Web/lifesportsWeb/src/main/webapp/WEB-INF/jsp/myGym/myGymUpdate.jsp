@@ -14,7 +14,7 @@ $(document).ready(function() {
 	
 	$("#addBtn").on("click", function(){
 		if(listChanged){
-			$("#groundList").append("<tr><td><input type='text'></td><td><input type='text'></td><td><input type='text'></td><td><button class='okBtn' type='button'>OK</button><button class='deleteBtn' type='button'>DELETE</button></td></tr>");
+			$("#groundList").append("<tr><td><input type='text'></td><td><input type='text'></td><td><input type='text'></td><td><button class='okBtn' type='button' name='new'>OK</button><button class='deleteBtn' type='button'>DELETE</button></td></tr>");
 			listChanged = false;	
 		}
 	});
@@ -74,6 +74,28 @@ $(document).ready(function() {
 	
 	$(document).on("click", ".deleteBtn", function(){
 		$(this).parent().parent().remove();
+		
+		// Request Data
+		var data = {
+			/* "year": date.getFullYear(),
+			"month": date.getMonth() + 1 */
+		};
+		
+		$.ajax({
+			headers: { 
+			    Accept : "application/json"
+			},
+			url:"/delFacility.do",
+			type:"POST",
+			data : JSON.stringify(data),
+			contentType : "application/json; charset=UTF-8",
+			success: function(result){
+				console.log(result);
+			},
+			error: function(xhr, status, error) {
+				alert(error);
+			}
+		});
 	});
 	
 	$(document).on("click", ".okBtn", function(){
@@ -92,6 +114,14 @@ $(document).ready(function() {
 					$(this).parent().siblings().eq(i).text(text.trim());
 				}
 				
+				var url;
+				if($(this).attr("name") == 'new'){
+					url = "/addFacility.do";
+					$(this).attr("name", "");
+				}
+				else
+					url = "/editFacility.do";
+					
 				// Request Data
 				var data = {
 					/* "year": date.getFullYear(),
@@ -102,7 +132,7 @@ $(document).ready(function() {
 					headers: { 
 					    Accept : "application/json"
 					},
-					url:"/addFacility.do",
+					url: url,
 					type:"POST",
 					data : JSON.stringify(data),
 					contentType : "application/json; charset=UTF-8",
@@ -136,6 +166,28 @@ $(document).ready(function() {
 	$("#registerBtn").on("click", function(){
 		$("#registerInfoBox").css("display", "none");
 		$("#gymInfo").css("display", "block");
+		
+		// Request Data
+		var data = {
+			/* "year": date.getFullYear(),
+			"month": date.getMonth() + 1 */
+		};
+		
+		$.ajax({
+			headers: { 
+			    Accept : "application/json"
+			},
+			url:"/addGym.do",
+			type:"POST",
+			data : JSON.stringify(data),
+			contentType : "application/json; charset=UTF-8",
+			success: function(result){
+				console.log(result);
+			},
+			error: function(xhr, status, error) {
+				alert(error);
+			}
+		});
 	});
 	
 	$("#cancelBtn").on("click", function(){

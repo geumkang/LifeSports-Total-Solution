@@ -47,16 +47,108 @@ public class MyGymController {
 		return "/myGym/myGymUpdate";
 	}
 	
-	// 이전 월로 이동 버튼 클릭
-	@RequestMapping(value = "/addGym.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	// 체육관 등록 버튼 클릭
+	@RequestMapping(value = "/registerGym.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
 	@ResponseBody
-	public String addGym(@RequestBody String map) throws Exception{
+	public String registerGym(@RequestBody String map) throws Exception{
 		
 		// key : year, month
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
 		
 		//Server Call
-		List<Map<String, Object>> res = mygymService.addGym(reqMap);
+		List<Map<String, Object>> res = mygymService.registerGym(reqMap);
+		
+		//Data Injection
+		String id = (String) res.get(0).get("id");
+		String name = (String) res.get(0).get("name");
+		
+		//Map maker
+		Map<String, Object> resMap = new HashMap();
+		resMap.put("id", id);
+		resMap.put("name", name);
+		
+		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+	}
+	
+	// 체육관 정보 수정 버튼 클릭
+	@RequestMapping(value = "/editGym.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@ResponseBody
+	public String editGym(@RequestBody String map) throws Exception{
+		
+		// key : year, month
+		Map reqMap = CommUtils.convertJSONstringToMap(map);
+		
+		//Server Call
+		List<Map<String, Object>> res = mygymService.editGym(reqMap);
+		
+		//Data Injection
+		String id = (String) res.get(0).get("id");
+		String name = (String) res.get(0).get("name");
+		
+		//Map maker
+		Map<String, Object> resMap = new HashMap();
+		resMap.put("id", id);
+		resMap.put("name", name);
+		
+		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+	}
+	
+	// 시설 추가 버튼 클릭
+	@RequestMapping(value = "/addFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@ResponseBody
+	public String addFacility(@RequestBody String map) throws Exception{
+		
+		// key : year, month
+		Map reqMap = CommUtils.convertJSONstringToMap(map);
+		
+		//Server Call
+		List<Map<String, Object>> res = mygymService.addFacility(reqMap);
+		
+		//Data Injection
+		String id = (String) res.get(0).get("id");
+		String name = (String) res.get(0).get("name");
+		
+		//Map maker
+		Map<String, Object> resMap = new HashMap();
+		resMap.put("id", id);
+		resMap.put("name", name);
+		
+		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+	}
+	
+	// 시설 정보 변경 버튼 클릭
+	@RequestMapping(value = "/editFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@ResponseBody
+	public String editFacility(@RequestBody String map) throws Exception{
+		
+		// key : year, month
+		Map reqMap = CommUtils.convertJSONstringToMap(map);
+		
+		//Server Call
+		List<Map<String, Object>> res = mygymService.editFacility(reqMap);
+		
+		//Data Injection
+		String id = (String) res.get(0).get("id");
+		String name = (String) res.get(0).get("name");
+		
+		//Map maker
+		Map<String, Object> resMap = new HashMap();
+		resMap.put("id", id);
+		resMap.put("name", name);
+		
+		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+	}
+	
+	// 시설 정보 삭제 버튼 클릭
+	@RequestMapping(value = "/delFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@ResponseBody
+	public String delFacility(@RequestBody String map) throws Exception{
+		
+		// key : year, month
+		Map reqMap = CommUtils.convertJSONstringToMap(map);
+		
+		//Server Call
+		List<Map<String, Object>> res = mygymService.delFacility(reqMap);
 		
 		//Data Injection
 		String id = (String) res.get(0).get("id");

@@ -15,9 +15,49 @@ public class MyGymService{
 	@Resource(name = "mygymDAO")
 	private MyGymDAO mygymDAO;
 
-	public List<Map<String, Object>> addGym(Map<String, Object> map) {
+	public List<Map<String, Object>> registerGym(Map<String, Object> map) {
 		try {
 			return mygymDAO.insertGym(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Map<String, Object>> editGym(Map<String, Object> map) {
+		try {
+			return mygymDAO.updateGym(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Map<String, Object>> addFacility(Map<String, Object> map) {
+		try {
+			return mygymDAO.insertFacility(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Map<String, Object>> editFacility(Map<String, Object> map) {
+		try {
+			return mygymDAO.updateFacility(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Map<String, Object>> delFacility(Map<String, Object> map) {
+		try {
+			return mygymDAO.deleteFacility(map);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
