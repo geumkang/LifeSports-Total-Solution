@@ -10,12 +10,9 @@ import first.common.dao.AbstractDAO;
 public class MyGymDAO extends AbstractDAO {
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> selectBoardList(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("Authority.selectUser", map);
+	public List<Map<String, Object>> insertGym(Map<String, Object> map) throws Exception {
+		return (List<Map<String, Object>>) selectList("Authority.addGym", map);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> testCall(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("Authority.testCall", map);
-	}
+	
 }

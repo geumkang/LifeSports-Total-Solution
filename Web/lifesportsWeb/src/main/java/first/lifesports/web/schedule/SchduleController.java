@@ -121,4 +121,72 @@ public class SchduleController {
 		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
 	}
 	
+	// 일정 추가 버튼 클릭
+	@RequestMapping(value = "/addSchedule.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@ResponseBody
+	public String addSchedule(@RequestBody String map) throws Exception{
+		
+		// key : year, month
+		Map reqMap = CommUtils.convertJSONstringToMap(map);
+		
+		//Server Call
+		List<Map<String, Object>> res = scheduleService.addSchedule(reqMap);
+		
+		//Data Injection
+		String id = (String) res.get(0).get("id");
+		String name = (String) res.get(0).get("name");
+		
+		//Map maker
+		Map<String, Object> resMap = new HashMap();
+		resMap.put("id", id);
+		resMap.put("name", name);
+		
+		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+	}
+	
+	// 일정 변경 버튼 클릭
+	@RequestMapping(value = "/editSchedule.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@ResponseBody
+	public String editSchedule(@RequestBody String map) throws Exception{
+		
+		// key : year, month
+		Map reqMap = CommUtils.convertJSONstringToMap(map);
+		
+		//Server Call
+		List<Map<String, Object>> res = scheduleService.editSchedule(reqMap);
+		
+		//Data Injection
+		String id = (String) res.get(0).get("id");
+		String name = (String) res.get(0).get("name");
+		
+		//Map maker
+		Map<String, Object> resMap = new HashMap();
+		resMap.put("id", id);
+		resMap.put("name", name);
+		
+		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+	}
+	
+	// 일정 변경 버튼 클릭
+	@RequestMapping(value = "/delSchedule.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@ResponseBody
+	public String delSchedule(@RequestBody String map) throws Exception{
+		
+		// key : year, month
+		Map reqMap = CommUtils.convertJSONstringToMap(map);
+		
+		//Server Call
+		List<Map<String, Object>> res = scheduleService.delSchedule(reqMap);
+		
+		//Data Injection
+		String id = (String) res.get(0).get("id");
+		String name = (String) res.get(0).get("name");
+		
+		//Map maker
+		Map<String, Object> resMap = new HashMap();
+		resMap.put("id", id);
+		resMap.put("name", name);
+		
+		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+	}
 }

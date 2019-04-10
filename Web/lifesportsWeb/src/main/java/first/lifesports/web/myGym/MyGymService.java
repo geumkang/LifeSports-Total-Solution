@@ -15,9 +15,9 @@ public class MyGymService{
 	@Resource(name = "mygymDAO")
 	private MyGymDAO mygymDAO;
 
-	public List<Map<String, Object>> selectUser(Map<String, Object> map) {
+	public List<Map<String, Object>> addGym(Map<String, Object> map) {
 		try {
-			return mygymDAO.selectBoardList(map);
+			return mygymDAO.insertGym(map);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -25,13 +25,4 @@ public class MyGymService{
 		}
 	}
 	
-	public List<Map<String, Object>> testMethod(Map<String, Object> map) {
-		try {
-			return mygymDAO.testCall(map);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
 }

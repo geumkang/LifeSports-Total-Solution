@@ -4,7 +4,6 @@
 <mapper namespace="Schedule">
 
 	<select id="getSchedule" parameterType="hashMap" resultType="hashMap">
-	
 		<!-- 
 		SELECT
 			ID as "id",
@@ -14,8 +13,17 @@
 		WHERE
 			ID = #{userId}
 		-->
-			
+	</select>
+	
+	<select id="addSchedule" parameterType="hashMap" resultType="hashMap">
 	
 	</select>
-
+	
+	<select id="editSchedule" parameterType="hashMap" resultType="hashMap">
+	
+	</select>
+	
+	<select id="delSchedule" parameterType="hashMap" resultType="hashMap">
+	
+	</select>
 </mapper>
