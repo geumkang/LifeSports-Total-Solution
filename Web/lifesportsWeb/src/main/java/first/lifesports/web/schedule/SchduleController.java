@@ -1,6 +1,7 @@
 package first.lifesports.web.schedule;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import first.lifesports.web.authority.AuthorityService;
@@ -51,9 +53,104 @@ public class SchduleController {
 		
 		Map reqMap = CommUtils.getRequestMap(request);
 		
-		List tournamentList = scheduleService.getTournamentList(reqMap);
+		//List tournamentList = scheduleService.getTournamentList(reqMap);
 		
-		model.addAttribute("tournamentList",  tournamentList);
+		//model.addAttribute("tournamentList",  tournamentList);
+		
+		
+		//디비에서 pagenatedList로 가져와서 model에 맵핑
+		List list = new ArrayList();
+		Map test = new HashMap<String, Object>();
+		test.put("title", "fuck");
+		list.add(test);
+		
+		model.addAttribute("list", list);
+		
+		return "/schedule/tournament";
+	}
+	
+	@RequestMapping(value = "/schedule/tournamentView.do")
+	/*public String tornamentView(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {*/
+		public String tornamentView(HttpServletRequest request, Model model) {
+		
+		Map reqMap = CommUtils.getRequestMap(request);
+		
+		//List tournamentList = scheduleService.getTournamentList(reqMap);
+		
+		//model.addAttribute("tournamentList",  tournamentList);
+		
+		
+		//디비에서 게시글 번호를 바탕으로 게시글의 상세 내용을 조회함 (serial)
+		List list = new ArrayList();
+		Map test = new HashMap<String, Object>();
+		test.put("title", "fuck");
+		list.add(test);
+		
+		model.addAttribute("list", list);
+		
+		return "/schedule/tournamentView";
+	}
+	
+	@RequestMapping(value = "/schedule/tournamentRegi.do")
+	/*public String tornamentRegi(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {*/
+	public String tornamentRegi(HttpServletRequest request, Model model) {
+		
+		Map reqMap = CommUtils.getRequestMap(request);
+		
+		//List tournamentList = scheduleService.getTournamentList(reqMap);
+		
+		//model.addAttribute("tournamentList",  tournamentList);
+		
+		
+		//디비에서 게시글 번호를 바탕으로 게시글의 상세 내용을 조회함 (serial)
+		List list = new ArrayList();
+		Map test = new HashMap<String, Object>();
+		test.put("title", "fuck");
+		list.add(test);
+		
+		model.addAttribute("list", list);
+		
+		return "/schedule/tournamentRegi";
+	}
+	
+	@RequestMapping(value = "/schedule/regiTournament.do")
+	public String regiTornament(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {
+		
+		Map reqMap = CommUtils.getRequestMap(request);
+		
+		//List tournamentList = scheduleService.getTournamentList(reqMap);
+		
+		//model.addAttribute("tournamentList",  tournamentList);
+		
+		
+		//디비에서 게시글 번호를 바탕으로 게시글의 상세 내용을 조회함 (serial)
+		List list = new ArrayList();
+		Map test = new HashMap<String, Object>();
+		test.put("title", "fuck");
+		list.add(test);
+		
+		model.addAttribute("list", list);
+		
+		return "/schedule/tournament";
+	}
+	
+	@RequestMapping(value = "/schedule/deltTournament.do")
+	public String deltTornament(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {
+		
+		Map reqMap = CommUtils.getRequestMap(request);
+		
+		//List tournamentList = scheduleService.getTournamentList(reqMap);
+		
+		//model.addAttribute("tournamentList",  tournamentList);
+		
+		
+		//디비에서 게시글 번호를 바탕으로 게시글의 상세 내용을 조회함 (serial)
+		List list = new ArrayList();
+		Map test = new HashMap<String, Object>();
+		test.put("title", "fuck");
+		list.add(test);
+		
+		model.addAttribute("list", list);
 		
 		return "/schedule/tournament";
 	}

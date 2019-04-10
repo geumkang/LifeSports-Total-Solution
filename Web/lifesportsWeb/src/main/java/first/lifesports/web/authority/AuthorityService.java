@@ -35,4 +35,14 @@ public class AuthorityService{
 			return null;
 		}
 	}
+	
+	public Map<String, Object> getUserInfo(Map<String, Object> map) {
+		try {
+			return authorityDAO.getUserInfo(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

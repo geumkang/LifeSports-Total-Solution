@@ -28,5 +28,17 @@
 			
 	
 	</select>
+	
+	<select id="getUserInfo" parameterType="hashMap" resultType="hashMap">
+	
+		SELECT
+			ID as "id",
+			name as "name"
+		FROM
+			`gym_admin`
+		WHERE
+			ID = #{id}
+	
+	</select>
 
 </mapper>

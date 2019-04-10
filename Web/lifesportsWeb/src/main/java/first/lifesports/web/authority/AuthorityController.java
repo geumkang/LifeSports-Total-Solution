@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -45,8 +47,23 @@ public class AuthorityController {
 	
 	@RequestMapping(value = "/login.do")
 	public String loginView(HttpServletRequest request, Model model) {
-
+		
 		return "/authority/login";
+	}
+	
+	@RequestMapping(value = "/loginProcess.do", method=RequestMethod.POST)
+	public String loginProcess(HttpServletRequest request, @RequestParam("id") String id, @RequestParam("password") String password) {
+
+		Map<String, Object> reqMap = new HashMap();
+		reqMap.put("id", id);
+		reqMap.put("password", password);
+		
+		Map res = authorityService.getUserInfo(reqMap);
+		String name = (String) res.get("name");
+		HttpSession session = request.getSession();
+		session.setAttribute("name", name);
+		
+		return "main";
 	}
 	
 	
