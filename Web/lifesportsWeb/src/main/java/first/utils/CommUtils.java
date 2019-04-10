@@ -30,11 +30,58 @@ import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+ 
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+
 @SuppressWarnings("unchecked")
 public class CommUtils {
 	
 	private final static Log logger = LogFactory.getLog(CommUtils.class);
 
+	 public static JSONObject getJsonStringFromMap( Map<String, Object> map )
+	    {
+	        JSONObject jsonObject = new JSONObject();
+	        for( Map.Entry<String, Object> entry : map.entrySet() ) {
+	            String key = entry.getKey();
+	            Object value = entry.getValue();
+	            jsonObject.put(key, value);
+	        }
+	        
+	        return jsonObject;
+	    }
+	    
+	    /**
+	     * List<Map>을 jsonArray로 변환한다.
+	     *
+	     * @param list List<Map<String, Object>>.
+	     * @return JSONArray.
+	     */
+	    public static JSONArray getJsonArrayFromList( List<Map<String, Object>> list )
+	    {
+	        JSONArray jsonArray = new JSONArray();
+	        for( Map<String, Object> map : list ) {
+	            jsonArray.add( getJsonStringFromMap( map ) );
+	        }
+	        
+	        return jsonArray;
+	    }
+	    
+	    /**
+	     * List<Map>을 jsonString으로 변환한다.
+	     *
+	     * @param list List<Map<String, Object>>.
+	     * @return String.
+	     */
+	    public static String getJsonStringFromList( List<Map<String, Object>> list )
+	    {
+	        JSONArray jsonArray = getJsonArrayFromList( list );
+	        return jsonArray.toJSONString();
+	    }
+	 
+	
 	public static Map<String,Object> convertJSONstringToMap(String json) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = new HashMap<String, Object>();

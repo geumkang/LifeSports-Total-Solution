@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import first.utils.CommUtils;
+import net.minidev.json.JSONObject;
+import net.sf.json.JSONArray;
 import first.lifesports.web.main.HomeController;;
 
 /**
@@ -55,40 +57,13 @@ public class AuthorityController {
 		return "/authority/login";
 	}
 	
-	@RequestMapping(value = "/loginTry.do")
-	public String loginTry(HttpServletRequest request, Model model) {
-		
-		Map reqMap = getRequestMap(request);
-		
-		reqMap.put("userId", "admin");
-		reqMap.put("passWord", "admin");
-		
-		List<Map<String, Object>> resMap = authorityService.selectUser(reqMap);
-		
-		return "main";
-	}
-	
-	/*
-	 * @RequestMapping("/testAjax.do") public ModelAndView
-	 * testAjax(@ModelAttribute("VO") CommentVO commentVO, ModelMap model) throws
-	 * Exception {
-	 * 
-	 * Map resultMap = new HashMap(); resultMap.put("result1", "1");
-	 * resultMap.put("result2", "2");
-	 * 
-	 * ModelAndView modelAndView = new ModelAndView("jsonView",resultMap);
-	 * 
-	 * return modelAndView; }
-	 */
 	
 	@RequestMapping(value = "/testAjax.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
 	@ResponseBody
-	public Map<String, Object> goAjax5(@RequestBody String map) throws Exception{
+	public String testAjax(@RequestBody String map) throws Exception{
 		
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
-		
-		reqMap.put("test", "xodidth");
-		
+		reqMap.put("test", "star7357");
 		//Server Call
 		List<Map<String, Object>> res = authorityService.testMethod(reqMap);
 		
@@ -98,45 +73,10 @@ public class AuthorityController {
 		
 		//Map maker
 		Map<String, Object> resMap = new HashMap();
-		resMap.put("result", id);
-
-		return resMap;
+		resMap.put("id", id);
+		resMap.put("name", name);
+		
+		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
 	}
 
-	protected HashMap getRequestMap(HttpServletRequest req) {
-
-		HashMap map = new HashMap();
-
-		String ajaxFlag = req.getHeader("AjaxFlag");
-
-		Enumeration enm = req.getParameterNames();
-		String name = null;
-		String value = null;
-		String[] arr = null;
-
-		while (enm.hasMoreElements()) {
-			name = (String) enm.nextElement();
-			arr = req.getParameterValues(name);
-
-			if (name.startsWith("arr")) {
-				if ("true".equals(ajaxFlag))
-					map.put(name, CommUtils.decodeAjax(arr, "UTF-8"));
-				else
-					map.put(name, arr);
-			} else {
-				if (arr != null && arr.length > 0) {
-					value = arr[0];
-				} else {
-					value = req.getParameter(name);
-				}
-
-				if ("true".equals(ajaxFlag))
-					map.put(name, CommUtils.decodeAjax(value, "UTF-8"));
-				else
-					map.put(name, value);
-			}
-		}
-
-		return map;
-	}
 }

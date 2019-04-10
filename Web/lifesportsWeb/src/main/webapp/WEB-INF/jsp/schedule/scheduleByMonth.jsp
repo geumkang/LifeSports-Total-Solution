@@ -50,30 +50,51 @@ $(document).ready(function() {
 	// 이전달 이동 버튼 클릭
 	$('.fc-prev-button').click(function(){
 		var date = calendar.getDate();
-		var year = date.getFullYear();
-		var month = date.getMonth() + 1;
-		var allData = { "year": year, "month": month };
-		console.log(year, month)
+		var data = {
+			"year": date.getFullYear(),
+			"month": date.getMonth() + 1
+		};
+		
 		$.ajax({
 			headers: { 
 			    Accept : "application/json"
 			},
-			url:"/testAjax.do",
+			url:"/prevMonth.do",
 			type:"POST",
-			data : JSON.stringify(allData),
+			data : JSON.stringify(data),
 			contentType : "application/json; charset=UTF-8",
 			success: function(result){
 				console.log(result);
 			},
 			error: function(xhr, status, error) {
 				alert(error);
-			}	
+			}
 		});
 	});
 	
 	// 다음달 이동 버튼 클릭
 	$('.fc-next-button').click(function(){
-	   alert('nextis clicked, do something');
+		var date = calendar.getDate();
+		var data = {
+			"year": date.getFullYear(),
+			"month": date.getMonth() + 1
+		};
+		
+		$.ajax({
+			headers: { 
+			    Accept : "application/json"
+			},
+			url:"/nextMonth.do",
+			type:"POST",
+			data : JSON.stringify(data),
+			contentType : "application/json; charset=UTF-8",
+			success: function(result){
+				console.log(result);
+			},
+			error: function(xhr, status, error) {
+				alert(error);
+			}
+		});
 	});
 	
 	$('#addBtn').click(function(){
