@@ -25,4 +25,14 @@ public class AuthorityService{
 			return null;
 		}
 	}
+	
+	public List<Map<String, Object>> testMethod(Map<String, Object> map) {
+		try {
+			return authorityDAO.testCall(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

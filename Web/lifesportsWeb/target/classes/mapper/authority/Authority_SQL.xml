@@ -15,5 +15,18 @@
 			
 	
 	</select>
+	
+	<select id="testCall" parameterType="hashMap" resultType="hashMap">
+	
+		SELECT
+			ID as "id",
+			name as "name"
+		FROM
+			`gym_admin`
+		WHERE
+			ID = #{test}
+			
+	
+	</select>
 
 </mapper>

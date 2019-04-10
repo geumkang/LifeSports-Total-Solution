@@ -55,20 +55,20 @@ $(document).ready(function() {
 		var allData = { "year": year, "month": month };
 		console.log(year, month)
 		$.ajax({
-			type:"POST",
-			method : "post",
+			headers: { 
+			    Accept : "application/json"
+			},
 			url:"/testAjax.do",
-			data : allData,
+			type:"POST",
+			data : JSON.stringify(allData),
 			contentType : "application/json; charset=UTF-8",
 			success: function(result){
 				console.log(result);
 			},
 			error: function(xhr, status, error) {
-				console.log("ffff");
 				alert(error);
 			}	
 		});
-	   	
 	});
 	
 	// 다음달 이동 버튼 클릭

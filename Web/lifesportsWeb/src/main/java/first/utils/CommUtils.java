@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -26,12 +27,23 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 @SuppressWarnings("unchecked")
 public class CommUtils {
 	
 	private final static Log logger = LogFactory.getLog(CommUtils.class);
 
+	public static Map<String,Object> convertJSONstringToMap(String json) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = new HashMap<String, Object>();
+        
+        map = mapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+        
+        return map;
+    }
+	
 	// �듅�젙�씪(yyyyMMdd) �뿉�꽌 二쇱뼱吏� �씪�옄留뚰겮 �뜑�븳 �궇吏쒕�� 怨꾩궛�븳�떎.
 	public static String addDate(String date, String gubn, int rday) {
 		if (date == null)

@@ -11,6 +11,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+import org.codehaus.jackson.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -77,20 +81,28 @@ public class AuthorityController {
 	 * return modelAndView; }
 	 */
 	
-	@RequestMapping(value = "/testAjax.do")
-	  @ResponseBody
-	  public Map<String, Object> goAjax5(@RequestBody Map<String, Object> map) throws Exception{
-	     
-	    System.out.println("userId:"+map.get("userId"));
-	    System.out.println("userPass:"+map.get("userPass"));
-	    System.out.println("type:"+map.get("type"));
-	     
-	     
-	    Map<String, Object> resultMap = new HashMap<String, Object>();
-	    map.put("result", "1");
-	    return resultMap;
-	  }
-	
+	@RequestMapping(value = "/testAjax.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> goAjax5(@RequestBody String map) throws Exception{
+		
+		Map reqMap = CommUtils.convertJSONstringToMap(map);
+		
+		reqMap.put("test", "xodidth");
+		
+		//Server Call
+		List<Map<String, Object>> res = authorityService.testMethod(reqMap);
+		
+		//Data Injection
+		String id = (String) res.get(0).get("id");
+		String name = (String) res.get(0).get("name");
+		
+		//Map maker
+		Map<String, Object> resMap = new HashMap();
+		resMap.put("result", id);
+
+		return resMap;
+	}
+
 	protected HashMap getRequestMap(HttpServletRequest req) {
 
 		HashMap map = new HashMap();

@@ -14,4 +14,8 @@ public class AuthorityDAO extends AbstractDAO {
 		return (List<Map<String, Object>>) selectList("Authority.selectUser", map);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> testCall(Map<String, Object> map) throws Exception {
+		return (List<Map<String, Object>>) selectList("Authority.testCall", map);
+	}
 }
