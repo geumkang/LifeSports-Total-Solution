@@ -23,7 +23,7 @@ public class ScheduleService{
 			return null;
 		}
 	}
-	
+
 	public List<Map<String, Object>> addSchedule(Map<String, Object> map) {
 		try {
 			return scheduleDAO.insertSchedule(map);
@@ -33,7 +33,7 @@ public class ScheduleService{
 			return null;
 		}
 	}
-	
+
 	public List<Map<String, Object>> editSchedule(Map<String, Object> map) {
 		try {
 			return scheduleDAO.updateSchedule(map);
@@ -43,7 +43,7 @@ public class ScheduleService{
 			return null;
 		}
 	}
-	
+
 	public List<Map<String, Object>> delSchedule(Map<String, Object> map) {
 		try {
 			return scheduleDAO.deleteSchedule(map);
