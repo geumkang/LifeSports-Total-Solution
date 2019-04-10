@@ -27,7 +27,7 @@ public class ScheduleDAO extends AbstractDAO {
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> deleteSchedule(Map<String, Object> map) throws Exception {
 		return (List<Map<String, Object>>) selectList("Schedule.deleteSchedule", map);
-
+	}
 	@SuppressWarnings("unchecked")
 		public List<Map<String, Object>> tournamentList(Map<String, Object> map) throws Exception {
 			return (List<Map<String, Object>>) selectList("Schedule.tournamentList", map);

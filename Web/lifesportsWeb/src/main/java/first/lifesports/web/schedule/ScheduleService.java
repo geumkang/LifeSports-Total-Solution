@@ -14,6 +14,16 @@ public class ScheduleService{
 	@Resource(name = "scheduleDAO")
 	private ScheduleDAO scheduleDAO;
 
+	public List<Map<String, Object>> getTournamentList(Map<String, Object> map) {
+		try {
+			return scheduleDAO.tournamentList(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public List<Map<String, Object>> getSchedule(Map<String, Object> map) {
 		try {
 			return scheduleDAO.scheduleList(map);
