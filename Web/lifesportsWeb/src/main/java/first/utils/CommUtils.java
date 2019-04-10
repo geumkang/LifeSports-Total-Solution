@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -25,10 +26,14 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -40,7 +45,44 @@ import net.minidev.json.JSONObject;
 public class CommUtils {
 	
 	private final static Log logger = LogFactory.getLog(CommUtils.class);
+	
+	public static HashMap getRequestMap(HttpServletRequest req) {
 
+		HashMap map = new HashMap();
+
+		String ajaxFlag = req.getHeader("AjaxFlag");
+
+		Enumeration enm = req.getParameterNames();
+		String name = null;
+		String value = null;
+		String[] arr = null;
+
+		while (enm.hasMoreElements()) {
+			name = (String) enm.nextElement();
+			arr = req.getParameterValues(name);
+
+			if (name.startsWith("arr")) {
+				if ("true".equals(ajaxFlag))
+					map.put(name, CommUtils.decodeAjax(arr, "UTF-8"));
+				else
+					map.put(name, arr);
+			} else {
+				if (arr != null && arr.length > 0) {
+					value = arr[0];
+				} else {
+					value = req.getParameter(name);
+				}
+
+				if ("true".equals(ajaxFlag))
+					map.put(name, CommUtils.decodeAjax(value, "UTF-8"));
+				else
+					map.put(name, value);
+			}
+		}
+
+		return map;
+	}
+	
 	 public static JSONObject getJsonStringFromMap( Map<String, Object> map )
 	    {
 	        JSONObject jsonObject = new JSONObject();

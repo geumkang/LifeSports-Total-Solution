@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,15 +63,13 @@ public class SchduleController {
 	}
 	
 	@RequestMapping(value = "/schedule/tournament.do")
-	public String tornament(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
+	public String tornament(HttpServletRequest request, Model model) {
 		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		Map reqMap = CommUtils.getRequestMap(request);
 		
-		String formattedDate = dateFormat.format(date);
+		List tournamentList = scheduleService.getTournamentList(reqMap);
 		
-		model.addAttribute("serverTime", formattedDate );
+		model.addAttribute("tournamentList",  tournamentList);
 		
 		return "/schedule/tournament";
 	}
