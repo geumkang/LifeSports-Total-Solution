@@ -23,10 +23,30 @@ public class ScheduleService{
 			return null;
 		}
 	}
-	
-	public List<Map<String, Object>> getTournamentList(Map<String, Object> map) {
+
+	public List<Map<String, Object>> addSchedule(Map<String, Object> map) {
 		try {
-			return scheduleDAO.tournamentList(map);
+			return scheduleDAO.insertSchedule(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public List<Map<String, Object>> editSchedule(Map<String, Object> map) {
+		try {
+			return scheduleDAO.updateSchedule(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public List<Map<String, Object>> delSchedule(Map<String, Object> map) {
+		try {
+			return scheduleDAO.deleteSchedule(map);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

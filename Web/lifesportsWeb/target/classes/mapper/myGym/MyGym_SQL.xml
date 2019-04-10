@@ -3,16 +3,7 @@
 
 <mapper namespace="MyGym">
 
-	<select id="selectUser" parameterType="hashMap" resultType="hashMap">
-	
-		SELECT
-			ID as "id",
-			name as "name"
-		FROM
-			`user`
-		WHERE
-			ID = #{userId}
-			
+	<select id="addGym" parameterType="hashMap" resultType="hashMap">
 	
 	</select>
 
