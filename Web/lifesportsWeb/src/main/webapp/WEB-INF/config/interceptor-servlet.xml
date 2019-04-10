@@ -20,6 +20,11 @@
       <beans:property name="order" value="0"/>
     </beans:bean>
      
-    <beans:bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
-       
+    <beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver" id="viewResolver">
+       <beans:property name="order" value="0"/>
+    </beans:bean>
+   <beans:bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" id="jsonView">
+       <beans:property name="contentType" value="application/json;charset=UTF-8"/>
+   </beans:bean>
+
 </beans:beans>
