@@ -1,163 +1,159 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%> 
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <jsp:include page="/WEB-INF/jsp/header.jsp" flush="true"></jsp:include>
 <jsp:include page="/WEB-INF/jsp/topMenu.jsp" flush="true"></jsp:include>
+
+<link href='/webResource/fullcalendar/packages/core/main.css' rel='stylesheet' />
+<link href='/webResource/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
+<script src='/webResource/fullcalendar/packages/core/main.js'></script>
+<script src='/webResource/fullcalendar/packages/interaction/main.js'></script>
+<script src='/webResource/fullcalendar/packages/daygrid/main.js'></script>
 <script src='/webResource/jquery-3.3.1.js'></script>
 
 <script>
 
-$(document).ready(function() {
+var calendar;
+var currentEvent = null;
 
-	loadData();
-	
-	$(".okBtn").on("click", function(){
-		addInfo($(this).parent().siblings());
-		$(this).parent().parent().remove();
-		
-		emptyCheck();
+
+document.addEventListener('DOMContentLoaded', function() {
+	var calendarEl = document.getElementById('calendar');
+    
+	calendar = new FullCalendar.Calendar(calendarEl, {
+		plugins: [ 'interaction', 'dayGrid' ],
+		defaultDate: dateFormat(new Date()),
+		editable: true,
+		eventLimit: true, // allow "more" link when too many events
+		selectable: true,
+		unselectAuto: true,
+		dateClick: function(info) {
+			displayList(info);
+		},
+		eventClick: function(info) {
+			currentEvent = info;
+			loadPlan(info);
+		},
+		events: [
+		]
+    });
+
+    calendar.render();
+});
+
+$(document).ready(function(){
+	// 이전달 이동 버튼 클릭
+	$('.fc-prev-button').click(function(){
+		var selDate = calendar.getDate();
+		var today = new Date();
+
+		if(monthDiff(today, selDate) != -1){
+			calendar.next();
+			
+			/*var date = calendar.getDate();
+			var data = {
+				"year": date.getFullYear(),
+				"month": date.getMonth() + 1
+			};
+			
+			$.ajax({
+				headers: { 
+				    Accept : "application/json"
+				},
+				url:"/prevMonth.do",
+				type:"POST",
+				data : JSON.stringify(data),
+				contentType : "application/json; charset=UTF-8",
+				success: function(result){
+					console.log(result);
+				},
+				error: function(xhr, status, error) {
+					alert(error);
+				}
+			}); */
+		}
 	});
 	
-	$(".rejectBtn").on("click", function(){
-		
-		$(this).parent().parent().remove();
-		
-		emptyCheck();
+	// 다음달 이동 버튼 클릭
+	$('.fc-next-button').click(function(){
+		var selDate = calendar.getDate();
+		var today = new Date();
+		console.log(selDate, today)
+		console.log(monthDiff(today, selDate))
+		if(monthDiff(today, selDate) != 0){
+			calendar.prev();
+						
+			/*var date = calendar.getDate();
+			var data = {
+				"year": date.getFullYear(),
+				"month": date.getMonth() + 1
+			};
+			
+			$.ajax({
+				headers: { 
+				    Accept : "application/json"
+				},
+				url:"/nextMonth.do",
+				type:"POST",
+				data : JSON.stringify(data),
+				contentType : "application/json; charset=UTF-8",
+				success: function(result){
+					console.log(result);
+				},
+				error: function(xhr, status, error) {
+					alert(error);
+				}
+			}); */
+		}
 	});
 	
 });
 
-function loadData(){
-	var dataSet = new Array();
-	var data = new Array();
-	data.push("name", "Date", "start", "end", "ID");
-	
-	dataSet.push(data);
-	
-	for(var len = 0; len < dataSet.length; len++){
-		$("#reservation").children('tbody').append("<tr></tr>");
-		for(var idx = 0; idx < 5; idx++){
-			$("#reservation").children('tbody').children('tr:last').append("<td>" + dataSet[len][idx] + "</td>");
-		}
-		$("#reservation").children('tbody').children('tr:last').append("<td><button class='okBtn' type='button'>OK</button><button class='rejectBtn' type='button'>Reject</button></td>");
-	}
-	
-	emptyCheck();
+function monthDiff(d1, d2) {
+    var months;
+    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth() + 1;
+    months += d2.getMonth();
+    return months;
 }
 
-function addInfo(row){
-	var Data = new Array();
+function dateFormat(input){
+	var date = new Date(input);
+    var year = date.getFullYear(); 
+    var month = new String(date.getMonth()+1); 
+    var day = new String(date.getDate()); 
 	
-	for(var i = 0; i < row.length; i++){
-		Data[i] = row.eq(i).text();
-	}
-	
-	// db에 넣기
+    if(month.length == 1){ 
+		month = "0" + month;
+    } 
+    if(day.length == 1){ 
+		day = "0" + day;
+    } 
+    
+	return year + "-" + month + "-" + day;
 }
 
-function emptyCheck(){
-	if($("#reservation").find('tr').length == 1)
-		$("#emptyText").css("display", "block");
-	else 
-		$("#emptyText").css("display", "none");
-}
 
 </script>
-
 <style>
 
-#reservation {
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	margin: auto;
-}
+	body {
+		/* margin: 40px 10px; */
+		padding: 0;
+		/* font-family: Arial, Helvetica Neue, Helvetica, sans-serif; */
+		font-size: 14px;
+	}
 
-#reservation th {
-	border-top-width: 2px;
-	border-top-style: solid;
-	border-top-color: rgba(113, 156, 254, 0.9);
-	
-	border-bottom-width: 2px;
-	border-bottom-style: solid;
-	border-bottom-color: rgba(113, 156, 254, 0.9);
-}
-
-#reservation th, td {
-	text-align: center;
-	width: 16%;
-	height: 60px;
-}
-
-#reservation button {
-	width: 60px;
-	margin: auto;
-}
-
-#emptyText {
-	display: none;
-	text-align: center;
-	margin:auto;
-	margin-top: 30px;
-	font-size: 30px;
-}
+	#calendar {
+		max-width: 900px;
+		margin: auto;
+	}
 
 </style>
 
-
 <section class="w3ls-bnrbtm py-5" id="about">
 	<div class="container py-xl-5 py-lg-3">
-		<h3 class="title-w3 mb-md-5 mb-sm-4 mb-2 text-center font-weight-bold">Reservations</h3>
+		<h3 class="title-w3 mb-md-5 mb-sm-4 mb-2 text-center font-weight-bold">Reservation Status</h3>
 		<div class="row">
-			<table id="reservation">
-				<thead>
-					<tr>
-						<th>Facility Name</th>
-						<th>Date</th>
-						<th>Start Time</th>
-						<th>End Time</th>
-						<th>Applicant ID</th>
-						<th>Confirm</th>
-					</tr>
-				</thead>
-				
-				<tbody>
-					<tr>
-						<td>ChoongAng</td>
-						<td>2018.03.01</td>
-						<td>08:00</td>
-						<td>11:00</td>
-						<td>hou</td>
-						<td>
-							<button class="okBtn" type="button">OK</button>
-							<button class="rejectBtn" type="button">Reject</button>
-						</td>
-					</tr>
-					
-					<tr>
-						<td>ChoongAng</td>
-						<td>2018.03.02</td>
-						<td>10:00</td>
-						<td>12:00</td>
-						<td>hou</td>
-						<td>
-							<button class="okBtn" type="button">OK</button>
-							<button class="rejectBtn" type="button">Reject</button>
-						</td>
-					</tr>
-					
-					<tr>
-						<td>ChoongAng</td>
-						<td>2018.03.03</td>
-						<td>10:00</td>
-						<td>13:00</td>
-						<td>hou</td>
-						<td>
-							<button class="okBtn" type="button">OK</button>
-							<button class="rejectBtn" type="button">Reject</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<label id="emptyText">List is Empty</label>
+			<div id="calendar"></div>
 		</div>
 	</div>
 </section>
