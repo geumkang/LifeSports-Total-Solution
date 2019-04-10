@@ -87,44 +87,6 @@ function replaceAll(str, searchStr, replaceStr) {
 						<!-- ${prev.dateTime}	-->
 					</div>
 
-					<div class="row">
-						<div class="col-xs-6">
-							<a href="#" onclick="downNextView('${next.serial}')">
-								<ul class="nav navbar-nav boardPrev">
-									<c:if test="${next eq null }">
-										<li class="left"><i class="fa fa-angle-left"></i></li>
-										<li><span>이전글</span>
-											<p>없습니다.</p> <em><i class="fa fa-clock-o">&nbsp;</i>-</em>
-									</c:if>
-									<c:if test="${next ne null }">
-										<li class="left"><i class="fa fa-angle-left"></i></li>
-										<li><span>이전글 </span>
-											<p>${next.title }</p> <em><i class="fa fa-clock-o">&nbsp;</i>${next.dateTime }</em>
-										</li>
-									</c:if>
-								</ul>
-							</a>
-						</div>
-						<div class="col-xs-6">
-							<a href="#" onclick="downPrevView('${prev.serial}')">
-								<ul class="nav navbar-nav boardNext">
-									<c:if test="${prev eq null }">
-										<li><span>다음글</span>
-											<p>없습니다.</p> <em><i class="fa fa-clock-o">&nbsp;</i>-</em></li>
-										<li class="right"><i class="fa fa-angle-right">&nbsp;</i></li>
-									</c:if>
-									<c:if test="${prev ne null }">
-										<li><span>다음글</span>
-											<p>${prev.title}.</p> <em><i class="fa fa-clock-o">&nbsp;</i>${prev.dateTime}</em>
-
-										</li>
-										<li class="right"><i class="fa fa-angle-right">&nbsp;</i></li>
-									</c:if>
-								</ul>
-							</a>
-						</div>
-					</div>
-
 					<br>
 
 					<div align="center">
@@ -132,9 +94,6 @@ function replaceAll(str, searchStr, replaceStr) {
 						<button class="btn btn-danger" onclick="deltBtn()">
 								<i class="fa fa-trash">&nbsp;</i>삭제
 							</button>&nbsp&nbsp&nbsp
-						<button class="btn btn-sky" onclick="goList()">
-							<i class="fa fa-th-list">&nbsp;</i>목록
-						</button>
 					</div>
 
 				</form>
