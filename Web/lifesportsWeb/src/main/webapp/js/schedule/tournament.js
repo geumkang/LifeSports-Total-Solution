@@ -7,3 +7,8 @@ function tournamentView(serial)
 	frm.target = "_self";
 	frm.submit();
 }
+
+function regiBtn()
+{
+	window.location.href='/schedule/tournamentRegi.do';
+}

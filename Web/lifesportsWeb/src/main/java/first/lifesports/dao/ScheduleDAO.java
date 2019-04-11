@@ -30,6 +30,22 @@ public class ScheduleDAO extends AbstractDAO {
 	}
 	@SuppressWarnings("unchecked")
 		public List<Map<String, Object>> tournamentList(Map<String, Object> map) throws Exception {
-			return (List<Map<String, Object>>) selectList("Schedule.tournamentList", map);
+			return (List<Map<String, Object>>) selectList("Schedule.listTournament_board", map);
+	}
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> searchTournament(Map<String, Object> map) throws Exception {
+		return (List<Map<String, Object>>) selectList("Schedule.selectTournament_board", map);
+}
+	@SuppressWarnings("unchecked")
+	public void insertTournament(Map<String, Object> map) throws Exception {
+		insert("Schedule.insertTournament_board", map);
+	}
+	@SuppressWarnings("unchecked")
+	public void updateTournament(Map<String, Object> map) throws Exception {
+		insert("Schedule.updateTournament_board", map);
+	}
+	@SuppressWarnings("unchecked")
+	public void deleteTournament(Map<String, Object> map) throws Exception {
+		insert("Schedule.deleteTournament_board", map);
 	}
 }

@@ -10,7 +10,7 @@
 <jsp:include page="/WEB-INF/jsp/header.jsp" flush="true"></jsp:include>
 <jsp:include page="/WEB-INF/jsp/topMenu.jsp" flush="true"></jsp:include>
 <script src='/webResource/jquery-3.3.1.js'></script>
-<script src='/js/schedule/tournament.js'></script>
+<script src='/js/schedule/tournamentView.js'></script>
 <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
@@ -90,8 +90,8 @@ function replaceAll(str, searchStr, replaceStr) {
 					<br>
 
 					<div align="center">
-							<button class="btn btn-sky" onclick="updtBtn()">수정</button> &nbsp&nbsp&nbsp
-						<button class="btn btn-danger" onclick="deltBtn()">
+							<button class="btn btn-sky" onclick="updtBtn(${result.serial})">수정</button> &nbsp&nbsp&nbsp
+						<button class="btn btn-danger" onclick="deltBtn(${result.serial})">
 								<i class="fa fa-trash">&nbsp;</i>삭제
 							</button>&nbsp&nbsp&nbsp
 					</div>

@@ -62,10 +62,7 @@ public class SchduleController {
 		
 		
 		//디비에서 pagenatedList로 가져와서 model에 맵핑
-		List list = new ArrayList();
-		Map test = new HashMap<String, Object>();
-		test.put("title", "fuck");
-		list.add(test);
+		List list = scheduleService.getTournamentList(reqMap);
 			
 		Map sessionMap = CommUtils.getSessionMap(request);
 		
@@ -80,12 +77,12 @@ public class SchduleController {
 		public String tornamentView(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {
 		
 		//디비에서 게시글 번호를 바탕으로 게시글의 상세 내용을 조회함 (serial)
-		List list = new ArrayList();
-		Map test = new HashMap<String, Object>();
+		Map reqMap = new HashMap<String, Object>();
+		reqMap.put("serial", serial);
 
-		list.add(test);
+		Map result = scheduleService.searchTournament(reqMap);
 		
-		model.addAttribute("list", list);
+		model.addAttribute("result", result);
 		
 		return "/schedule/tournamentView";
 	}
@@ -94,54 +91,36 @@ public class SchduleController {
 	/*public String tornamentRegi(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {*/
 	public String tornamentRegi(HttpServletRequest request, Model model) {
 		
-		Map reqMap = CommUtils.getRequestMap(request);
-		
-		//List tournamentList = scheduleService.getTournamentList(reqMap);
-		
-		//model.addAttribute("tournamentList",  tournamentList);
-		
-		
-		//디비에서 게시글 번호를 바탕으로 게시글의 상세 내용을 조회함 (serial)
-		List list = new ArrayList();
-		Map test = new HashMap<String, Object>();
-		test.put("title", "fuck");
-		list.add(test);
-		
-		model.addAttribute("list", list);
+		Map sessionMap = CommUtils.getSessionMap(request);
+		model.addAttribute("session", sessionMap);
 		
 		return "/schedule/tournamentRegi";
 	}
 	
-	@RequestMapping(value = "/schedule/regiTournament.do")
-	public String regiTornament(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {
+	@RequestMapping(value = "/schedule/tournamentUpdt.do", method=RequestMethod.POST)
+	public String tornamentUpdt(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {
 		
-		Map reqMap = CommUtils.getRequestMap(request);
+		Map reqMap = new HashMap<String, Object>();
+		reqMap.put("serial", serial);
 		
-		//List tournamentList = scheduleService.getTournamentList(reqMap);
+		Map sessionMap = CommUtils.getSessionMap(request);
+		model.addAttribute("session", sessionMap);
 		
-		//model.addAttribute("tournamentList",  tournamentList);
+		Map result = scheduleService.searchTournament(reqMap);
 		
+		model.addAttribute("result", result);
 		
-		//디비에서 게시글 번호를 바탕으로 게시글의 상세 내용을 조회함 (serial)
-		List list = new ArrayList();
-		Map test = new HashMap<String, Object>();
-		test.put("title", "fuck");
-		list.add(test);
-		
-		model.addAttribute("list", list);
-		
-		return "/schedule/tournament";
+		return "/schedule/tournamentUpdt";
 	}
 	
-	@RequestMapping(value = "/schedule/deltTournament.do")
-	public String deltTornament(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {
+	@RequestMapping(value = "/schedule/regiTournament.do", method=RequestMethod.POST)
+	public String regiTornament(HttpServletRequest request, Model model, @RequestParam("contents") String contents, @RequestParam("title") String title) {
 		
-		Map reqMap = CommUtils.getRequestMap(request);
+		Map reqMap = new HashMap<String, Object>();
+		reqMap.put("contents", contents);
+		reqMap.put("title", title);
 		
-		//List tournamentList = scheduleService.getTournamentList(reqMap);
-		
-		//model.addAttribute("tournamentList",  tournamentList);
-		
+		scheduleService.insertTournament(reqMap);
 		
 		//디비에서 게시글 번호를 바탕으로 게시글의 상세 내용을 조회함 (serial)
 		List list = new ArrayList();
@@ -151,7 +130,31 @@ public class SchduleController {
 		
 		model.addAttribute("list", list);
 		
-		return "/schedule/tournament";
+		return "redirect:/schedule/tournament.do";
+	}
+	
+	@RequestMapping(value = "/schedule/updtTournament.do", method=RequestMethod.POST)
+	public String updtTornament(HttpServletRequest request, Model model, @RequestParam("serial") String serial, @RequestParam("contents") String contents, @RequestParam("title") String title) {
+		
+		Map reqMap = new HashMap<String, Object>();
+		reqMap.put("serial", serial);
+		reqMap.put("contents", contents);
+		reqMap.put("title", title);
+		
+		scheduleService.updateTournament(reqMap);
+		
+		return "redirect:/schedule/tournament.do";
+	}
+	
+	@RequestMapping(value = "/schedule/deltTournament.do", method=RequestMethod.POST)
+	public String deltTornament(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {
+		
+		Map reqMap = new HashMap<String, Object>();
+		reqMap.put("serial", serial);
+		
+		scheduleService.deleteTournament(reqMap);
+		
+		return "redirect:/schedule/tournament.do";
 	}
 	
 	// 이전 월로 이동 버튼 클릭

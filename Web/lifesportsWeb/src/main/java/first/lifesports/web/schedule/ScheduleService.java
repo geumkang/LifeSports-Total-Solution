@@ -63,4 +63,56 @@ public class ScheduleService{
 			return null;
 		}
 	}
+	
+	public Map<String, Object> searchTournament(Map<String, Object> map) {
+		try {
+			List temp = scheduleDAO.searchTournament(map);
+			if(temp.size() > 0) {
+				Map<String, Object> temp_m = (Map<String, Object>)temp.get(0);
+				temp_m.put("contents", new String((byte[])temp_m.get("contents"), "utf-8"));
+				return (Map<String, Object>) temp.get(0);
+				}
+			else {
+				return null;}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public void insertTournament(Map<String, Object> map) {
+		try {
+			String temp = (String)map.get("contents");
+			temp = temp.replaceAll("&lt;", "<");
+			temp = temp.replaceAll("&gt;", ">");
+			map.put("contents", temp);
+			scheduleDAO.insertTournament(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void updateTournament(Map<String, Object> map) {
+		try {
+			String temp = (String)map.get("contents");
+			temp = temp.replaceAll("&lt;", "<");
+			temp = temp.replaceAll("&gt;", ">");
+			map.put("contents", temp);
+			scheduleDAO.updateTournament(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteTournament(Map<String, Object> map) {
+		try {
+			scheduleDAO.deleteTournament(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

@@ -26,4 +26,76 @@
 	<select id="delSchedule" parameterType="hashMap" resultType="hashMap">
 	
 	</select>
+	
+	<!-- 
+	@Parameter : title / contents
+	@Do : 새로운 게시글 추가
+	 -->
+	<insert id="insertTournament_board" parameterType="hashMap" >
+	insert
+		into tournament_board
+	(
+		title,
+		contents
+	)
+	values
+	(
+		#{title},
+		#{contents}
+	)
+	</insert>
+	
+	<!-- 
+	@Parameter : serial
+	@Do : serial을 가진 게시글의 정보 검색
+	 -->
+	<select id="selectTournament_board" parameterType="hashMap" resultType="hashMap">
+		select
+			tournament_ID as "serial",
+			title as "title",
+			contents as "contents"
+		from
+			tournament_board
+		where
+			tournament_ID = #{serial}
+	</select>
+	
+	<!-- 
+	@Parameter : -
+	@Do : 현재 사용자와 연관된 게시글 전체 조회
+	 -->
+	<select id="listTournament_board" parameterType="hashMap" resultType="hashMap">
+		select
+			tournament_ID as "serial",
+			title as "title"
+		from
+			tournament_board
+	</select>
+	
+	<!-- 
+	@Parameter : serial
+	@Do : 게시글 삭제
+	 -->
+	<update id="deleteTournament_board" parameterType="hashMap">
+		delete
+		from
+			tournament_board
+		where
+			tournament_ID = #{serial}
+	</update>
+	
+	<!-- 
+	@Parameter : serial
+	@Do : 게시글 수정
+	 -->
+	<update id="updateTournament_board" parameterType="hashMap">
+		update
+			tournament_board
+		set
+			title = #{title},
+			contents = #{contents}
+		where
+			tournament_ID = #{serial}
+	</update>
+	
 </mapper>
