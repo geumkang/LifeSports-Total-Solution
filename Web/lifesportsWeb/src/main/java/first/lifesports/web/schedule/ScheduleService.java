@@ -33,6 +33,16 @@ public class ScheduleService{
 			return null;
 		}
 	}
+	
+	public List<Map<String, Object>> searchScheduleByMonth(Map<String, Object> map) {
+		try {
+			return scheduleDAO.searchScheduleByMonth(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public List<Map<String, Object>> addSchedule(Map<String, Object> map) {
 		try {
