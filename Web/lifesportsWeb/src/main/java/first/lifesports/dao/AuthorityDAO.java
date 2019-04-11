@@ -20,7 +20,7 @@ public class AuthorityDAO extends AbstractDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> getUserInfo(Map<String, Object> map) throws Exception {
-		return (Map<String, Object>) selectOne("Authority.getUserInfo", map);
+	public List<Map<String, Object>> getUserInfo(Map<String, Object> map) throws Exception {
+		return (List<Map<String, Object>>) selectList("Authority.getUserInfo", map);
 	}
 }

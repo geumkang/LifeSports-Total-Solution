@@ -18,6 +18,7 @@
 			<div class="col-lg-6 pr-xl-5 mt-4">
 				<form id="frm" name="frm" method="post" onsubmit="return false;">
 					<input type="hidden" id="serial" name="serial" />
+					<input type="hidden" id="session" name="session" value="${session.UDID}"/>
 					<table class="normalTable tableStriped text-center">
 						<colgroup>
 							<col style="width: 10%;">

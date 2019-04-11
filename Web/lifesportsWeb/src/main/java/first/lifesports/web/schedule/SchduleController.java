@@ -69,6 +69,8 @@ public class SchduleController {
 		model.addAttribute("list", list);
 		model.addAttribute("session", sessionMap);
 		
+		
+		
 		return "/schedule/tournament";
 	}
 	

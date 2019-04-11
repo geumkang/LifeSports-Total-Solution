@@ -8,7 +8,17 @@ import first.common.dao.AbstractDAO;
 
 @Repository("mygymDAO")
 public class MyGymDAO extends AbstractDAO {
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectGym(Map<String, Object> map) throws Exception {
+		return (List<Map<String, Object>>) selectList("MyGym.viewGym", map);
+	}
 
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectFacility(Map<String, Object> map) throws Exception {
+		return (List<Map<String, Object>>) selectList("MyGym.viewFacility", map);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> insertGym(Map<String, Object> map) throws Exception {
 		return (List<Map<String, Object>>) selectList("MyGym.registerGym", map);

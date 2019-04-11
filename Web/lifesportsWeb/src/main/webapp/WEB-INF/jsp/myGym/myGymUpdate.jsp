@@ -1,4 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="app" uri="/WEB-INF/tld/app.tld"%>
+<%@ taglib prefix="f" uri="/WEB-INF/tld/f.tld"%>
+<%@ page language="java" contentType="text/html" pageEncoding="utf-8"%> 
 <jsp:include page="/WEB-INF/jsp/header.jsp" flush="true"></jsp:include>
 <jsp:include page="/WEB-INF/jsp/topMenu.jsp" flush="true"></jsp:include>
 <script src='/webResource/jquery-3.3.1.js'></script>
@@ -11,60 +18,136 @@ listChanged = true;
 $(document).ready(function() {
 	
 	loadData();
+	$(document).on("click", ".timeBox", function(){
+	
+	
+		startTime = $("#GYM_STARTTIME").val().substr(0,5);
+		endTime = $("#GYM_ENDTIME").val().substr(0,5);
+		
+		var current = startTime;
+		var timeList = new Array();
+		timeList.push(current);
+		
+		while(current.substr(0,3) <= endTime.substr(0,3)){
+			if(current.substr(3,5) == '00'){
+				current = current.substr(0,3) + '30';
+			}
+			else{
+				current = String(Number(current.substr(0,2)) + 1) + ':00';
+				if(current.length == 4)
+					current = "0" + current;
+			}
+			timeList.push(current)
+			if(current == endTime)
+				break;
+		}
+		console.log(timeList.length)
+		for(var i = 0; i < timeList.length; i++){
+			if(i == 0)
+				$(this).append('<option value=' + "12" + 'selected="selected">' + timeList[i] + '</option>');
+			else
+				$(this).append('<option value=' + timeList[i] + '>' + timeList[i] + '</option>');
+		}
+		
+	});
 	
 	$("#addBtn").on("click", function(){
 		if(listChanged){
-			$("#groundList").append("<tr><td><input type='text'></td><td><input type='text'></td><td><input type='text'></td><td><button class='okBtn' type='button' name='new'>OK</button><button class='deleteBtn' type='button'>DELETE</button></td></tr>");
+			$temp = $("#newFacility tbody").clone();
+			$temp.find("select[name='start']").empty()
+			$temp.find("select[name='start']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
+			$temp.find("select[name='end']").empty()
+			$temp.find("select[name='end']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
+			
+			$temp.find(".okBtn").attr("name", "new");
+			$("#groundList").append($temp.html());
+			
 			listChanged = false;	
 		}
 	});
 	
 	$(document).on("click", ".editCompleteBtn", function(){
-		var text = $(this).parent().parent().siblings().eq(0).find('input').val();
-		$(this).parent().parent().siblings().eq(0).children().eq(2).children().remove();
-		$(this).parent().parent().siblings().eq(0).children().eq(2).text(text);	
+		var isEmpty = true;
 		
-		for(var i = 1; i < $(this).parent().parent().siblings().length; i++){
-			var text = $(this).parent().parent().siblings().eq(i).find('input').val();
-			$(this).parent().parent().siblings().eq(i).children().eq(1).children().remove();
-			$(this).parent().parent().siblings().eq(i).children().eq(1).text(text);	
-		}
-		
-		$(this).css("display", "none");
-		$(this).prev().css("display", "block");
-		
-		// Request Data
-		var data = {
-			/* "year": date.getFullYear(),
-			"month": date.getMonth() + 1 */
-		};
-		
-		$.ajax({
-			headers: { 
-			    Accept : "application/json"
-			},
-			url:"/editGym.do",
-			type:"POST",
-			data : JSON.stringify(data),
-			contentType : "application/json; charset=UTF-8",
-			success: function(result){
-				console.log(result);
-			},
-			error: function(xhr, status, error) {
-				alert(error);
+		if($("#gymName input").val() != "" && $(this).parent().parent().siblings().eq(0).find('input').val() != ""){
+			for(var i = 1; i < $(this).parent().parent().siblings().length; i++){
+				if($(this).parent().parent().siblings().eq(0).find('input').val() != ""){
+					isEmpty = false;
+				}
+				else{
+					isEmpty = true;
+					break;
+				}
 			}
-		});
+		}
+			
+		if(isEmpty){
+			alert("빈 칸이 존재합니다. 채워주세요.")
+		}
+		else{
+			var gym_data = new Array();
+			
+			var name = $("#gymName input").val();
+			$("#gymName input").remove();
+			$("#gymName").text(name);
+			gym_data.push(name);
+			
+			var text = $(this).parent().parent().siblings().eq(0).find('input').val();
+			$(this).parent().parent().siblings().eq(0).children().eq(2).children().remove();
+			$(this).parent().parent().siblings().eq(0).children().eq(2).text(text);	
+			gym_data.push(text);
+			
+			for(var i = 1; i < $(this).parent().parent().siblings().length; i++){
+				var text = $(this).parent().parent().siblings().eq(i).find('input').val();
+				$(this).parent().parent().siblings().eq(i).children().eq(1).children().remove();
+				$(this).parent().parent().siblings().eq(i).children().eq(1).text(text);	
+				gym_data.push(text);
+			}
+			
+			$(this).css("display", "none");
+			$(this).prev().css("display", "block");
+			
+			// Request Data
+			var data = {
+// 				"gym_name": gym_data[0],
+// 				"gym_location": gym_data[1],
+// 				"avail_starttime": gym_data[2].substr(0,5) + ":00",
+// 				"avail_endtime": gym_data[2].substr(8,13) + ":00",
+// 				"gym_info": gym_data[3],
+// 				"admin_ID": $("#ADMIN_UDID").val(),
+			};
+			console.log(data)
+			$.ajax({
+				headers: { 
+				    Accept : "application/json"
+				},
+				url:"/editGym.do",
+				type:"POST",
+				data : JSON.stringify(data),
+				contentType : "application/json; charset=UTF-8",
+				success: function(result){
+					console.log("save complete")
+				},
+				error: function(xhr, status, error) {
+					alert(error);
+				}
+			});
+		}
 	});
 	
 	$(document).on("click", ".editBtn", function(){
+		var name = $("#gymName").text()
+		$("#gymName").wrapInner('<input type="text"/>');
+		$("#gymName input").val(name);
+		$("#gymName input").css("textAlign", "center");
 		
 		var text = $(this).parent().parent().siblings().eq(0).children().eq(2).text();
-		$(this).parent().parent().siblings().eq(0).children().eq(2).wrapInner('<input type="text">')
+		$(this).parent().parent().siblings().eq(0).children().eq(2).wrapInner('<input type="text"/>')
 		$(this).parent().parent().siblings().eq(0).children().eq(2).children().val(text);
 		
 		for(var i = 1; i < $(this).parent().parent().siblings().length; i++){
 			var text = $(this).parent().parent().siblings().eq(i).children().eq(1).text();
-			$(this).parent().parent().siblings().eq(i).children().eq(1).wrapInner('<input type="text">')
+			$(this).parent().parent().siblings().eq(i).children().eq(1).wrapInner('<input type="text"/>')
 			$(this).parent().parent().siblings().eq(i).children().eq(1).children().val(text);
 		}
 		
@@ -101,18 +184,44 @@ $(document).ready(function() {
 	$(document).on("click", ".okBtn", function(){
 		if($(this).text() == "OK"){
 			if(!listChanged){
-				for(var i = 0; i < $(this).parent().siblings().length; i++){
-					var text = $(this).parent().siblings().eq(i).children().val();
-					if(text == ""){
-						alert("미입력된 항목이 존재합니다");
-						return;
-					}
+				if($(this).parent().parent().find("input:eq(0)").val() == "" ||
+					$(this).parent().parent().find("input:eq(2)").val() == ""){
+					alert("미입력된 항목이 존재합니다");
+					return;
 				}
-				for(var i = 0; i < $(this).parent().siblings().length; i++){
-					var text = $(this).parent().siblings().eq(i).children().val();
-					$(this).parent().siblings().eq(i).children().remove();
-					$(this).parent().siblings().eq(i).text(text.trim());
-				}
+				console.log($(this).parent().siblings().length);
+				
+				var gym_data = new Array();
+				
+				// 이름
+				var name = $(this).parent().siblings().eq(0).children().val();
+				$(this).parent().siblings().eq(0).children().remove();
+				$(this).parent().siblings().eq(0).text(name.trim());
+				gym_data.push(name);
+				
+				// 이용 시간
+				var startTime = $(this).parent().siblings().eq(1).children().eq(0).val();
+				var endTime = $(this).parent().siblings().eq(1).children().eq(1).val();
+				$(this).parent().siblings().eq(1).children().remove();
+				$(this).parent().siblings().eq(1).text(startTime + " ~ " + endTime);
+				gym_data.push(startTime + ":00");
+				gym_data.push(endTime + ":00");
+				
+				// 인원
+				var participant = $(this).parent().siblings().eq(2).children().val();
+				$(this).parent().siblings().eq(2).children().remove();
+				$(this).parent().siblings().eq(2).text(participant);
+				gym_data.push(participant);
+				
+				// 종목
+				var subject = $(this).parent().siblings().eq(3).children().find("option:selected").text();
+				$(this).parent().siblings().eq(3).children().remove();
+				$(this).parent().siblings().eq(3).text(subject);
+				gym_data.push(subject);
+				
+				var id = $(this).parent().siblings().eq(4).text();
+				gym_data.push(id);
+				console.log(gym_data);
 				
 				var url;
 				if($(this).attr("name") == 'new'){
@@ -124,8 +233,12 @@ $(document).ready(function() {
 					
 				// Request Data
 				var data = {
-					/* "year": date.getFullYear(),
-					"month": date.getMonth() + 1 */
+					"avail_starttime": gym_data[1],
+					"avail_endtime": gym_data[2],
+					"avail_participant": gym_data[3],
+					"fac_name": gym_data[0],
+					"subj_ID": gym_data[4],
+					//"fac_ID": gym_data[5]
 				};
 				
 				$.ajax({
@@ -137,7 +250,7 @@ $(document).ready(function() {
 					data : JSON.stringify(data),
 					contentType : "application/json; charset=UTF-8",
 					success: function(result){
-						console.log(result);
+						console.log("Edit Facility Info Completely");
 					},
 					error: function(xhr, status, error) {
 						alert(error);
@@ -150,14 +263,37 @@ $(document).ready(function() {
 		}
 		else if($(this).text() == "EDIT"){
 			if(listChanged){
-				for(var i = 0; i < $(this).parent().siblings().length; i++){
-					var text = $(this).parent().siblings().eq(i).text();
-					console.log(text)
-					$(this).parent().siblings().eq(i).wrapInner('<input type="text">')
-					$(this).parent().siblings().eq(i).children().val(text.trim());
-				}
-			
-				$(this).text("OK");
+				
+				
+				$temp = $("#newFacility tbody tr").clone();
+				$temp.find("select[name='start']").empty()
+				$temp.find("select[name='start']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
+				$temp.find("select[name='end']").empty()
+				$temp.find("select[name='end']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
+				
+				// 시설명
+				$temp.find("input[name='f_name']").val($(this).parent().siblings().eq(0).text());
+				
+				// 운영시간
+				var start = $(this).parent().siblings().eq(1).text().substr(0,5);
+				var end = $(this).parent().siblings().eq(1).text().substr(8,13);
+				$temp.find("select[name='start'] option:contains(" + start + ")").prop("selected", "selected");
+				$temp.find("select[name='end'] option:contains(" + end + ")").prop("selected", "selected");
+				
+				// 수용인원
+				$temp.find("input[name='f_participant']").val($(this).parent().siblings().eq(2).text());
+				
+				//종목
+				var subject = $(this).parent().siblings().eq(3).text();
+				$temp.find("select[name='f_subject'] option:contains(" + subject + ")").prop("selected", "selected");
+				
+				//ID
+				var id = $(this).parent().siblings().eq(4).text();
+				$temp.find("td[name='f_id']").text(id);
+				
+				
+				$(this).parent().parent().replaceWith($temp);
+				
 				listChanged = false;
 			}
 		}
@@ -199,8 +335,47 @@ $(document).ready(function() {
     
 });
 
+function loadTime($start, $end){
+	startTime = $start.val().substr(0,5);
+	endTime = $end.val().substr(0,5);
+	
+	var current = startTime;
+	var timeList = new Array();
+	timeList.push(current);
+	
+	while(current.substr(0,3) <= endTime.substr(0,3)){
+		if(current.substr(3,5) == '00'){
+			current = current.substr(0,3) + '30';
+		}
+		else{
+			current = String(Number(current.substr(0,2)) + 1) + ':00';
+			if(current.length == 4)
+				current = "0" + current;
+		}
+		timeList.push(current)
+		if(current == endTime)
+			break;
+	}
+	
+	var result;
+	for(var i = 0; i < timeList.length; i++){
+		if(i == 0)
+			result += '<option value=' + timeList[i] + ' selected="selected">' + timeList[i] + '</option>'
+		else
+			result += '<option value=' + timeList[i] + '>' + timeList[i] + '</option>'
+	}
+	return result;
+}
+
 function loadData(){
-	emptyCheck();
+	
+	// 데이터 있을 때
+	if($("#GYM_ISEMPTY").val() == "FALSE"){
+		$("#gymName").text($("#GYM_NAME").val())
+		$("#gymLocation").text($("#GYM_LOC").val())
+		$("#gymUsableTime").text($("#GYM_STARTTIME").val().substr(0,5) + " ~ " + $("#GYM_ENDTIME").val().substr(0,5))
+		$("#gymDescription").text($("#GYM_INFO").val())
+	}
 }
 
 function emptyCheck(){
@@ -341,7 +516,7 @@ function placeMarker(location, marker) {
 
 .facilityInfo img {
 	width: 100%;
-	height: 200px;
+	height: 250px;
 	margin: 0px 0px 0px 0px;
 }
 
@@ -350,7 +525,7 @@ function placeMarker(location, marker) {
 }	
 
 .facilityInfo tr {
-	height: 30px;
+	height: 50px;
 }
 
 .facilityInfo td {
@@ -413,6 +588,10 @@ function placeMarker(location, marker) {
 	margin-top: 30px;
 	font-size: 30px;
 }
+
+.radioBtn {
+	width: 10px;
+}
 </style>
 
 
@@ -451,7 +630,7 @@ function placeMarker(location, marker) {
 					<tr>
 						<td>234</td>
 						<td><input id="234Input" type="text"></td>
-					</tr>
+					</tr>	
 					
 					<tr style="height: 50px;">
 						<td colspan="4">
@@ -471,7 +650,8 @@ function placeMarker(location, marker) {
 						
 						border-bottom-width: 2px;
 						border-bottom-style: solid;
-						border-bottom-color: rgba(113, 156, 254, 0.9);">1. 중앙대학교</th>
+						border-bottom-color: rgba(113, 156, 254, 0.9);"
+						id="gymName"></th>
 				</tr>
 				<tr>
 					<td>
@@ -488,33 +668,25 @@ function placeMarker(location, marker) {
 										</th>
 									</tr>
 									<tr>
-										<td rowspan="5">
+										<td rowspan="3">
 											<img src="/images/about.jpg">
 										</td>
-										<td>Name</td>
-										<td>ChoongAng</td>
-									</tr>
-									<tr>
 										<td>Location</td>
-										<td>서울특별시 동작구 흑석로 123</td>
+										<td id="gymLocation"></td>
 									</tr>
 									<tr>
 										<td>Usable Time</td>
-										<td>9:00 ~ 21:00</td>
+										<td id="gymUsableTime"></td>
 									</tr>
 									<tr>
-										<td>123</td>
-										<td>123</td>
-									</tr>
-									<tr>
-										<td>123</td>
-										<td>123</td>
+										<td rowspan="2">Description</td>
+										<td rowspan="2" id="gymDescription"></td>
 									</tr>
 								</table>
 								
 								<table id="groundList">
 									<tr>
-										<th colspan = "4">
+										<th colspan = "5">
 											구장 목록
 											<button id="addBtn" type="button" style="float:right">ADD</button>
 										</th>
@@ -526,23 +698,24 @@ function placeMarker(location, marker) {
 										<td>이름</td>
 										<td>이용 시간</td>
 										<td>수용 인원</td>
+										<td>종목</td>
 										<td>확인</td>
 									</tr>
-									<tr>
-										<td>
-											축구장
-										</td>
-										<td>
-											09:00 ~ 18:00
-										</td>
-										<td>
-											22명
-										</td>
-										<td>
-											<button class="okBtn" type="button">EDIT</button>
-											<button class="deleteBtn" type="button">DELETE</button>
-										</td>
-									</tr>
+									<c:if test="${facilityList.size() ne 0 }">
+				                        <c:forEach items="${facilityList}" var="list" varStatus="state">
+				                           <tr>
+				                           		<td>${list.f_name}</td>
+												<td>${list.time}</td>
+												<td>${list.f_participant}</td>
+												<td>${list.f_subject}</td>
+												<td>
+				                              		<button class='okBtn' type='button'>EDIT</button>
+													<button class='deleteBtn' type='button'>DELETE</button>
+												</td>
+												<td style="display: none">${list.f_id}</td>
+				                           </tr>
+				                        </c:forEach>
+									</c:if>
 								</table>
 								</td>
 							</tr>
@@ -553,5 +726,48 @@ function placeMarker(location, marker) {
 		</div>
 	</div>
 </section>
+
+<input type="hidden" id="ADMIN_UDID" value="${list.UDID}"/>
+<input type="hidden" id="GYM_ISEMPTY" value="${list.isEmpty}"/>
+<input type="hidden" id="GYM_ID" value="${list.id}"/>
+<input type="hidden" id="GYM_NAME" value="${list.name}"/>
+<input type="hidden" id="GYM_FIG" value="${list.fig}"/>
+<input type="hidden" id="GYM_LOC" value="${list.location}"/>
+<input type="hidden" id="GYM_LAT" value="${list.latitude}"/>
+<input type="hidden" id="GYM_LONG" value="${list.longitude}"/>
+<input type="hidden" id="GYM_STARTTIME" value="${list.startTime}"/>
+<input type="hidden" id="GYM_ENDTIME" value="${list.endTime}"/>
+<input type="hidden" id="GYM_INFO" value="${list.info}"/>
+
+<input type="hidden" id="FACILITY_ISEMPTY" value="${facilityMap.f_isEmpty}"/>
+
+<div id="newFacility" style="display: none">
+<table>
+	<tr>
+		<td>
+			<input type="text" placeholder="ex)축구장" name="f_name"/>
+		</td>
+		<td>
+			<select name="start"></select>
+			<select name="end"></select>
+		</td>
+		<td><input type="number" max="30" min="1" name="f_participant"/></td>
+		<td>
+			<select name="f_subject">
+				<option value="1" selected="selected">축구</option>
+				<option value="2">농구</option>
+				<option value="3">야구</option>
+				<option value="4">배드민턴</option>
+			</select>
+		</td>
+		<td>
+            <button class='okBtn' type='button'>OK</button>
+			<button class='deleteBtn' type='button'>DELETE</button>
+		</td>
+		<td name="f_id" style="display: none"></td>
+	</tr>
+</table>
+</div>
+
 
 <jsp:include page="/WEB-INF/jsp/footer.jsp" flush="true"></jsp:include>

@@ -2,13 +2,59 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="MyGym">
-
+	
+	<select id="viewGym" parameterType="hashMap" resultType="hashMap">
+	
+		SELECT
+			A.gym_ID as "id",
+			A.gym_name as "name",
+			A.gym_fig as "fig",
+			A.gym_location as "location",
+			A.gym_latitude as "latitude",
+			gym_longitude as "longitude",
+			avail_starttime as "startTime",
+			avail_endtime as "endTime",
+			gym_info as "info"
+		FROM
+			gym as A
+		WHERE 
+			A.gym_admin_ID = #{UDID};
+			
+	</select>
+	
+	<select id="viewFacility" parameterType="hashMap" resultType="hashMap">
+	
+		SELECT
+			A.fac_ID as "f_id",
+			A.avail_starttime as "f_startTime",
+			A.avail_endtime as "f_endTime",
+			A.avail_participant as "f_participant",
+			A.fac_name as "f_name",
+			A.subj_ID as "f_subject"
+		FROM
+			gym_facility AS B
+   			LEFT OUTER JOIN fac_info AS A
+      		ON A.fac_ID = B.fac_ID
+		WHERE
+			B.gym_ID = (SELECT gym_ID FROM gym_admin WHERE gym_admin.UDID = #{UDID});
+			
+	</select>
+	
 	<select id="registerGym" parameterType="hashMap" resultType="hashMap">
 	
 	</select>
 	
 	<select id="editGym" parameterType="hashMap" resultType="hashMap">
-	
+		UPDATE
+			gym 
+		SET 
+			gym_name = #{gym_name},
+			gym_location = #{gym_location},
+			avail_starttime= #{avail_starttime},
+			avail_endtime= #{avail_endtime},
+			gym_info = #{gym_info}
+		WHERE 
+			gym_admin_ID = #{admin_ID}
 	</select>
 
 	<select id="addFacility" parameterType="hashMap" resultType="hashMap">
@@ -16,7 +62,16 @@
 	</select>
 	
 	<select id="editFacility" parameterType="hashMap" resultType="hashMap">
-	
+		UPDATE
+			fac_info
+		SET
+			avail_starttime = ${avail_starttime},
+			avail_endtime = ${avail_endtime},
+			avail_participant = ${avail_participant},
+			fac_name = ${fac_name},
+			subj_ID = ${subj_ID} 
+		WHERE
+			fac_ID = ${fac_ID}
 	</select>
 	
 	<select id="delFacility" parameterType="hashMap" resultType="hashMap">

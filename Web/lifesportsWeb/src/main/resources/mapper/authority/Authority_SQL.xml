@@ -16,28 +16,20 @@
 	
 	</select>
 	
-	<select id="testCall" parameterType="hashMap" resultType="hashMap">
-	
-		SELECT
-			ID as "id",
-			name as "name"
-		FROM
-			`gym_admin`
-		WHERE
-			ID = #{test}
-			
-	
-	</select>
+
 	
 	<select id="getUserInfo" parameterType="hashMap" resultType="hashMap">
 	
-		SELECT
-			ID as "id",
-			name as "name"
-		FROM
-			`gym_admin`
-		WHERE
-			ID = #{id}
+		
+			
+		SELECT 
+			A.UDID as "UDID",
+			A.ID as "id",
+			A.name as "name"
+		FROM 
+			gym_admin AS A
+		WHERE 
+			A.ID = #{id} AND #{password} = AES_DECRYPT(UNHEX(A.PWD),'lifesports')
 	
 	</select>
 
