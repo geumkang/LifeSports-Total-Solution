@@ -47,7 +47,8 @@ public class AuthorityController {
 	
 	@RequestMapping(value = "/login.do")
 	public String loginView(HttpServletRequest request, Model model) {
-		
+	
+	
 		return "/authority/login";
 	}
 	
@@ -58,12 +59,25 @@ public class AuthorityController {
 		reqMap.put("id", id);
 		reqMap.put("password", password);
 		
-		Map res = authorityService.getUserInfo(reqMap);
-		String name = (String) res.get("name");
-		HttpSession session = request.getSession();
-		session.setAttribute("name", name);
+		List<Map<String, Object>> res = authorityService.getUserInfo(reqMap);
 		
-		return "main";
+		if(res.size() != 0) {
+			String UDID = res.get(0).get("UDID").toString();
+			String userId = res.get(0).get("id").toString();
+			String name = (String) res.get(0).get("name");
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("UDID", UDID);
+			session.setAttribute("id", userId);
+			session.setAttribute("name", name);
+			
+			return "main";
+		}
+		else {
+			return "authority/login";
+		}
+		
+		
 	}
 	
 	

@@ -36,7 +36,7 @@ public class AuthorityService{
 		}
 	}
 	
-	public Map<String, Object> getUserInfo(Map<String, Object> map) {
+	public List<Map<String, Object>> getUserInfo(Map<String, Object> map) {
 		try {
 			return authorityDAO.getUserInfo(map);
 		} catch (Exception e) {

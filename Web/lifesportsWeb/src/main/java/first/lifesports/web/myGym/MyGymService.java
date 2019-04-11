@@ -14,7 +14,27 @@ public class MyGymService{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Resource(name = "mygymDAO")
 	private MyGymDAO mygymDAO;
-
+	
+	public List<Map<String, Object>> viewGym(Map<String, Object> map) {
+		try {
+			return mygymDAO.selectGym(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Map<String, Object>> viewFacility(Map<String, Object> map) {
+		try {
+			return mygymDAO.selectFacility(map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public List<Map<String, Object>> registerGym(Map<String, Object> map) {
 		try {
 			return mygymDAO.insertGym(map);
