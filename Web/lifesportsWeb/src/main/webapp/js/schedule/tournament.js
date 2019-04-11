@@ -1,11 +1,9 @@
-function clicked()
+function tournamentView(serial)
 {
-	console.log("done");
+	var form = document.frm;
 	
-		var f = document.form1;
-		
-		f.action = "/schedule/tournament.do";
-		f.submit();
-		
-		
+	frm.serial.value = serial;
+	frm.action = "/schedule/tournamentView.do";
+	frm.target = "_self";
+	frm.submit();
 }

@@ -2,7 +2,9 @@ package first.lifesports.web.schedule;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -10,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,29 +66,25 @@ public class SchduleController {
 		Map test = new HashMap<String, Object>();
 		test.put("title", "fuck");
 		list.add(test);
+			
+		Map sessionMap = CommUtils.getSessionMap(request);
 		
 		model.addAttribute("list", list);
+		model.addAttribute("session", sessionMap);
 		
 		
 		
 		return "/schedule/tournament";
 	}
 	
-	@RequestMapping(value = "/schedule/tournamentView.do")
+	@RequestMapping(value = "/schedule/tournamentView.do", method=RequestMethod.POST)
 	/*public String tornamentView(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {*/
-		public String tornamentView(HttpServletRequest request, Model model) {
-		
-		Map reqMap = CommUtils.getRequestMap(request);
-		
-		//List tournamentList = scheduleService.getTournamentList(reqMap);
-		
-		//model.addAttribute("tournamentList",  tournamentList);
-		
+		public String tornamentView(HttpServletRequest request, Model model, @RequestParam("serial") String serial) {
 		
 		//디비에서 게시글 번호를 바탕으로 게시글의 상세 내용을 조회함 (serial)
 		List list = new ArrayList();
 		Map test = new HashMap<String, Object>();
-		test.put("title", "fuck");
+
 		list.add(test);
 		
 		model.addAttribute("list", list);

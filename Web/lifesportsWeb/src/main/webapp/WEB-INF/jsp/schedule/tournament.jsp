@@ -10,32 +10,6 @@
 <jsp:include page="/WEB-INF/jsp/topMenu.jsp" flush="true"></jsp:include>
 <script src='/webResource/jquery-3.3.1.js'></script>
 <script src='/js/schedule/tournament.js'></script>
-<script>
-$(document).ready(function() {
-	// 이전달 이동 버튼 클릭
-	$('#postTest').click(function(){
-		
-		var data = {
-			"year": 123,
-			"month": 456
-		};
-		
-		$.post({
-			url:"/schedule/tournament.do",
-			type:"POST",
-			data : data,
-			contentType : "application/json; charset=UTF-8",
-			success: function(result){
-				console.log(result);
-			},
-			error: function(xhr, status, error) {
-				alert(error);
-			}
-		});
-	});
-});
-
-</script>
 
 <section class="w3ls-bnrbtm py-5" id="about">
 	<div class="container py-xl-5 py-lg-3">
@@ -65,12 +39,13 @@ $(document).ready(function() {
 								<c:forEach items="${list}" var="list" varStatus="state">
 									<tr>
 										<td><c:out value="${(totCnt - startNo) - state.index}" /></td>
-										<td class="text-left"><a href="#" onclick="downView()">${list.title}</a></td>
+										<td class="text-left"><a href="#" onclick="tournamentView(${list.serial})">${list.title}</a></td>
 									</tr>
 								</c:forEach>
 							</c:if>	
 
 						</tbody>
+					
 					</table>
 					
 						<br>

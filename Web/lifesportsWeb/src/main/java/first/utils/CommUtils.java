@@ -13,6 +13,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,6 +47,17 @@ import net.minidev.json.JSONObject;
 public class CommUtils {
 	
 	private final static Log logger = LogFactory.getLog(CommUtils.class);
+	
+	public static Map getSessionMap(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		List sessionlist = Collections.list(session.getAttributeNames());
+		Map sessionMap = new HashMap<String, Object>();
+		for(int i = 0 ; i < sessionlist.size(); i ++) {
+			sessionMap.put(sessionlist.get(i), session.getAttribute((String) sessionlist.get(i)));
+		}
+		
+		return sessionMap;
+	}
 	
 	public static HashMap getRequestMap(HttpServletRequest req) {
 
