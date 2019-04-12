@@ -18,6 +18,8 @@ listChanged = true;
 $(document).ready(function() {
 	
 	loadData();
+	emptyCheck();
+	
 	$(document).on("click", ".timeBox", function(){
 	
 	
@@ -109,19 +111,19 @@ $(document).ready(function() {
 			
 			// Request Data
 			var data = {
-// 				"gym_name": gym_data[0],
-// 				"gym_location": gym_data[1],
-// 				"avail_starttime": gym_data[2].substr(0,5) + ":00",
-// 				"avail_endtime": gym_data[2].substr(8,13) + ":00",
-// 				"gym_info": gym_data[3],
-// 				"admin_ID": $("#ADMIN_UDID").val(),
+				"gym_name": gym_data[0],
+				"gym_location": gym_data[1],
+				"avail_starttime": gym_data[2].substr(0,5) + ":00",
+				"avail_endtime": gym_data[2].substr(8,13) + ":00",
+				"gym_info": gym_data[3],
+				"admin_ID": $("#ADMIN_UDID").val(),
 			};
 			console.log(data)
 			$.ajax({
 				headers: { 
 				    Accept : "application/json"
 				},
-				url:"/editGym.do",
+				url:"/myGym/editGym.do",
 				type:"POST",
 				data : JSON.stringify(data),
 				contentType : "application/json; charset=UTF-8",
@@ -156,29 +158,29 @@ $(document).ready(function() {
 	});
 	
 	$(document).on("click", ".deleteBtn", function(){
+		
+		var fac_ID = $(this).parent().next().text();
 		$(this).parent().parent().remove();
-		
 		// Request Data
-		var data = {
-			/* "year": date.getFullYear(),
-			"month": date.getMonth() + 1 */
-		};
+ 		var data = {
+ 			"fac_ID": fac_ID
+ 		};
 		
-		$.ajax({
-			headers: { 
-			    Accept : "application/json"
+ 		$.ajax({
+ 			headers: { 
+ 			    Accept : "application/json"
+ 			},
+ 			url:"/myGym/delFacility.do",
+ 			type:"POST",
+ 			data : JSON.stringify(data),
+ 			contentType : "application/json; charset=UTF-8",
+ 			success: function(result){
+ 				console.log("Facility Delete Completely");
 			},
-			url:"/delFacility.do",
-			type:"POST",
-			data : JSON.stringify(data),
-			contentType : "application/json; charset=UTF-8",
-			success: function(result){
-				console.log(result);
-			},
-			error: function(xhr, status, error) {
-				alert(error);
-			}
-		});
+ 			error: function(xhr, status, error) {
+ 				alert(error);
+ 			}
+ 		});
 	});
 	
 	$(document).on("click", ".okBtn", function(){
@@ -221,15 +223,15 @@ $(document).ready(function() {
 				
 				var id = $(this).parent().siblings().eq(4).text();
 				gym_data.push(id);
-				console.log(gym_data);
 				
+				console.log("URL : " + $(this).attr("name"))
 				var url;
 				if($(this).attr("name") == 'new'){
-					url = "/addFacility.do";
+					url = "/myGym/addFacility.do";
 					$(this).attr("name", "");
 				}
 				else
-					url = "/editFacility.do";
+					url = "/myGym/editFacility.do";
 					
 				// Request Data
 				var data = {
@@ -237,8 +239,9 @@ $(document).ready(function() {
 					"avail_endtime": gym_data[2],
 					"avail_participant": gym_data[3],
 					"fac_name": gym_data[0],
-					"subj_ID": gym_data[4],
-					//"fac_ID": gym_data[5]
+					"subj_name": gym_data[4],
+					"fac_ID": gym_data[5],
+					"gym_ID": $("#GYM_ID").val() 
 				};
 				
 				$.ajax({
@@ -313,7 +316,7 @@ $(document).ready(function() {
 			headers: { 
 			    Accept : "application/json"
 			},
-			url:"/addGym.do",
+			url:"/myGym/addGym.do",
 			type:"POST",
 			data : JSON.stringify(data),
 			contentType : "application/json; charset=UTF-8",
@@ -379,13 +382,16 @@ function loadData(){
 }
 
 function emptyCheck(){
-	if($("#facilityInfoBox").find('tr').length == 0){
+	if($("#GYM_ID").val() != null){
+		$("#newInfo").find("select[name='start']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
+		$("#newInfo").find("select[name='end']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
+		
 		$("#registerInfoBox").css("display", "block");
 		$("#gymInfo").css("display", "none");
 	}
 	else{ 
-		$("#registerInfoBox").css("display", "none");
-		$("#gymInfo").css("display", "block");
+		$("#registerInfoBox").css("display", "block");
+		$("#gymInfo").css("display", "none");
 	}
 }
 
@@ -483,7 +489,7 @@ function placeMarker(location, marker) {
 
 
 #registerInfoBox {
-	display: none;
+	
 	width:100%;
 	margin: 0px 50px 0px 50px;
 	padding: 10px 30px 10px 30px;
@@ -615,8 +621,10 @@ function placeMarker(location, marker) {
 					</tr>
 					
 					<tr>
-						<td>234</td>
-						<td><input id="234Input" type="text"></td>
+						<td>Figure</td>
+						<td>
+							<input type="file" id="figInput">
+						</td>
 						<td rowspan="3" colspan="2" style="text-align:right;">
 							<div id="map" style="display: inline-block"></div>
 						</td>
@@ -624,12 +632,15 @@ function placeMarker(location, marker) {
 					
 					<tr>
 						<td>Usable Time</td>
-						<td><input id="timeInput" type="text"></td>
+						<td>
+							<select name="start"></select>
+							<select name="end"></select>
+						</td>
 					</tr>
 					
 					<tr>
-						<td>234</td>
-						<td><input id="234Input" type="text"></td>
+						<td>Info</td>
+						<td><input id="info" type="text"></td>
 					</tr>	
 					
 					<tr style="height: 50px;">
@@ -754,10 +765,10 @@ function placeMarker(location, marker) {
 		<td><input type="number" max="30" min="1" name="f_participant"/></td>
 		<td>
 			<select name="f_subject">
-				<option value="1" selected="selected">축구</option>
-				<option value="2">농구</option>
-				<option value="3">야구</option>
-				<option value="4">배드민턴</option>
+				<option value="1" selected="selected">soccer</option>
+				<option value="2">baseball</option>
+				<option value="3">basketball</option>
+				<option value="4">badminton</option>
 			</select>
 		</td>
 		<td>

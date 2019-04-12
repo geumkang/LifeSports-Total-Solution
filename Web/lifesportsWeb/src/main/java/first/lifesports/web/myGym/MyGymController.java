@@ -76,7 +76,6 @@ public class MyGymController {
 			
 			
 			// Get Facility Info
-			
 			Map map2 = new HashMap<String, Object>();
 			map2.put("UDID", session.getAttribute("UDID"));
 			res = mygymService.viewFacility(map2);
@@ -110,99 +109,63 @@ public class MyGymController {
 	}
 	
 	// 체육관 등록 버튼 클릭
-	@RequestMapping(value = "/registerGym.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@RequestMapping(value = "/myGym/registerGym.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
 	@ResponseBody
-	public String registerGym(@RequestBody String map) throws Exception{
+	public void registerGym(@RequestBody String map) throws Exception{
 		
-		// key : year, month
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
 		
-		//Server Call
-		List<Map<String, Object>> res = mygymService.registerGym(reqMap);
+		mygymService.registerGym(reqMap);
 		
-		//Data Injection
-		String id = (String) res.get(0).get("id");
-		String name = (String) res.get(0).get("name");
-		
-		//Map maker
-		Map<String, Object> resMap = new HashMap();
-		resMap.put("id", id);
-		resMap.put("name", name);
-		
-		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+		return;
 	}
 	
 	// 체육관 정보 수정 버튼 클릭
-	@RequestMapping(value = "/editGym.do", method=RequestMethod.POST, headers="Accept=*/*",produces="application/json; charset=utf8")
+	@RequestMapping(value = "/myGym/editGym.do", method=RequestMethod.POST, headers="Accept=*/*",produces="application/json; charset=utf8")
 	@ResponseBody
 	public void editGym(@RequestBody String map) throws Exception{
 		
-		// key : id
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
 		
-		//Server Call
-		List<Map<String, Object>> res = mygymService.editGym(reqMap);
+		mygymService.editGym(reqMap);
 		
 		return;
 	}
 	
 	// 시설 추가 버튼 클릭
-	@RequestMapping(value = "/addFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces="application/json")
+	@RequestMapping(value = "/myGym/addFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces="application/json")
 	@ResponseBody
-	public String addFacility(@RequestBody String map) throws Exception{
+	public void addFacility(@RequestBody String map) throws Exception{
 		
-		// key : year, month
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
+
+		mygymService.addFacility(reqMap);
 		
-		//Server Call
-		List<Map<String, Object>> res = mygymService.addFacility(reqMap);
-		
-		//Data Injection
-		String id = (String) res.get(0).get("id");
-		String name = (String) res.get(0).get("name");
-		
-		//Map maker
-		Map<String, Object> resMap = new HashMap();
-		resMap.put("id", id);
-		resMap.put("name", name);
-		
-		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+		return;
 	}
 	
 	// 시설 정보 변경 버튼 클릭
-	@RequestMapping(value = "/editFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@RequestMapping(value = "/myGym/editFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
 	@ResponseBody
 	public void editFacility(@RequestBody String map) throws Exception{
 		
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
 		
-		//Server Call
-		List<Map<String, Object>> res = mygymService.editFacility(reqMap);
+		mygymService.editFacility(reqMap);
 		
 		return;
 	}
 	
 	// 시설 정보 삭제 버튼 클릭
-	@RequestMapping(value = "/delFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	@RequestMapping(value = "/myGym/delFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
 	@ResponseBody
-	public String delFacility(@RequestBody String map) throws Exception{
+	public void delFacility(@RequestBody String map) throws Exception{
 		
-		// key : year, month
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
 		
-		//Server Call
-		List<Map<String, Object>> res = mygymService.delFacility(reqMap);
+		mygymService.delFacility(reqMap);
 		
-		//Data Injection
-		String id = (String) res.get(0).get("id");
-		String name = (String) res.get(0).get("name");
-		
-		//Map maker
-		Map<String, Object> resMap = new HashMap();
-		resMap.put("id", id);
-		resMap.put("name", name);
-		
-		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+		return;
 	}
 	
 }

@@ -20,28 +20,36 @@ public class MyGymDAO extends AbstractDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> insertGym(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("MyGym.registerGym", map);
+	public void insertGym(Map<String, Object> map) throws Exception {
+		insert("MyGym.registerGym", map);
+		return;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> updateGym(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("MyGym.editGym", map);
+	public void updateGym(Map<String, Object> map) throws Exception {
+		update("MyGym.editGym", map);
+		return;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> insertFacility(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("MyGym.addFacility", map);
+	public void insertFacility(Map<String, Object> map) throws Exception {
+		insert("MyGym.addFacility1", map);
+		update("MyGym.addFacility2", map);
+		
+		return;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> updateFacility(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("MyGym.editFacility", map);
+	public void updateFacility(Map<String, Object> map) throws Exception {
+		update("MyGym.editFacility", map);
+		return;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> deleteFacility(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("MyGym.delFacility", map);
+	public void deleteFacility(Map<String, Object> map) throws Exception {
+		delete("MyGym.delFacility", map);
+		
+		return;
 	}
 	
 }

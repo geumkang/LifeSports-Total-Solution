@@ -30,21 +30,21 @@
 			A.avail_endtime as "f_endTime",
 			A.avail_participant as "f_participant",
 			A.fac_name as "f_name",
-			A.subj_ID as "f_subject"
-		FROM
-			gym_facility AS B
-   			LEFT OUTER JOIN fac_info AS A
-      		ON A.fac_ID = B.fac_ID
+			C.subj_name as "f_subject"
+		FROM 
+			fac_info AS A 
+			LEFT OUTER JOIN subject AS C
+			ON A.subj_ID = C.subj_ID
 		WHERE
-			B.gym_ID = (SELECT gym_ID FROM gym_admin WHERE gym_admin.UDID = #{UDID});
+			gym_ID = (SELECT gym_ID FROM gym_admin WHERE UDID = #{UDID})
 			
 	</select>
 	
-	<select id="registerGym" parameterType="hashMap" resultType="hashMap">
+	<insert id="registerGym" parameterType="hashMap">
 	
-	</select>
+	</insert>
 	
-	<select id="editGym" parameterType="hashMap" resultType="hashMap">
+	<update id="editGym" parameterType="hashMap">
 		UPDATE
 			gym 
 		SET 
@@ -55,26 +55,43 @@
 			gym_info = #{gym_info}
 		WHERE 
 			gym_admin_ID = #{admin_ID}
-	</select>
+	</update>
 
-	<select id="addFacility" parameterType="hashMap" resultType="hashMap">
+	<insert id="addFacility1" parameterType="hashMap">
 	
-	</select>
+		INSERT INTO fac_info(
+								gym_ID,
+								avail_starttime,
+								avail_endtime,
+								avail_participant,
+								fac_name,
+								subj_ID) 
+		VALUES (#{gym_ID}, #{avail_starttime}, #{avail_endtime}, #{avail_participant}, #{fac_name}, 1);
+		
+	</insert>
+	<update id="addFacility2" parameterType="hashMap">
+		
+		UPDATE 
+			fac_info
+		SET
+			subj_ID = (select subj_ID FROM subject WHERE subj_name = #{subj_name});
+		
+	</update>
 	
-	<select id="editFacility" parameterType="hashMap" resultType="hashMap">
+	<update id="editFacility" parameterType="hashMap">
 		UPDATE
 			fac_info
 		SET
-			avail_starttime = ${avail_starttime},
-			avail_endtime = ${avail_endtime},
-			avail_participant = ${avail_participant},
-			fac_name = ${fac_name},
-			subj_ID = ${subj_ID} 
+			avail_starttime = #{avail_starttime},
+			avail_endtime = #{avail_endtime},
+			avail_participant = #{avail_participant},
+			fac_name = #{fac_name},
+			subj_ID = (SELECT subj_ID FROM subject WHERE subj_name = #{subj_name})
 		WHERE
-			fac_ID = ${fac_ID}
-	</select>
+			fac_ID = #{fac_ID}
+	</update>
 	
-	<select id="delFacility" parameterType="hashMap" resultType="hashMap">
-	
-	</select>	
+	<delete id="delFacility" parameterType="hashMap">
+		DELETE FROM fac_info WHERE fac_ID = ${fac_ID}
+	</delete>	
 </mapper>

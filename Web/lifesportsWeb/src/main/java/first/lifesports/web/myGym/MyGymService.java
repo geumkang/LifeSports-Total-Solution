@@ -35,53 +35,52 @@ public class MyGymService{
 		}
 	}
 	
-	public List<Map<String, Object>> registerGym(Map<String, Object> map) {
+	public void registerGym(Map<String, Object> map) {
 		try {
-			return mygymDAO.insertGym(map);
+			mygymDAO.insertGym(map);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			return;
 		}
 	}
 	
-	public List<Map<String, Object>> editGym(Map<String, Object> map) {
+	public void editGym(Map<String, Object> map) {
 		try {
-			return mygymDAO.updateGym(map);
+			mygymDAO.updateGym(map);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			return;
 		}
 	}
 	
-	public List<Map<String, Object>> addFacility(Map<String, Object> map) {
+	public void addFacility(Map<String, Object> map) {
 		try {
-			return mygymDAO.insertFacility(map);
+			mygymDAO.insertFacility(map);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
 	}
 	
-	public List<Map<String, Object>> editFacility(Map<String, Object> map) {
+	public void editFacility(Map<String, Object> map) {
 		try {
-			return mygymDAO.updateFacility(map);
+			mygymDAO.updateFacility(map);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			return;
 		}
 	}
 	
-	public List<Map<String, Object>> delFacility(Map<String, Object> map) {
+	public void delFacility(Map<String, Object> map) {
 		try {
-			return mygymDAO.deleteFacility(map);
+			mygymDAO.deleteFacility(map);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			return;
 		}
 	}
 	
