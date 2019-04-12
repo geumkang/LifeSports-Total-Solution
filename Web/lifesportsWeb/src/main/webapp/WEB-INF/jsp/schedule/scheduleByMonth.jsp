@@ -77,10 +77,25 @@ $(document).ready(function() {
 		var date = calendar.getDate();
 		var data = {
 			"year": date.getFullYear(),
-			"month": date.getMonth() + 1
+			"month": date.getMonth()
 		};
 		
 		$.ajax({
+			headers: { 
+			    Accept : "application/json"
+			},
+			url:"/scheduleRequestAjax.do",
+			type:"POST",
+			data : JSON.stringify(data),
+			contentType : "application/json; charset=UTF-8",
+			success: function(result){
+				console.log(result);
+			},
+			error: function(xhr, status, error) {
+				alert(error);
+			}
+		});
+/* 		$.ajax({
 			headers: { 
 			    Accept : "application/json"
 			},
@@ -94,7 +109,7 @@ $(document).ready(function() {
 			error: function(xhr, status, error) {
 				alert(error);
 			}
-		});
+		}); */
 	});
 	
 	$('#addBtn').click(function(){

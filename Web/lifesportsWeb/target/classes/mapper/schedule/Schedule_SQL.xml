@@ -3,16 +3,25 @@
 
 <mapper namespace="Schedule">
 
-	<select id="getSchedule" parameterType="hashMap" resultType="hashMap">
-		<!-- 
-		SELECT
-			ID as "id",
-			name as "name"
-		FROM
-			`user`
-		WHERE
-			ID = #{userId}
-		-->
+	<!-- 
+	@Parameter : MONTH / YEAR
+	@Do : 해당 월 일정 검색
+	 -->
+	<select id="scheduleListByMonth" parameterType="hashMap" resultType="hashMap">
+		select
+			schedule_ID as "id",
+			gym_ID as "gym_id",
+			fac_ID as "fac_id",
+			schedule_name as "name",
+			schedule_detail as "detail",
+			schedule_type as "type",
+			starttime as "startTime",
+			endtime as "endTime"
+		from
+			fac_schedule
+		where
+			STR_TO_DATE(#{searchStartDate}, '%Y-%m') &lt; STR_TO_DATE(starttime, '%Y-%m-%d %H:%i:%s') AND
+			STR_TO_DATE(#{searchEndDate}, '%Y-%m') &gt; STR_TO_DATE(starttime, '%Y-%m-%d %H:%i:%s')
 	</select>
 	
 	<select id="addSchedule" parameterType="hashMap" resultType="hashMap">

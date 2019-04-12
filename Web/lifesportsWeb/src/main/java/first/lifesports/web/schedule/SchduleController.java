@@ -159,6 +159,29 @@ public class SchduleController {
 		return "redirect:/schedule/tournament.do";
 	}
 	
+	/*
+	 * Ajax Request for schedule
+	 * */
+		@RequestMapping(value = "/scheduleRequestAjax.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+		@ResponseBody
+		public String scheduleRequestAjax(@RequestBody String map) throws Exception{
+			
+			// key : year, month
+			Map reqMap = CommUtils.convertJSONstringToMap(map);
+			
+			reqMap.put("searchStartDate", (reqMap.get("year") + "-" + reqMap.get("month") ) );
+			reqMap.put("searchEndDate", (reqMap.get("year") + "-" + ((int)reqMap.get("month")+1) ) );
+			
+			//Server Call
+			List<Map<String, Object>> res = scheduleService.searchScheduleByMonth(reqMap);
+					
+			//Map maker
+			Map<String, Object> resMap = new HashMap();
+			resMap.put("resultList", res);
+			
+			return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+		}
+	
 	// 이전 월로 이동 버튼 클릭
 	@RequestMapping(value = "/prevMonth.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
 	@ResponseBody
