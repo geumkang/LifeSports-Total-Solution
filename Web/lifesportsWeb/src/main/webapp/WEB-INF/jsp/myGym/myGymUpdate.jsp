@@ -225,6 +225,7 @@ $(document).ready(function() {
 				gym_data.push(id);
 				
 				console.log("URL : " + $(this).attr("name"))
+				
 				var url;
 				if($(this).attr("name") == 'new'){
 					url = "/myGym/addFacility.do";
@@ -414,7 +415,8 @@ function loadData(){
 }
 
 function emptyCheck(){
-	if($("#GYM_ID").val() != null){
+	console.log($("#GYM_ID").val())
+	if($("#GYM_ID").val() == ""){
 		$("#newInfo").find("select[name='start']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
 		$("#newInfo").find("select[name='end']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
 		
@@ -422,8 +424,8 @@ function emptyCheck(){
 		$("#gymInfo").css("display", "none");
 	}
 	else{ 
-		$("#registerInfoBox").css("display", "block");
-		$("#gymInfo").css("display", "none");
+		$("#registerInfoBox").css("display", "none");
+		$("#gymInfo").css("display", "block");
 	}
 }
 

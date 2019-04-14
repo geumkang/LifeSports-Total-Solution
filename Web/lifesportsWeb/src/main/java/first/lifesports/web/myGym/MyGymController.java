@@ -56,7 +56,7 @@ public class MyGymController {
 		
 		HttpSession session = request.getSession();
 		
-		Map list = new HashMap<String, Object>();;
+		Map list = new HashMap<String, Object>();
 		Map map = new HashMap<String, Object>();
 		map.put("UDID", session.getAttribute("UDID"));
 		
