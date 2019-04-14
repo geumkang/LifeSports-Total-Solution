@@ -42,7 +42,7 @@
 			starttime,
 			endtime
 		)	
-		valuesoptiond
+		values
 		(
 			(
 				SELECT 

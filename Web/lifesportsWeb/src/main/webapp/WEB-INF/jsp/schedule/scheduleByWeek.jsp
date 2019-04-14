@@ -418,7 +418,7 @@ body {
 
 <section class="w3ls-bnrbtm py-5" id="about">
 	<div class="container py-xl-5 py-lg-3">
-		<h3 class="title-w3 mb-md-5 mb-sm-4 mb-2 text-center font-weight-bold">Weekly Schedule</h3>
+		<h3 class="title-w3 mb-md-5 mb-sm-4 mb-2 text-center font-weight-bold">Schedule Management</h3>
 		<div style="text-align: right; margin-bottom: 40px;">
 			시설 선택 : <select id="fac_listBox">
 				<c:forEach items="${fac_list}" var="elem" varStatus="status">

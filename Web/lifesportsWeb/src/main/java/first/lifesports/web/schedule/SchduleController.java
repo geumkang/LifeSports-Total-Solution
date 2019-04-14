@@ -181,8 +181,8 @@ public class SchduleController {
 		// key : year, month
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
 
-		reqMap.put("searchStartDate", (reqMap.get("year") + "-" + reqMap.get("month")));
-		reqMap.put("searchEndDate", (reqMap.get("year") + "-" + ((int) reqMap.get("month") + 1)));
+		reqMap.put("searchStartDate", (reqMap.get("year") + "-" + ((int)reqMap.get("month"))));
+		reqMap.put("searchEndDate", (reqMap.get("year") + "-" + ((int) reqMap.get("month") + 2)));
 
 		// Server Call
 		List<Map<String, Object>> res = scheduleService.searchScheduleByMonth(reqMap);

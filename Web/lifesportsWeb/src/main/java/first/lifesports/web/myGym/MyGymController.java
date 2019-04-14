@@ -50,7 +50,7 @@ public class MyGymController {
 		return map;		
 	}
 	
-	// ÆäÀÌÁö ·ÎµåµÉ ‹š
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ ï¿½ï¿½
 	@RequestMapping(value = "/myGym/myGymUpdate.do")
 	public String myGym(HttpServletRequest request, Model model) {
 		
@@ -65,13 +65,15 @@ public class MyGymController {
 			List<Map<String, Object>> res = mygymService.viewGym(map);
 			
 			String fig;
-			if(res.size() != 0) {
-				map.put("isEmpty", "FALSE");
-				List<String> keyList = new ArrayList<String>(Arrays.asList("id", "name", "fig", "location", "latitude", "longitude", "startTime", "endTime", "info"));
-				map.putAll(responseMapping(res, keyList, 0));
-			}
-			else {
-				map.put("isEmpty", "TRUE");
+			if(res != null) {
+				if(res.size() != 0) {
+					map.put("isEmpty", "FALSE");
+					List<String> keyList = new ArrayList<String>(Arrays.asList("id", "name", "fig", "location", "latitude", "longitude", "startTime", "endTime", "info"));
+					map.putAll(responseMapping(res, keyList, 0));
+				}
+				else {
+					map.put("isEmpty", "TRUE");
+				}
 			}
 			
 			
@@ -108,7 +110,7 @@ public class MyGymController {
 		return "/myGym/myGymUpdate";
 	}
 	
-	// Ã¼À°°ü µî·Ï ¹öÆ° Å¬¸¯
+	// Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½
 	@RequestMapping(value = "/myGym/registerGym.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
 	@ResponseBody
 	public void registerGym(@RequestBody String map) throws Exception{
@@ -120,7 +122,7 @@ public class MyGymController {
 		return;
 	}
 	
-	// Ã¼À°°ü Á¤º¸ ¼öÁ¤ ¹öÆ° Å¬¸¯
+	// Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½
 	@RequestMapping(value = "/myGym/editGym.do", method=RequestMethod.POST, headers="Accept=*/*",produces="application/json; charset=utf8")
 	@ResponseBody
 	public void editGym(@RequestBody String map) throws Exception{
@@ -132,7 +134,7 @@ public class MyGymController {
 		return;
 	}
 	
-	// ½Ã¼³ Ãß°¡ ¹öÆ° Å¬¸¯
+	// ï¿½Ã¼ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½
 	@RequestMapping(value = "/myGym/addFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces="application/json")
 	@ResponseBody
 	public void addFacility(@RequestBody String map) throws Exception{
@@ -144,7 +146,7 @@ public class MyGymController {
 		return;
 	}
 	
-	// ½Ã¼³ Á¤º¸ º¯°æ ¹öÆ° Å¬¸¯
+	// ï¿½Ã¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½
 	@RequestMapping(value = "/myGym/editFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
 	@ResponseBody
 	public void editFacility(@RequestBody String map) throws Exception{
@@ -156,7 +158,7 @@ public class MyGymController {
 		return;
 	}
 	
-	// ½Ã¼³ Á¤º¸ »èÁ¦ ¹öÆ° Å¬¸¯
+	// ï¿½Ã¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Å¬ï¿½ï¿½
 	@RequestMapping(value = "/myGym/delFacility.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
 	@ResponseBody
 	public void delFacility(@RequestBody String map) throws Exception{

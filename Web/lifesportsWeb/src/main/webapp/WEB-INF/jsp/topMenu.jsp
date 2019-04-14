@@ -43,9 +43,9 @@ else{
                                 <a href="#">Schedule<span class="fa fa-angle-down" aria-hidden="true"></span></a>
                                 <input type="checkbox" id="drop-2" />
                                 <ul>
-                                    <li><a href="/schedule/scheduleByMonth.do" class="drop-text">Per Month</a></li>
-                                    <li><a href="/schedule/scheduleByWeek.do" class="drop-text">Per Week</a></li>
-                                    <li><a href="/schedule/scheduleByWeek.do" class="drop-text">Reservation Start Date</a></li>
+                                    <li><a href="/schedule/scheduleByMonth.do" class="drop-text">Holyday Management</a></li>
+                                    <li><a href="/schedule/scheduleByWeek.do" class="drop-text">Schedule Management</a></li>
+                                    <!-- <li><a href="/schedule/scheduleByWeek.do" class="drop-text">Reservation Start Date</a></li> -->
                                     <li><a href="/schedule/tournament.do" class="drop-text">Tournament</a></li>
                                 </ul>
                             </li>

@@ -10,6 +10,12 @@
 <jsp:include page="/WEB-INF/jsp/topMenu.jsp" flush="true"></jsp:include>
 <script src='/webResource/jquery-3.3.1.js'></script>
 
+<script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+
 						    
 <script>
 
@@ -198,7 +204,6 @@ $(document).ready(function() {
 				// 이름
 				var name = $(this).parent().siblings().eq(0).children().val();
 				$(this).parent().siblings().eq(0).children().remove();
-				$(this).parent().siblings().eq(0).text(name.trim());
 				gym_data.push(name);
 				
 				// 이용 시간
@@ -224,7 +229,8 @@ $(document).ready(function() {
 				var id = $(this).parent().siblings().eq(4).text();
 				gym_data.push(id);
 				
-				console.log("URL : " + $(this).attr("name"))
+				debugger;
+				alert("URL : " + $(this).attr("name"))
 				
 				var url;
 				if($(this).attr("name") == 'new'){
@@ -310,23 +316,20 @@ $(document).ready(function() {
 			var name = $("#nameInput").val();
 			gym_data.push(name);
 			
-			var fig = ""
-			gym_data.push(fig);
+			var figure = $(".ql-editor p").html();
+			gym_data.push(figure);
 			
 			var location = $("#locationInput").text();
 			gym_data.push(location);
 			
-			var startTime = $("#newInfo").find("select[name='start']").find("option:selected").text();
+			var startTime = $('#newInfo').find("select[name='start']").find("option:selected").text();
 			gym_data.push(startTime);
 			
-			var endTime = $("#newInfo").find("select[name='end']").find("option:selected").text();
+			var endTime = $('#newInfo').find("select[name='end']").find("option:selected").text();
 			gym_data.push(endTime);
 			
 			var info = $("#info").val();
 			gym_data.push(info);
-			
-			$("#registerInfoBox").css("display", "none");
-			$("#gymInfo").css("display", "block");
 			
 			// Request Data
 			var data = {
@@ -350,7 +353,8 @@ $(document).ready(function() {
 				data : JSON.stringify(data),
 				contentType : "application/json; charset=UTF-8",
 				success: function(result){
-					console.log(result);
+					console.log("Register Gym Completely");
+					window.location.href = '/myGym/myGymUpdate.do';
 				},
 				error: function(xhr, status, error) {
 					alert(error);
@@ -372,8 +376,14 @@ $(document).ready(function() {
 });
 
 function loadTime($start, $end){
-	startTime = $start.val().substr(0,5);
-	endTime = $end.val().substr(0,5);
+	if($start == "00:00:00"){
+		startTime = $start.substr(0,5);
+		endTime = $end.substr(0,5);
+	}
+	else{
+		startTime = $start.val().substr(0,5);
+		endTime = $end.val().substr(0,5);
+	}
 	
 	var current = startTime;
 	var timeList = new Array();
@@ -417,8 +427,8 @@ function loadData(){
 function emptyCheck(){
 	console.log($("#GYM_ID").val())
 	if($("#GYM_ID").val() == ""){
-		$("#newInfo").find("select[name='start']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
-		$("#newInfo").find("select[name='end']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
+		$("#newInfo").find("select[name='start']").wrapInner(loadTime("00:00:00", "23:30:00"));
+		$("#newInfo").find("select[name='end']").wrapInner(loadTime("00:00:00", "23:30:00"));
 		
 		$("#registerInfoBox").css("display", "block");
 		$("#gymInfo").css("display", "none");
@@ -525,6 +535,11 @@ function placeMarker(location, marker) {
 	margin-bottom: 20px;
 }
 
+#gymInfo tbody {
+	width: 100%;
+	margin: auto;
+}
+
 #gymInfo th {
 	height: 60px;
 }
@@ -539,7 +554,7 @@ function placeMarker(location, marker) {
 }
 
 #newInfo {
-	width: 100%;
+/* 	width: 100%; */
 	margin: auto;
 }
 
@@ -550,6 +565,7 @@ function placeMarker(location, marker) {
 #newInfo td {
 	width: 15%;
 	text-align: center;
+	vertical-align:middle;
 }
 
 #newInfo input {
@@ -562,8 +578,8 @@ function placeMarker(location, marker) {
 	margin-bottom: 30px;
 }
 
-.facilityInfo img {
-	width: 100%;
+#imgLoca {
+	width: 350px;
 	height: 250px;
 	margin: 0px 0px 0px 0px;
 }
@@ -640,6 +656,20 @@ function placeMarker(location, marker) {
 .radioBtn {
 	width: 10px;
 }
+
+.ql-editor {
+	display: none;
+}
+
+.ql-snow {
+	width : 28%;
+	text-align: center;
+	float:left;
+}
+
+#figureOK {
+	margin-top: 10px;s
+}
 </style>
 
 
@@ -650,7 +680,7 @@ function placeMarker(location, marker) {
 			<div id="registerInfoBox">
 				<table id="newInfo">
 					<tr style="height: 50px;">
-						<th colspan="4">
+<!-- 						<th colspan="4"> -->
 							Register Gym
 						</th>
 					</tr>
@@ -665,7 +695,62 @@ function placeMarker(location, marker) {
 					<tr>
 						<td>Figure</td>
 						<td>
-							<input type="file" id="figInput">
+							<div id="editor" style="height: 0px"></div>
+							<!-- Initialize Quill editor -->
+							<script>
+								var toolbarOptions = [
+									  ['image']
+									];
+								var Delta = Quill.import('delta');
+								var quill = new Quill('#editor', {
+									  modules: {
+									    toolbar: toolbarOptions
+									  },
+									  theme: 'snow'
+									});
+								var change = new Delta();
+								
+								quill.on('text-change', function(delta) {
+								  change = change.compose(delta);
+								});
+								//Save periodically
+								setInterval(function() {
+								  if (change.length() > 0) {
+ 								    console.log('Saving changes', change);
+									$("#figureOK").text("File Uploaded!")
+								    /* 
+								    Send partial changes
+								    $.post('/your-endpoint', { 
+								      partial: JSON.stringify(change) 
+								    });
+								    
+								    Send entire document
+								    $.post('/your-endpoint', { 
+								      doc: JSON.stringify(quill.getContents())
+								    });
+								    */
+								    change = new Delta();
+								    
+								    var temp = $("#editor").html();
+								    /*
+								    temp = replaceAll(temp, '<', '&lt;');
+								    temp = replaceAll(temp, '>', '&gt;'); */   
+								    $("#contents").val(temp);
+								  }
+								}, 5*1000);
+								function quillGetHTML(inputDelta) {
+								    var tempCont = document.createElement("div");
+								    (new Quill(tempCont)).setContents(inputDelta);
+								    return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
+								}
+								function replaceAll(str, searchStr, replaceStr) {
+								  return str.split(searchStr).join(replaceStr);
+								}
+							</script>
+							<label id="figureOK" style="margin-top=10px"></label>
+							<input type="hidden" rows="10" cols="70"
+								class="form-control input-smm " id="contents" name="contents" />
+							
 						</td>
 						<td rowspan="3" colspan="2" style="text-align:right;">
 							<div id="map" style="display: inline-block"></div>
@@ -722,7 +807,10 @@ function placeMarker(location, marker) {
 									</tr>
 									<tr>
 										<td rowspan="3">
-											<img src="/images/about.jpg">
+											<!-- <img src="/images/about.jpg"> -->
+											<div id="imgLoca">
+												${list.fig}
+											</div>
 										</td>
 										<td>Location</td>
 										<td id="gymLocation"></td>

@@ -22,6 +22,7 @@ public class MyGymDAO extends AbstractDAO {
 	@SuppressWarnings("unchecked")
 	public void insertGym(Map<String, Object> map) throws Exception {
 		insert("MyGym.registerGym", map);
+		update("MyGym.updateGymAdminID", map);
 		return;
 	}
 	

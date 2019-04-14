@@ -19,6 +19,18 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 			log.debug("====================================== START ======================================");
 			log.debug(" Request URI \t: " + request.getRequestURI());
 		}
+		
+		if(request.getRequestURI().toString().equals("/main.do") || request.getRequestURI().toString().equals("/login.do") || request.getRequestURI().toString().equals("/loginProcess.do")) {
+			
+		}
+		else {
+			if(request.getSession().getAttribute("UDID") == null) {
+				response.sendRedirect("/login.do");
+				return false;
+			}
+		}
+		
+		
 		return super.preHandle(request, response, handler);
 	}
 

@@ -40,7 +40,7 @@
 			
 	</select>
 	
-	<insert id="registerGym" parameterType="hashMap">
+	<insert id="registerGym" parameterType="hashMap" useGeneratedKeys="true" keyProperty="id" keyColumn="gym_ID">
 	
 		INSERT INTO gym(
 			gym_name,
@@ -62,8 +62,18 @@
 			#{avail_endtime},
 			#{gym_info},
 			#{gym_admin_ID}
+		)
 		
 	</insert>
+	
+	<update id="updateGymAdminID" parameterType="hashMap">
+		UPDATE
+			gym_admin 
+		SET 
+			gym_ID = #{id}
+		WHERE 
+			UDID = #{gym_admin_ID}
+	</update>
 	
 	<update id="editGym" parameterType="hashMap">
 		UPDATE

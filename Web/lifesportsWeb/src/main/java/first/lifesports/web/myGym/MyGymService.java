@@ -17,7 +17,18 @@ public class MyGymService{
 	
 	public List<Map<String, Object>> viewGym(Map<String, Object> map) {
 		try {
-			return mygymDAO.selectGym(map);
+			List temp = mygymDAO.selectGym(map);
+			if(temp.size() > 0){
+				Map<String, Object> temp_m = (Map<String, Object>)temp.get(0);
+				if(temp_m.containsKey("fig")) {
+					if(temp_m.get("fig") != null)
+						temp_m.put("fig", new String((byte[])temp_m.get("fig"), "utf-8"));
+				}
+				
+				temp.set(0, temp_m);
+				return temp;
+			}
+			else return null;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
