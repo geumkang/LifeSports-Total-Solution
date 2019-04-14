@@ -1,4 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="f" uri="/WEB-INF/tld/f.tld"%>
+
+<%
+
+Object o_userId = session.getAttribute("id");
+Object o_userName = session.getAttribute("name");
+
+String userId;
+String userName;
+if(o_userId != null){
+	userId = o_userId.toString();
+	userName = o_userName.toString();
+}
+else{
+	userId = "";
+	userName = "";
+}
+%>
+
+<c:set var="sessionId" value="<%=userId%>" />
+<c:set var="sessionName" value="<%=userName%>" />
 
 <!-- header -->
     <header>
@@ -28,7 +50,13 @@
                                 </ul>
                             </li>
                             <li><a href="/reservation/reservationView.do">Reservations</a></li>
-                            <li><a href="/login.do">Log In</a></li>
+                            <c:if test="${sessionId eq ''}">
+                            	<li><a href="/login.do">Log In </a></li>
+                            </c:if>
+                            <c:if test="${sessionId ne ''}">
+                            	<li><a href="/logout.do">Logout </a></li>
+                            	<li>${sessionName}님 안녕하세요!</li>
+                            </c:if>
                             
                             <!-- <li><a href="#contact">Contact</a></li>
                             <li><a href="login.html">Login</a></li>

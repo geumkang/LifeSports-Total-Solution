@@ -18,6 +18,7 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -50,6 +51,14 @@ public class AuthorityController {
 	
 	
 		return "/authority/login";
+	}
+	
+	@RequestMapping(value = "/logout.do")
+	public String logout(HttpServletRequest request, Model model) {
+	
+		request.getSession().invalidate();
+		
+		return "redirect:/main.do";
 	}
 	
 	@RequestMapping(value = "/loginProcess.do", method=RequestMethod.POST)

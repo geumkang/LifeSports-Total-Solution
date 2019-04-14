@@ -30,52 +30,6 @@
 
 </script>
 
-<body>
-    <!-- header -->
-    <header>
-        <div class="container">
-            <div class="header d-lg-flex justify-content-between align-items-center py-2 px-sm-2 px-1">
-                <!-- logo -->
-                <div id="logo">
-                    <h1><a href="index.html">My School</a></h1>
-                </div>
-                <!-- //logo -->
-                <!-- nav -->
-                <div class="nav_w3ls ml-lg-5">
-                    <nav>
-                        <label for="drop" class="toggle">Menu</label>
-                        <input type="checkbox" id="drop" />
-                        <ul class="menu">
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="index.html">About</a></li>
-                            <li><a href="index.html">Join Now</a></li>
-                            <li>
-                                <!-- First Tier Drop Down -->
-                                <label for="drop-2" class="toggle toogle-2">Pages <span class="fa fa-angle-down"
-                                        aria-hidden="true"></span>
-                                </label>
-                                <a href="#">Pages <span class="fa fa-angle-down" aria-hidden="true"></span></a>
-                                <input type="checkbox" id="drop-2" />
-                                <ul>
-                                    <li><a href="index.html" class="drop-text">Events</a></li>
-                                    <li><a href="index.html" class="drop-text">What We Do?</a></li>
-                                    <li><a href="index.html" class="drop-text">Popular Courses</a></li>
-                                    <li><a href="index.html" class="drop-text">Statistics</a></li>
-                                    <li><a href="index.html" class="drop-text">Gallery</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="index.html">Contact</a></li>
-                            <li><a href="login.html">Login</a></li>
-                            <li><a href="register.html">Register</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <!-- //nav -->
-            </div>
-        </div>
-    </header>
-    <!-- //header -->
-
     <!-- inner banner -->
     <div class="inner-banner-w3ls py-5" id="home">
         <div class="container py-xl-5 py-lg-3">

@@ -21,20 +21,66 @@
 			fac_schedule
 		where
 			STR_TO_DATE(#{searchStartDate}, '%Y-%m') &lt; STR_TO_DATE(starttime, '%Y-%m-%d %H:%i:%s') AND
-			STR_TO_DATE(#{searchEndDate}, '%Y-%m') &gt; STR_TO_DATE(starttime, '%Y-%m-%d %H:%i:%s')
+			STR_TO_DATE(#{searchEndDate}, '%Y-%m') &gt; STR_TO_DATE(starttime, '%Y-%m-%d %H:%i:%s') AND
+			fac_ID = #{fac_id}
 	</select>
 	
-	<select id="addSchedule" parameterType="hashMap" resultType="hashMap">
+	<!-- 
+	@Parameter : Multi
+	@Do : 새로운 일정 추가
+	 -->
+	<insert id="insertSchedule" parameterType="hashMap" useGeneratedKeys="true" keyProperty="id" keyColumn="schedule_ID">
+		insert
+			into
+			fac_schedule 
+		(			
+			gym_ID,
+			fac_ID,
+			schedule_name,
+			schedule_detail,
+			schedule_type,
+			starttime,
+			endtime
+		)	
+		valuesoptiond
+		(
+			(
+				SELECT 
+					gym_ID
+				FROM
+					fac_info
+				where
+					fac_ID = #{fac_id}
+			),
+			#{fac_id},
+			#{title},
+			#{detail},
+			#{type},
+			#{startDate},
+			#{endDate}
+		)
+	</insert>
 	
-	</select>
+	<update id="updateSchedule" parameterType="hashMap">
+		update
+			fac_schedule	
+		set
+			starttime = #{startDate},
+			endtime = #{endDate},
+			schedule_name = #{title},
+			schedule_detail = #{detail},
+			schedule_type = #{type}
+		where
+			schedule_ID = #{schedule_id}
+	</update>
 	
-	<select id="editSchedule" parameterType="hashMap" resultType="hashMap">
-	
-	</select>
-	
-	<select id="delSchedule" parameterType="hashMap" resultType="hashMap">
-	
-	</select>
+	<delete id="deleteSchedule" parameterType="hashMap">
+		delete
+		from
+			fac_schedule
+		where
+			schedule_ID = #{schedule_id}
+	</delete>
 	
 	<!-- 
 	@Parameter : title / contents
@@ -85,13 +131,13 @@
 	@Parameter : serial
 	@Do : 게시글 삭제
 	 -->
-	<update id="deleteTournament_board" parameterType="hashMap">
+	<delete id="deleteTournament_board" parameterType="hashMap">
 		delete
 		from
 			tournament_board
 		where
 			tournament_ID = #{serial}
-	</update>
+	</delete>
 	
 	<!-- 
 	@Parameter : serial
@@ -107,4 +153,26 @@
 			tournament_ID = #{serial}
 	</update>
 	
+	<!-- 
+	@Parameter : UDID
+	@Result : 시설 ID / 시설 이름 / 시설 시작시간 / 시설 끝나는시간
+	@Do : 시설 조회
+	 -->
+	<select id="viewFacilityList" parameterType="hashMap" resultType="hashMap">
+	
+	SELECT
+         A.fac_ID as "f_id",
+         A.avail_starttime as "f_startTime",
+         A.avail_endtime as "f_endTime",
+         A.avail_participant as "f_participant",
+         A.fac_name as "f_name",
+         C.subj_name as "f_subject"
+      FROM 
+         fac_info AS A 
+         LEFT OUTER JOIN subject AS C
+         ON A.subj_ID = C.subj_ID
+      WHERE
+         gym_ID = (SELECT gym_ID FROM gym_admin WHERE UDID = #{UDID})
+	
+	</select>
 </mapper>

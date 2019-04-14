@@ -41,6 +41,12 @@ public class SchduleController {
 	
 	@RequestMapping(value = "/schedule/scheduleByMonth.do")
 	public String scheduleByMonth(HttpServletRequest request, Model model) {
+				
+		Map sesMap = CommUtils.getSessionMap(request);
+		
+		List<Map<String, Object>> res = scheduleService.viewFacilityList(sesMap);
+		
+		model.addAttribute("fac_list", res);
 		
 		return "/schedule/scheduleByMonth";
 	}
@@ -48,6 +54,12 @@ public class SchduleController {
 	@RequestMapping(value = "/schedule/scheduleByWeek.do")
 	public String scheduleByWeek(HttpServletRequest request, Model model) {
 	
+		Map sesMap = CommUtils.getSessionMap(request);
+		
+		List<Map<String, Object>> res = scheduleService.viewFacilityList(sesMap);
+		
+		model.addAttribute("fac_list", res);
+		
 		return "/schedule/scheduleByWeek";
 	}
 	
@@ -161,139 +173,65 @@ public class SchduleController {
 	
 	/*
 	 * Ajax Request for schedule
-	 * */
-		@RequestMapping(value = "/scheduleRequestAjax.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
-		@ResponseBody
-		public String scheduleRequestAjax(@RequestBody String map) throws Exception{
-			
-			// key : year, month
-			Map reqMap = CommUtils.convertJSONstringToMap(map);
-			
-			reqMap.put("searchStartDate", (reqMap.get("year") + "-" + reqMap.get("month") ) );
-			reqMap.put("searchEndDate", (reqMap.get("year") + "-" + ((int)reqMap.get("month")+1) ) );
-			
-			//Server Call
-			List<Map<String, Object>> res = scheduleService.searchScheduleByMonth(reqMap);
-					
-			//Map maker
-			Map<String, Object> resMap = new HashMap();
-			resMap.put("resultList", res);
-			
-			return CommUtils.getJsonStringFromMap(resMap).toJSONString();
-		}
-	
-	// 이전 월로 이동 버튼 클릭
-	@RequestMapping(value = "/prevMonth.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	 */
+	@RequestMapping(value = "/scheduleRequestAjax.do", method = RequestMethod.POST, headers = "Accept=*/*", produces = "application/json")
 	@ResponseBody
-	public String prevMonth(@RequestBody String map) throws Exception{
-		
+	public String scheduleRequestAjax(@RequestBody String map) throws Exception {
+
 		// key : year, month
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
-		
-		//Server Call
-		List<Map<String, Object>> res = scheduleService.getSchedule(reqMap);
-		
-		//Data Injection
-		String id = (String) res.get(0).get("id");
-		String name = (String) res.get(0).get("name");
-		
-		//Map maker
+
+		reqMap.put("searchStartDate", (reqMap.get("year") + "-" + reqMap.get("month")));
+		reqMap.put("searchEndDate", (reqMap.get("year") + "-" + ((int) reqMap.get("month") + 1)));
+
+		// Server Call
+		List<Map<String, Object>> res = scheduleService.searchScheduleByMonth(reqMap);
+
+		// Map maker
 		Map<String, Object> resMap = new HashMap();
-		resMap.put("id", id);
-		resMap.put("name", name);
-		
+		resMap.put("resultList", res);
+
 		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
 	}
 	
-	// 다음 월로 이동 버튼 클릭
-	@RequestMapping(value = "/nextMonth.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	/*
+	 * Ajax Insert Request for schedule
+	 */
+	@RequestMapping(value = "/insertScheduleRequestAjax.do", method = RequestMethod.POST, headers = "Accept=*/*", produces = "application/json")
 	@ResponseBody
-	public String nextMonth(@RequestBody String map) throws Exception{
-		
+	public String insertScheduleRequestAjax(@RequestBody String map) throws Exception {
+
 		// key : year, month
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
+
+		// Server Call
+		scheduleService.insertSchedule(reqMap);
+
+		return reqMap.get("id").toString();
+	}
+	/*
+	 * Ajax Request for schedule
+	 */
+	@RequestMapping(value = "/updateScheduleRequestAjax.do", method = RequestMethod.POST, headers = "Accept=*/*", produces = "application/json")
+	@ResponseBody
+	public void updateScheduleRequestAjax(@RequestBody String map) throws Exception {
+
+		Map reqMap = CommUtils.convertJSONstringToMap(map);
 		
-		//Server Call
-		List<Map<String, Object>> res = scheduleService.getSchedule(reqMap);
+		scheduleService.updateSchedule(reqMap);
 		
-		//Data Injection
-		String id = (String) res.get(0).get("id");
-		String name = (String) res.get(0).get("name");
-		
-		//Map maker
-		Map<String, Object> resMap = new HashMap();
-		resMap.put("id", id);
-		resMap.put("name", name);
-		
-		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
 	}
 	
-	// 일정 추가 버튼 클릭
-	@RequestMapping(value = "/addSchedule.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
+	/*
+	 * Ajax Request for schedule
+	 */
+	@RequestMapping(value = "/deleteScheduleRequestAjax.do", method = RequestMethod.POST, headers = "Accept=*/*", produces = "application/json")
 	@ResponseBody
-	public String addSchedule(@RequestBody String map) throws Exception{
-		
-		// key : year, month
+	public void deleteScheduleRequestAjax(@RequestBody String map) throws Exception {
+
 		Map reqMap = CommUtils.convertJSONstringToMap(map);
 		
-		//Server Call
-		List<Map<String, Object>> res = scheduleService.addSchedule(reqMap);
-		
-		//Data Injection
-		String id = (String) res.get(0).get("id");
-		String name = (String) res.get(0).get("name");
-		
-		//Map maker
-		Map<String, Object> resMap = new HashMap();
-		resMap.put("id", id);
-		resMap.put("name", name);
-		
-		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
-	}
-	
-	// 일정 변경 버튼 클릭
-	@RequestMapping(value = "/editSchedule.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
-	@ResponseBody
-	public String editSchedule(@RequestBody String map) throws Exception{
-		
-		// key : year, month
-		Map reqMap = CommUtils.convertJSONstringToMap(map);
-		
-		//Server Call
-		List<Map<String, Object>> res = scheduleService.editSchedule(reqMap);
-		
-		//Data Injection
-		String id = (String) res.get(0).get("id");
-		String name = (String) res.get(0).get("name");
-		
-		//Map maker
-		Map<String, Object> resMap = new HashMap();
-		resMap.put("id", id);
-		resMap.put("name", name);
-		
-		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
-	}
-	
-	// 일정 변경 버튼 클릭
-	@RequestMapping(value = "/delSchedule.do", method=RequestMethod.POST, headers="Accept=*/*",produces = "application/json")
-	@ResponseBody
-	public String delSchedule(@RequestBody String map) throws Exception{
-		
-		// key : year, month
-		Map reqMap = CommUtils.convertJSONstringToMap(map);
-		
-		//Server Call
-		List<Map<String, Object>> res = scheduleService.delSchedule(reqMap);
-		
-		//Data Injection
-		String id = (String) res.get(0).get("id");
-		String name = (String) res.get(0).get("name");
-		
-		//Map maker
-		Map<String, Object> resMap = new HashMap();
-		resMap.put("id", id);
-		resMap.put("name", name);
-		
-		return CommUtils.getJsonStringFromMap(resMap).toJSONString();
+		scheduleService.deleteSchedule(reqMap);
+
 	}
 }

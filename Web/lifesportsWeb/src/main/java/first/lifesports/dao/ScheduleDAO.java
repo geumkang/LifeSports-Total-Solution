@@ -20,18 +20,18 @@ public class ScheduleDAO extends AbstractDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> insertSchedule(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("Schedule.insertSchedule", map);
+	public void insertSchedule(Map<String, Object> map) throws Exception {
+		insert("Schedule.insertSchedule", map);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> updateSchedule(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("Schedule.updateSchedule", map);
+	public void updateSchedule(Map<String, Object> map) throws Exception {
+		update("Schedule.updateSchedule", map);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> deleteSchedule(Map<String, Object> map) throws Exception {
-		return (List<Map<String, Object>>) selectList("Schedule.deleteSchedule", map);
+	public void deleteSchedule(Map<String, Object> map) throws Exception {
+		delete("Schedule.deleteSchedule", map);
 	}
 	@SuppressWarnings("unchecked")
 		public List<Map<String, Object>> tournamentList(Map<String, Object> map) throws Exception {
@@ -47,10 +47,14 @@ public class ScheduleDAO extends AbstractDAO {
 	}
 	@SuppressWarnings("unchecked")
 	public void updateTournament(Map<String, Object> map) throws Exception {
-		insert("Schedule.updateTournament_board", map);
+		update("Schedule.updateTournament_board", map);
 	}
 	@SuppressWarnings("unchecked")
 	public void deleteTournament(Map<String, Object> map) throws Exception {
-		insert("Schedule.deleteTournament_board", map);
+		delete("Schedule.deleteTournament_board", map);
+	}
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> viewFacilityList(Map<String, Object> map) throws Exception {
+		return (List<Map<String, Object>>) selectList("Schedule.viewFacilityList", map);
 	}
 }
