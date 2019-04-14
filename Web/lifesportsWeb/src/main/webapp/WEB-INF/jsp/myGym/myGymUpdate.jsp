@@ -13,7 +13,8 @@
 						    
 <script>
 
-listChanged = true;
+var listChanged = true;
+var currentLatLng = new Array();
 
 $(document).ready(function() {
 	
@@ -21,7 +22,6 @@ $(document).ready(function() {
 	emptyCheck();
 	
 	$(document).on("click", ".timeBox", function(){
-	
 	
 		startTime = $("#GYM_STARTTIME").val().substr(0,5);
 		endTime = $("#GYM_ENDTIME").val().substr(0,5);
@@ -116,7 +116,7 @@ $(document).ready(function() {
 				"avail_starttime": gym_data[2].substr(0,5) + ":00",
 				"avail_endtime": gym_data[2].substr(8,13) + ":00",
 				"gym_info": gym_data[3],
-				"admin_ID": $("#ADMIN_UDID").val(),
+				"admin_ID": $("#ADMIN_UDID").val()
 			};
 			console.log(data)
 			$.ajax({
@@ -225,6 +225,7 @@ $(document).ready(function() {
 				gym_data.push(id);
 				
 				console.log("URL : " + $(this).attr("name"))
+				
 				var url;
 				if($(this).attr("name") == 'new'){
 					url = "/myGym/addFacility.do";
@@ -303,30 +304,62 @@ $(document).ready(function() {
 	});
 	
 	$("#registerBtn").on("click", function(){
-		$("#registerInfoBox").css("display", "none");
-		$("#gymInfo").css("display", "block");
-		
-		// Request Data
-		var data = {
-			/* "year": date.getFullYear(),
-			"month": date.getMonth() + 1 */
-		};
-		
-		$.ajax({
-			headers: { 
-			    Accept : "application/json"
-			},
-			url:"/myGym/addGym.do",
-			type:"POST",
-			data : JSON.stringify(data),
-			contentType : "application/json; charset=UTF-8",
-			success: function(result){
-				console.log(result);
-			},
-			error: function(xhr, status, error) {
-				alert(error);
-			}
-		});
+		if($("#nameInput").val() != "" && $("#info").val() != ""){
+			var gym_data = new Array();
+			
+			var name = $("#nameInput").val();
+			gym_data.push(name);
+			
+			var fig = ""
+			gym_data.push(fig);
+			
+			var location = $("#locationInput").text();
+			gym_data.push(location);
+			
+			var startTime = $("#newInfo").find("select[name='start']").find("option:selected").text();
+			gym_data.push(startTime);
+			
+			var endTime = $("#newInfo").find("select[name='end']").find("option:selected").text();
+			gym_data.push(endTime);
+			
+			var info = $("#info").val();
+			gym_data.push(info);
+			
+			$("#registerInfoBox").css("display", "none");
+			$("#gymInfo").css("display", "block");
+			
+			// Request Data
+			var data = {
+				"gym_name": gym_data[0],
+				"gym_fig": gym_data[1],
+				"gym_location": gym_data[2],
+				"gym_latitude": currentLatLng[0],
+				"gym_longitude": currentLatLng[1],
+				"avail_starttime": gym_data[3],
+				"avail_endtime": gym_data[4],
+				"gym_info": gym_data[5],
+				"gym_admin_ID": $("#ADMIN_UDID").val(), 
+			};
+			
+			$.ajax({
+				headers: { 
+				    Accept : "application/json"
+				},
+				url:"/myGym/registerGym.do",
+				type:"POST",
+				data : JSON.stringify(data),
+				contentType : "application/json; charset=UTF-8",
+				success: function(result){
+					console.log(result);
+				},
+				error: function(xhr, status, error) {
+					alert(error);
+				}
+			});
+		}
+		else{
+			alert("빈 칸이 존재합니다.");
+		}
 	});
 	
 	$("#cancelBtn").on("click", function(){
@@ -382,7 +415,8 @@ function loadData(){
 }
 
 function emptyCheck(){
-	if($("#GYM_ID").val() != null){
+	console.log($("#GYM_ID").val())
+	if($("#GYM_ID").val() == ""){
 		$("#newInfo").find("select[name='start']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
 		$("#newInfo").find("select[name='end']").wrapInner(loadTime($("#GYM_STARTTIME"), $("#GYM_ENDTIME")));
 		
@@ -390,8 +424,8 @@ function emptyCheck(){
 		$("#gymInfo").css("display", "none");
 	}
 	else{ 
-		$("#registerInfoBox").css("display", "block");
-		$("#gymInfo").css("display", "none");
+		$("#registerInfoBox").css("display", "none");
+		$("#gymInfo").css("display", "block");
 	}
 }
 
@@ -413,6 +447,10 @@ function initMap() {
 		if (status == google.maps.GeocoderStatus.OK) {
 			if (results[1]) {	
 				$("#locationInput").text(results[1].formatted_address);
+				
+				currentLatLng = new Array();
+				currentLatLng.push(results[1].geometry.location.lat());
+				currentLatLng.push(results[1].geometry.location.lng());
 			}
 		}
 	});
@@ -423,6 +461,10 @@ function initMap() {
 			if (status == google.maps.GeocoderStatus.OK) {
 				if (results[1]) {	
 					$("#locationInput").text(results[1].formatted_address);
+
+					currentLatLng = new Array();
+					currentLatLng.push(results[1].geometry.location.lat());
+					currentLatLng.push(results[1].geometry.location.lng());
 				}
 			}
 		});

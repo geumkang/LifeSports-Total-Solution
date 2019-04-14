@@ -42,6 +42,27 @@
 	
 	<insert id="registerGym" parameterType="hashMap">
 	
+		INSERT INTO gym(
+			gym_name,
+			gym_fig,
+			gym_location,
+			gym_latitude,
+			gym_longitude,
+			avail_starttime,
+			avail_endtime,
+			gym_info,
+			gym_admin_ID)
+		VALUES (
+			#{gym_name},
+			#{gym_fig},
+			#{gym_location},
+			#{gym_latitude},
+			#{gym_longitude},
+			#{avail_starttime},
+			#{avail_endtime},
+			#{gym_info},
+			#{gym_admin_ID}
+		
 	</insert>
 	
 	<update id="editGym" parameterType="hashMap">
