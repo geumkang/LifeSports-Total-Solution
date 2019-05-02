@@ -5,7 +5,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="app" uri="/WEB-INF/tld/app.tld"%>
 <%@ taglib prefix="f" uri="/WEB-INF/tld/f.tld"%>
+
+
 <%@ page language="java" contentType="text/html" pageEncoding="utf-8"%> 
+
+
 <jsp:include page="/WEB-INF/jsp/header.jsp" flush="true"></jsp:include>
 <jsp:include page="/WEB-INF/jsp/topMenu.jsp" flush="true"></jsp:include>
 <script src='/webResource/jquery-3.3.1.js'></script>
@@ -197,13 +201,13 @@ $(document).ready(function() {
 					alert("미입력된 항목이 존재합니다");
 					return;
 				}
-				console.log($(this).parent().siblings().length);
 				
 				var gym_data = new Array();
 				
 				// 이름
 				var name = $(this).parent().siblings().eq(0).children().val();
 				$(this).parent().siblings().eq(0).children().remove();
+				$(this).parent().siblings().eq(0).text(name);
 				gym_data.push(name);
 				
 				// 이용 시간
@@ -228,9 +232,6 @@ $(document).ready(function() {
 				
 				var id = $(this).parent().siblings().eq(4).text();
 				gym_data.push(id);
-				
-				debugger;
-				alert("URL : " + $(this).attr("name"))
 				
 				var url;
 				if($(this).attr("name") == 'new'){
@@ -273,7 +274,6 @@ $(document).ready(function() {
 		}
 		else if($(this).text() == "EDIT"){
 			if(listChanged){
-				
 				
 				$temp = $("#newFacility tbody tr").clone();
 				$temp.find("select[name='start']").empty()
@@ -578,10 +578,16 @@ function placeMarker(location, marker) {
 	margin-bottom: 30px;
 }
 
+.facilityInfo img {
+	width: 450px;
+	height: 250px;
+}
+
 #imgLoca {
-	width: 350px;
+	width: 100%;
 	height: 250px;
 	margin: 0px 0px 0px 0px;
+	overflow: hidden;
 }
 
 .facilityInfo th{
