@@ -5,11 +5,6 @@ import {HeaderInfo} from '../Component/HeaderInfo'
 import {SelectStatus} from '../Component/SelectStatus'
 
 export default class SelectPlanScreen extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        }
-    }
 
     render() {
         const statusList = this.props.navigation.getParam("statusList");
