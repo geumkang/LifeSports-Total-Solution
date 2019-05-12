@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {SelectStatus} from '../Component/SelectStatus'
@@ -13,6 +13,7 @@ export default class SelectRegionScreen extends Component {
         this.hideDetailView = this.hideDetailView.bind(this);
         this.state = {
             showDetail: false,
+            modalVisible: false,
             gymInfo: {
                 key: 0,
                 title: "국사봉 체육관",
@@ -23,13 +24,8 @@ export default class SelectRegionScreen extends Component {
         };
     }
 
-    showDetailView(value){
-        this.setState({showDetail: true});
-    }
-
-    hideDetailView(value){
-        this.setState({showDetail: false});
-    }
+    showDetailView = () => this.setState({ modalVisible: true })
+    hideDetailView = () => this.setState({ modalVisible: false })
 
     render() {
 		const list = [
@@ -53,15 +49,13 @@ export default class SelectRegionScreen extends Component {
         
         const detailViewStyle = StyleSheet.create({
             detailView: {
-                zIndex: 10,
-                height: 200,
+                flex: 1,
                 paddingTop: 20,
                 paddingBottom: 20,
                 paddingLeft: 15,
                 paddingRight: 15,
                 width: '100%',
-                backgroundColor: "#fff",
-                display: this.state.showDetail ? 'flex' : 'none' 
+                backgroundColor: "#fff"
             }
         });
 
@@ -82,31 +76,42 @@ export default class SelectRegionScreen extends Component {
                     statusList={statusList}
                     step={step}/> */}
 
-                <View style={detailViewStyle.detailView}>
-                    <View style={{height: 35, flexDirection: 'row', marginBottom: 5}}>
-                        <Text style={styles.Header}>{this.state.gymInfo.title}</Text>
-                        <Button
-                            title="NEXT STEP"
-                            style={styles.nextBtn}
-                            onPress={()=>{
-                                statusList[step] = this.state.gymInfo.title;
-                                this.props.navigation.navigate("SelectPlan", {"statusList": statusList, "step": Number(step)+1});
-                            }}
-                        />
+                <Modal animationType={"slide"}
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={()=>{this.hideDetailView()}}>
+                    <View style={{flex: 5}}> 
+                        <TouchableOpacity
+                            style={{flex: 1}}
+                            onPress={this.hideDetailView}></TouchableOpacity>
                     </View>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                        <View style={{flex: 1}}>
-                            <Text style={styles.Title}>소개</Text>
-                            <Text style={styles.Title}>주소</Text>
-                            <Text style={styles.Title}>운영 시간</Text>
+                    <View style={detailViewStyle.detailView}>
+                        <View style={{height: 35, flexDirection: 'row', marginBottom: 5}}>
+                            <Text style={styles.Header}>{this.state.gymInfo.title}</Text>
+                            <Button
+                                title="NEXT STEP"
+                                style={styles.nextBtn}
+                                onPress={()=>{
+                                    this.hideDetailView();
+                                    statusList[step] = this.state.gymInfo.title;
+                                    this.props.navigation.navigate("SelectPlan", {"statusList": statusList, "step": Number(step)+1});
+                                }}
+                            />
                         </View>
-                        <View style={{flex: 4}}>
-                            <Text style={styles.Detail}>{this.state.gymInfo.detail}</Text>
-                            <Text style={styles.Detail}>{this.state.gymInfo.address}</Text>
-                            <Text style={styles.Detail}>{this.state.gymInfo.openTime}</Text>
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                            <View style={{flex: 1}}>
+                                <Text style={styles.Title}>소개</Text>
+                                <Text style={styles.Title}>주소</Text>
+                                <Text style={styles.Title}>운영 시간</Text>
+                            </View>
+                            <View style={{flex: 4}}>
+                                <Text style={styles.Detail}>{this.state.gymInfo.detail}</Text>
+                                <Text style={styles.Detail}>{this.state.gymInfo.address}</Text>
+                                <Text style={styles.Detail}>{this.state.gymInfo.openTime}</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
+                </Modal>
 			</View>
 		);
 	}

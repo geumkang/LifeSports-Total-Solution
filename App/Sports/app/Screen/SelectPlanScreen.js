@@ -3,6 +3,7 @@ import { View } from 'react-native';
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {SelectStatus} from '../Component/SelectStatus'
+import {TimeTable} from '../Component/TimeTable'
 
 export default class SelectPlanScreen extends Component {
 
@@ -14,6 +15,7 @@ export default class SelectPlanScreen extends Component {
             <View style={{flex: 1}}>
                 <HeaderInfo headerTitle="일정 선택"></HeaderInfo>
                 <SelectStatus statusList={statusList}></SelectStatus>
+                <TimeTable statusList={statusList}></TimeTable>
             </View>
         );
     }

@@ -112,6 +112,7 @@ export class MyMapView extends React.Component {
     };
 
     onMapPress(e) {
+        console.log("hide")
         this.hideDetailView(e);
         // this.setState({
         // markers: [
@@ -125,6 +126,7 @@ export class MyMapView extends React.Component {
     }
 
     onMarkerPress(e) {
+        console.log("show")
         this.showDetailView(e);
     }
 
