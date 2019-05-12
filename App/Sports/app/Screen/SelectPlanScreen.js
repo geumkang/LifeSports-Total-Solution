@@ -17,7 +17,7 @@ export default class SelectPlanScreen extends Component {
         
         return(
             <View style={{flex: 1}}>
-                <HeaderInfo headerTitle="일정 선택"></HeaderInfo>
+                <HeaderInfo headerTitle="일정 선택" navigation={this.props.navigation}></HeaderInfo>
                 <SelectStatus statusList={statusList}></SelectStatus>
                 <TimeTable statusList={statusList} step={step} navigation={this.props.navigation}></TimeTable>
             </View>

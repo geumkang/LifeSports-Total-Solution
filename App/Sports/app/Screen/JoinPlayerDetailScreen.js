@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
+import { View } from "react-native";
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 
@@ -15,9 +15,9 @@ export default class JoinPlayerList extends Component{
 
         return(
             <View style={{flex: 1}}>
-                <HeaderInfo headerTitle={player.name}></HeaderInfo>
+                <HeaderInfo headerTitle={player.name} navigation={this.props.navigation}></HeaderInfo>
                 
             </View>
         );
     }
-}
+}   

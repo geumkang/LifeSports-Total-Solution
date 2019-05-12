@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Header, Avatar, Icon } from 'react-native-elements'
 
 export class HeaderInfo extends React.Component{
@@ -17,14 +17,33 @@ export class HeaderInfo extends React.Component{
                                     small
                                     rounded
                                     source={{uri: "http://www.usanetwork.com/sites/usanetwork/files/styles/629x720/public/2016/07/mrrobot_s2_cast_rami-malek2.jpg"}}
+                                    containerStyle={{marginLeft: 10}}
                                     onPress={() => this.goToProfileDetail()}
                                     activeOpacity={0.7}
                                 />}
                 centerComponent={ <View style={{alignItems: 'center'}}>
-                                    <Text style={{justifyContent: 'center', color: '#fff', alignContent:'center'}}>{this.props.headerTitle}</Text>
+                                    <Text style={styles.title}>{this.props.headerTitle}</Text>
                                     </View>}
-                rightComponent={<Icon name={'settings-applications'} color={'#fff'} onPress={() => this.goToProfileDetail()}/>}
+                rightComponent={<Icon name='ios-arrow-round-back' 
+                                    size={40} 
+                                    type='ionicon' 
+                                    color={'#fff'} 
+                                    iconStyle={{marginRight: 10}}
+                                    underlayColor={'#f40057'}
+                                    onPress={() => this.props.navigation.goBack()}/>}
             />
         );
     }
 }
+
+
+const styles = StyleSheet.create({
+    title: {
+        justifyContent: 'center',
+        color: '#fff',
+        alignContent:'center',
+        textAlignVertical: 'center',
+        fontSize: 20
+    }
+  });
+

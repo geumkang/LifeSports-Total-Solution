@@ -30,7 +30,7 @@ export default class JoinPlayerList extends Component{
     render(){
         return(
             <View style={{flex: 1}}>
-                <HeaderInfo headerTitle="참여자 목록"></HeaderInfo>
+                <HeaderInfo headerTitle="참여자 목록" navigation={this.props.navigation}></HeaderInfo>
                 <View style={{flex: 1}}>
                     {
                         this.state.playerList.map((player, i) => (

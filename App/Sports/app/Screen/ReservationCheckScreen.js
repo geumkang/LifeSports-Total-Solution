@@ -42,7 +42,7 @@ export default class ReservationCheckScreen extends Component{
 
         return(
             <View style={{flex: 1}}>
-                <HeaderInfo headerTitle="예약하기"></HeaderInfo>
+                <HeaderInfo headerTitle="예약하기" navigation={this.props.navigation}></HeaderInfo>
                 <SelectStatus statusList={statusList}></SelectStatus>
                 {reserveType}
             </View>

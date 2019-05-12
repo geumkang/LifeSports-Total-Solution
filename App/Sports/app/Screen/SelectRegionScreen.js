@@ -64,7 +64,7 @@ export default class SelectRegionScreen extends Component {
         
 		return (  
 			<View style={{flex: 1}}>
-				<HeaderInfo headerTitle="체육관 선택"></HeaderInfo>
+				<HeaderInfo headerTitle="체육관 선택" navigation={this.props.navigation}></HeaderInfo>
                 <SelectStatus statusList={statusList}></SelectStatus>
                 <MyMapView
                     showDetail={this.showDetailView}

@@ -31,7 +31,7 @@ export default class SelectSportsScreen extends Component {
         
 		return (  
 			<View style={{flex: 1}}>
-				<HeaderInfo headerTitle="종목 선택"></HeaderInfo>
+				<HeaderInfo headerTitle="종목 선택" navigation={this.props.navigation}></HeaderInfo>
                 <SelectStatus statusList={statusList}></SelectStatus>
 				<SelectMenu 
 					menuList={list}
