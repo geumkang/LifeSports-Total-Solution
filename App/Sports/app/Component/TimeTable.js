@@ -79,10 +79,14 @@ export class TimeTable extends React.Component{
         console.log(`Load Items for ${day.year}-${day.month}`);
     }
     
-    onPressItem = () => {
+    onPressItem = (item) => {
+        const statusList = this.props.statusList;
+        const step = Number(this.props.step);
+        statusList[step] = item.name;
+        
         // ...예약 정보 로드 {"statusList": statusList}
-        console.log("다음페이지 고고");
-        // this.props.navigation.navigate(this.props.nextPage);
+
+        this.props.navigation.navigate("ReservationCheck", {"statusList": statusList, "step": Number(step)+1, "item": item});
     }
 
     renderItem(item) {
@@ -90,7 +94,7 @@ export class TimeTable extends React.Component{
         
         return (
             <View style={[styles.item, {height: item.height, backgroundColor: typeColor[item.type - 1]}]}>
-                <TouchableOpacity style={{flex: 1}} onPress={this.onPressItem}>
+                <TouchableOpacity style={{flex: 1}} onPress={()=>this.onPressItem(item)}>
                     <Text>{item.name}</Text>
                 </TouchableOpacity>
             </View>

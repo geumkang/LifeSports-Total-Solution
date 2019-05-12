@@ -5,6 +5,9 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import SelectSportsScreen from "./app/Screen/SelectSportsScreen"
 import SelectRegionScreen from "./app/Screen/SelectRegionScreen"
 import SelectPlanScreen from "./app/Screen/SelectPlanScreen"
+import ReservationCheckScreen from "./app/Screen/ReservationCheckScreen"
+import JoinPlayerListScreen from "./app/Screen/JoinPlayerListScreen"
+import JoinPlayerDetailScreen from "./app/Screen/JoinPlayerDetailScreen"
 
 import {HeaderInfo} from './app/Component/HeaderInfo';
 import {SelectMenu} from './app/Component/SelectMenu';
@@ -53,6 +56,18 @@ const AppNavigator = createStackNavigator({
 	},
 	SelectPlan: {
 		screen : SelectPlanScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	ReservationCheck: {
+		screen : ReservationCheckScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	JoinPlayerList: {
+		screen : JoinPlayerListScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	JoinPlayerDetail: {
+		screen : JoinPlayerDetailScreen,
 		navigationOptions: ({ navigation }) => ({ header: null })
 	}
 });

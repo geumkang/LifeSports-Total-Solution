@@ -6,7 +6,11 @@ import {SelectStatus} from '../Component/SelectStatus'
 import {TimeTable} from '../Component/TimeTable'
 
 export default class SelectPlanScreen extends Component {
-
+    constructor(props) {
+        super(props);
+        this.state = {
+        }
+    }
     render() {
         const statusList = this.props.navigation.getParam("statusList");
         const step = this.props.navigation.getParam("step");
@@ -15,7 +19,7 @@ export default class SelectPlanScreen extends Component {
             <View style={{flex: 1}}>
                 <HeaderInfo headerTitle="일정 선택"></HeaderInfo>
                 <SelectStatus statusList={statusList}></SelectStatus>
-                <TimeTable statusList={statusList}></TimeTable>
+                <TimeTable statusList={statusList} step={step} navigation={this.props.navigation}></TimeTable>
             </View>
         );
     }
