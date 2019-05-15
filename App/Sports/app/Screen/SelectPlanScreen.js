@@ -15,6 +15,7 @@ export default class SelectPlanScreen extends Component {
         const statusList = this.props.navigation.getParam("statusList");
         const step = this.props.navigation.getParam("step");
         
+        console.log(step)
         return(
             <View style={{flex: 1}}>
                 <HeaderInfo headerTitle="일정 선택" navigation={this.props.navigation}></HeaderInfo>

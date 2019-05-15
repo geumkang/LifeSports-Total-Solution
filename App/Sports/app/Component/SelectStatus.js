@@ -12,6 +12,9 @@ export class SelectStatus extends React.Component{
     render(){
         const statusList = this.props.statusList;
         const styleList = [];        
+        
+        console.log(statusList)
+
         for(i = 0; i < 4; i++){
             if(statusList[i][0] == 'S')
                 styleList[i] = styles.statusItem;

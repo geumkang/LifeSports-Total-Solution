@@ -11,7 +11,7 @@ export class SelectMenu extends React.Component{
         const menuList = this.props.menuList;
         const statusList = this.props.statusList;
         const step = Number(this.props.step);
-
+        
         return(
             <View style={{flex: 1, backgroundColor: "#C0C0C0", paddingBottom: 10}}>
             {

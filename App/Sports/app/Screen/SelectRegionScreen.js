@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import { View, Text, Button, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { ListItem, Icon } from 'react-native-elements'
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {SelectStatus} from '../Component/SelectStatus'
 import {MyMapView} from '../Component/MyMapView'
-import {SelectMenu} from '../Component/SelectMenu';
 
 export default class SelectRegionScreen extends Component {
     constructor(props) {
@@ -19,13 +19,18 @@ export default class SelectRegionScreen extends Component {
                 title: "국사봉 체육관",
                 detail: "어서오세용",
                 address: "서울시 동작구 상도동 머시기",
-                openTime: "09:00 ~ 18:00"
+                openTime: "09:00 ~ 18:00",
+                favorite: true
             }
         };
     }
 
     showDetailView = () => this.setState({ modalVisible: true })
     hideDetailView = () => this.setState({ modalVisible: false })
+    toggleFavorite = () => {
+        this.state.gymInfo.favorite = !this.state.gymInfo.favorite
+        this.forceUpdate()
+    }
 
     render() {
 		const list = [
@@ -61,20 +66,28 @@ export default class SelectRegionScreen extends Component {
 
         const statusList = this.props.navigation.getParam("statusList");
         const step = this.props.navigation.getParam("step");
-        
+
 		return (  
 			<View style={{flex: 1}}>
 				<HeaderInfo headerTitle="체육관 선택" navigation={this.props.navigation}></HeaderInfo>
                 <SelectStatus statusList={statusList}></SelectStatus>
+                
+                <View>
+                    <ListItem
+                        key={i}
+                        title="자주 가는 체육관"
+                        chevron
+                        onPress={()=>{
+                            this.props.navigation.navigate("FavoriteGymList", {"statusList": statusList, "step": Number(step)});
+                        }}
+                        containerStyle={{backgroundColor: "#f40057"}}
+                        titleStyle={{color: "#fff"}}
+                    />
+                </View>
+
                 <MyMapView
                     showDetail={this.showDetailView}
                     hideDetail={this.hideDetailView}/>
-				{/* <SelectMenu 
-					menuList={list}
-					nextPage="SelectSports"
-					navigation={this.props.navigation}
-                    statusList={statusList}
-                    step={step}/> */}
 
                 <Modal animationType={"slide"}
                         transparent={true}
@@ -88,6 +101,15 @@ export default class SelectRegionScreen extends Component {
                     <View style={detailViewStyle.detailView}>
                         <View style={{height: 35, flexDirection: 'row', marginBottom: 5}}>
                             <Text style={styles.Header}>{this.state.gymInfo.title}</Text>
+                            {
+                                this.state.gymInfo.favorite ?
+                                <Icon iconStyle={styles.Icon} name='favorite' color="#f40057"
+                                    onPress={this.toggleFavorite}></Icon>
+                                :
+                                <Icon iconStyle={styles.Icon} name='favorite-border'
+                                    onPress={this.toggleFavorite}></Icon>
+                            }
+                            
                             <Button
                                 title="NEXT STEP"
                                 style={styles.nextBtn}
@@ -134,6 +156,10 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         color: "#000"
     },
+    Icon:{
+        paddingTop: 5,
+        marginRight: 20
+    },
     Detail: {
         paddingLeft: 15,
         flex: 1,
@@ -141,6 +167,6 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         color: "#000"
     },
-    nextBtn: {
+    nextBtn:{
     }
 });

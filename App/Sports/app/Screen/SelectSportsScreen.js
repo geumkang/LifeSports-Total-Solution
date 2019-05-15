@@ -28,7 +28,7 @@ export default class SelectSportsScreen extends Component {
         
         const statusList = this.props.navigation.getParam("statusList");
         const step = this.props.navigation.getParam("step");
-        
+		
 		return (  
 			<View style={{flex: 1}}>
 				<HeaderInfo headerTitle="종목 선택" navigation={this.props.navigation}></HeaderInfo>
