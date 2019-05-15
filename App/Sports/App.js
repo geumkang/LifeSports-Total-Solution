@@ -10,6 +10,9 @@ import ReservationCheckScreen from "./app/Screen/ReservationCheckScreen"
 import JoinPlayerListScreen from "./app/Screen/JoinPlayerListScreen"
 import JoinPlayerDetailScreen from "./app/Screen/JoinPlayerDetailScreen"
 import FavoriteGymListScreen from "./app/Screen/FavoriteGymListScreen"
+import LoginScreen from "./app/Screen/LoginScreen"
+import RegisterScreen from "./app/Screen/RegisterScreen"
+import RegisterScreen2 from "./app/Screen/RegisterScreen2"
 
 import {HeaderInfo} from './app/Component/HeaderInfo';
 
@@ -147,6 +150,18 @@ const AppNavigator = createStackNavigator({
 	},
 	FavoriteGymList: {
 		screen : FavoriteGymListScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	Login: {
+		screen : LoginScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	Register: {
+		screen : RegisterScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	Register2: {
+		screen : RegisterScreen2,
 		navigationOptions: ({ navigation }) => ({ header: null })
 	}
 });

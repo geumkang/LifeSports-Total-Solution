@@ -4,7 +4,6 @@ import { CheckBox } from 'react-native-elements'
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {SelectStatus} from '../Component/SelectStatus'
-import { isThisExpression } from '@babel/types';
 
 export default class ReservationCheckScreen extends Component{
     constructor(props) {
@@ -18,6 +17,11 @@ export default class ReservationCheckScreen extends Component{
         this.setState({checked:!this.state.checked});
     }
 
+    onPressComplete = () => {
+        // 일정 업뎃 완료되면 go
+        this.props.navigation.popToTop();
+    }
+
     viewPlayerList = (item) => {
         this.props.navigation.navigate("JoinPlayerList", {"item": item});
     }
@@ -29,15 +33,21 @@ export default class ReservationCheckScreen extends Component{
 
         let reserveType;
         
-        console.log(statusList[0])
         if(statusList[0] == "예약"){ //  && selectItem.type == 1
-            reserveType = <NewReservation item={selectItem} checked={this.state.checked} onPressCheckBox={()=>this.onPressCheckBox()}/>
+            reserveType = <NewReservation item={selectItem} 
+                                        checked={this.state.checked}
+                                        onPressCheckBox={()=>this.onPressCheckBox()}
+                                        onPressComplete={()=>this.onPressComplete()}/>
         }
         else if(statusList[0] == "예약"){ //  && selectItem.type == 2
-            reserveType = <NewReservation item={selectItem} checked={this.state.checked} onPressCheckBox={()=>this.onPressCheckBox()}/>
+            reserveType = <NewReservation item={selectItem}
+                                        checked={this.state.checked}
+                                        onPressCheckBox={()=>this.onPressCheckBox()}
+                                        onPressComplete={()=>this.onPressComplete()}/>
         }
         else if(statusList[0] == "매칭"){
-            reserveType = <Matching onPressNextBtn={()=>this.viewPlayerList(selectItem)}/>
+            reserveType = <Matching onPressNextBtn={()=>this.viewPlayerList(selectItem)}
+                                    onPressComplete={()=>this.onPressComplete()}/>
         }
 
         return(
@@ -75,7 +85,8 @@ function NewReservation(props){
                 />
             
             <Text style={styles.Title}>예약 취소시 이러이러이러리</Text>
-            <Button title="예약하기"></Button>
+            <Button title="예약하기"
+                    onPress={props.onPressComplete}></Button>
         </View>
     );
 }
@@ -98,7 +109,8 @@ function JoinReservation(props){
                 </View>
             </View>
             <Text style={styles.Title}>경기 취소시 이러이러이러리</Text>
-            <Button title="참여하기"></Button>
+            <Button title="참여하기"
+                    onPress={props.onPressComplete}></Button>
         </View>
     );
 }
@@ -122,7 +134,8 @@ function Matching(props){
                 </View>
             </View>
             <Text style={styles.Title}>경기 취소시 이러이러이러리</Text>
-            <Button title="참여하기"></Button>
+            <Button title="참여하기"
+                    onPress={props.onPressComplete}></Button>
         </View>
     );
 }

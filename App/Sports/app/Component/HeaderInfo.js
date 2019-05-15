@@ -28,7 +28,7 @@ export class HeaderInfo extends React.Component{
                                             rounded
                                             source={{uri: "http://www.usanetwork.com/sites/usanetwork/files/styles/629x720/public/2016/07/mrrobot_s2_cast_rami-malek2.jpg"}}
                                             containerStyle={{marginLeft: 10}}
-                                            onPress={() => this.goToProfileDetail()}
+                                            onPress={() => this.props.navigation.navigate("Login")}
                                             activeOpacity={0.7}
                                         />}
                         centerComponent={ <View style={{alignItems: 'center'}}>
@@ -51,7 +51,7 @@ export class HeaderInfo extends React.Component{
                                             rounded
                                             source={{uri: "http://www.usanetwork.com/sites/usanetwork/files/styles/629x720/public/2016/07/mrrobot_s2_cast_rami-malek2.jpg"}}
                                             containerStyle={{marginLeft: 10}}
-                                            onPress={() => this.goToProfileDetail()}
+                                            onPress={() => this.props.navigation.navigate("Login")}
                                             activeOpacity={0.7}
                                         />}
                         centerComponent={ <View style={{alignItems: 'center'}}>
