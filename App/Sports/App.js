@@ -16,6 +16,7 @@ import RegisterScreen from "./app/Screen/RegisterScreen"
 import RegisterScreen2 from "./app/Screen/RegisterScreen2"
 import ReservationStatusScreen from "./app/Screen/ReservationStatusScreen"
 import MatchingStatusScreen from "./app/Screen/MatchingStatusScreen"
+import MyPageScreen from "./app/Screen/MyPageScreen"
 
 import {HeaderInfo} from './app/Component/HeaderInfo';
 
@@ -29,6 +30,7 @@ class HomeScreen extends React.Component {
 	}
 	
 	componentDidMount(){
+		global.loginStatus = false;
 		this.setState({
 			reservationData: [
 				{
@@ -244,6 +246,10 @@ const AppNavigator = createStackNavigator({
 	},
 	MatchingStatus: {
 		screen : MatchingStatusScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	MyPage: {
+		screen : MyPageScreen,
 		navigationOptions: ({ navigation }) => ({ header: null })
 	}
 });

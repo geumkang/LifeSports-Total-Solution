@@ -23,6 +23,7 @@ export default class LoginScreen extends Component {
 
     onPressLogin = () => {
         // if login success
+        global.loginStatus = true;
         this.props.navigation.popToTop();
 
         //else

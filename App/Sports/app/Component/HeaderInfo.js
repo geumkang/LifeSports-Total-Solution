@@ -6,70 +6,56 @@ export class HeaderInfo extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            isMain: false
+            isMain: 'flex',
+            nextPage: ''
         }
     }
 
     componentDidMount(){
         if(this.props.headerTitle == "메인"){
-            this.setState({isMain: true});
+            this.setState({isMain: 'none'});
+        }
+        else{
+            this.setState({isMain: 'flex'});
         }
     }
 
+    nextPage = () => {
+        if(!global.loginStatus)
+            this.props.navigation.navigate("Login");
+        else
+            this.props.navigation.navigate("MyPage");
+    }
+
     render(){
+        console.log("렌더링 시 : " + this.state.isMain)
         return(
             <View>
-                {this.state.isMain ? (
-                    <Header
-                        containerStyle={{marginTop: Platform.OS === 'ios' ? 0 : - 20}}
-                        innerContainerStyles={{flexDirection: 'row'}}
-                        backgroundColor='#f40057'
-                        leftComponent={<Icon
-                                            name="user-circle"
-                                            type='font-awesome'
-                                            size={30}
-                                            color='white'
-                                            containerStyle={{marginLeft: 10}}
-                                            underlayColor={"#f40057"}
-                                            onPress={() => this.props.navigation.navigate("Login")}
-                                        />}
-                        centerComponent={ <View style={{alignItems: 'center'}}>
-                                            <Text style={styles.title}>{this.props.headerTitle}</Text>
-                                            </View>}
-                        // rightComponent={<Icon name='ios-arrow-round-back' 
-                        //                     size={40} 
-                        //                     type='ionicon' 
-                        //                     color={'#fff'} 
-                        //                     iconStyle={{marginRight: 10}}
-                        //                     underlayColor={'#f40057'}
-                        //                     onPress={() => this.props.navigation.goBack()}/>}
-                    />
-                ) : (
-                    <Header
-                        containerStyle={{marginTop: Platform.OS === 'ios' ? 0 : - 20}}
-                        innerContainerStyles={{flexDirection: 'row'}}
-                        backgroundColor='#f40057'
-                        leftComponent={<Icon
-                                            name="user-circle"
-                                            type='font-awesome'
-                                            size={30}
-                                            color='white'
-                                            containerStyle={{marginLeft: 10}}
-                                            underlayColor={"#f40057"}
-                                            onPress={() => this.props.navigation.navigate("Login")}
-                                        />}
-                        centerComponent={ <View style={{alignItems: 'center'}}>
-                                            <Text style={styles.title}>{this.props.headerTitle}</Text>
-                                            </View>}
-                        rightComponent={<Icon name='ios-arrow-round-back' 
-                                            size={40} 
-                                            type='ionicon' 
-                                            color={'#fff'} 
-                                            iconStyle={{marginRight: 10}}
-                                            underlayColor={'#f40057'}
-                                            onPress={() => this.props.navigation.goBack()}/>}
-                    />
-                )}
+                <Header
+                    containerStyle={{marginTop: Platform.OS === 'ios' ? 0 : - 20}}
+                    innerContainerStyles={{flexDirection: 'row'}}
+                    backgroundColor='#f40057'
+                    leftComponent={<Icon
+                                        name="user-circle"
+                                        type='font-awesome'
+                                        size={30}
+                                        color='white'
+                                        containerStyle={{marginLeft: 10}}
+                                        underlayColor={"#f40057"}
+                                        onPress={this.nextPage}
+                                    />}
+                    centerComponent={ <View style={{alignItems: 'center'}}>
+                                        <Text style={styles.title}>{this.props.headerTitle}</Text>
+                                        </View>}
+                    rightComponent={<Icon name='ios-arrow-round-back' 
+                                        size={40} 
+                                        type='ionicon' 
+                                        color={'#fff'} 
+                                        iconStyle={{marginRight: 10}}
+                                        underlayColor={'#f40057'}
+                                        onPress={() => this.props.navigation.goBack()}
+                                        containerStyle={{display: this.state.isMain}}/>}
+                />
             </View>
         );
     }
