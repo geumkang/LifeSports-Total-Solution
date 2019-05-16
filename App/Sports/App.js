@@ -1,6 +1,7 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import { Card, Divider, ListItem } from "react-native-elements"
 
 import SelectTypeScreen from "./app/Screen/SelectTypeScreen"
 import SelectSportsScreen from "./app/Screen/SelectSportsScreen"
@@ -13,6 +14,8 @@ import FavoriteGymListScreen from "./app/Screen/FavoriteGymListScreen"
 import LoginScreen from "./app/Screen/LoginScreen"
 import RegisterScreen from "./app/Screen/RegisterScreen"
 import RegisterScreen2 from "./app/Screen/RegisterScreen2"
+import ReservationStatusScreen from "./app/Screen/ReservationStatusScreen"
+import MatchingStatusScreen from "./app/Screen/MatchingStatusScreen"
 
 import {HeaderInfo} from './app/Component/HeaderInfo';
 
@@ -20,10 +23,32 @@ class HomeScreen extends React.Component {
 	constructor(props){
 		super(props);
 		this.state ={
-			dataSource: ''
+			reservationData: [],
+			matchingData: []
 		}
 	}
 	
+	componentDidMount(){
+		this.setState({
+			reservationData: [
+				{
+					name: '국사봉 체육관'
+				},
+				{
+					name: '중앙대 체육관'
+				}
+			],
+
+			matchingData: [
+				{
+					name: '국사봉 체육관'
+				},
+				{
+					name: '중앙대 체육관'
+				}
+			]
+		});
+	}
 	// componentDidMount(){
 	// 	let data = {
 	// 		headers: {
@@ -51,14 +76,63 @@ class HomeScreen extends React.Component {
 	// 				console.error(error);
 	// 			});
 	// }
+	onPressReservationStatus = () => {
+		this.props.navigation.navigate("ReservationStatus");
+	}
 
-  	render() {		
+	onPressMatchingStatus = () => {
+		this.props.navigation.navigate("MatchingStatus");
+	}
+
+	render() {
 		const statusList = ['Step1', 'Step2', 'Step3', 'Step4'];
 		const step = 0;
 		return (
 			<View style={{flex: 1}}>
 				<HeaderInfo headerTitle="메인" navigation={this.props.navigation}></HeaderInfo>
-				<View style={{flex: 5}}></View>
+				<View style={{flex: 5}}>
+					<Card title="예약 현황">
+					{
+						this.state.reservationData.map((u, i) => {
+							return (
+								<ListItem
+									key={i}
+									roundAvatar
+									title={u.name}
+									chevron
+									topDivider
+									bottomDivider
+									badge={{value: "D-3", 
+											badgeStyle: {width: 50, height: 20, backgroundColor: "#f40057"},
+											textStyle: {color: 'white', fontWeight: 'bold'}}}
+                            		onPress={()=>this.onPressReservationStatus()}
+								/>
+							);
+						})
+					}
+					</Card>
+
+					<Card title="매칭 현황">
+					{
+						this.state.matchingData.map((u, i) => {
+							return (
+								<ListItem
+									key={i}
+									roundAvatar
+									title={u.name}
+									chevron
+									topDivider
+									bottomDivider
+									badge={{value: "10 / 20", 
+											badgeStyle: {width: 60, height: 20, backgroundColor: "#f40057"},
+											textStyle: {color: 'white', fontWeight: 'bold'}}}
+                            		onPress={()=>this.onPressMatchingStatus()}
+								/>
+							);
+						})
+					}
+					</Card>
+				</View>
 				<View style={styles.menuView}>
 					<TouchableOpacity
 						style={styles.selectMenu}
@@ -162,6 +236,14 @@ const AppNavigator = createStackNavigator({
 	},
 	Register2: {
 		screen : RegisterScreen2,
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	ReservationStatus: {
+		screen : ReservationStatusScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	MatchingStatus: {
+		screen : MatchingStatusScreen,
 		navigationOptions: ({ navigation }) => ({ header: null })
 	}
 });

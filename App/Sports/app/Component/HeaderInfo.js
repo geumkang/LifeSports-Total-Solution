@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import { Header, Avatar, Icon } from 'react-native-elements'
 
 export class HeaderInfo extends React.Component{
@@ -21,15 +21,17 @@ export class HeaderInfo extends React.Component{
             <View>
                 {this.state.isMain ? (
                     <Header
+                        containerStyle={{marginTop: Platform.OS === 'ios' ? 0 : - 20}}
                         innerContainerStyles={{flexDirection: 'row'}}
                         backgroundColor='#f40057'
-                        leftComponent={<Avatar
-                                            small
-                                            rounded
-                                            source={{uri: "http://www.usanetwork.com/sites/usanetwork/files/styles/629x720/public/2016/07/mrrobot_s2_cast_rami-malek2.jpg"}}
+                        leftComponent={<Icon
+                                            name="user-circle"
+                                            type='font-awesome'
+                                            size={30}
+                                            color='white'
                                             containerStyle={{marginLeft: 10}}
+                                            underlayColor={"#f40057"}
                                             onPress={() => this.props.navigation.navigate("Login")}
-                                            activeOpacity={0.7}
                                         />}
                         centerComponent={ <View style={{alignItems: 'center'}}>
                                             <Text style={styles.title}>{this.props.headerTitle}</Text>
@@ -44,15 +46,17 @@ export class HeaderInfo extends React.Component{
                     />
                 ) : (
                     <Header
+                        containerStyle={{marginTop: Platform.OS === 'ios' ? 0 : - 20}}
                         innerContainerStyles={{flexDirection: 'row'}}
                         backgroundColor='#f40057'
-                        leftComponent={<Avatar
-                                            small
-                                            rounded
-                                            source={{uri: "http://www.usanetwork.com/sites/usanetwork/files/styles/629x720/public/2016/07/mrrobot_s2_cast_rami-malek2.jpg"}}
+                        leftComponent={<Icon
+                                            name="user-circle"
+                                            type='font-awesome'
+                                            size={30}
+                                            color='white'
                                             containerStyle={{marginLeft: 10}}
+                                            underlayColor={"#f40057"}
                                             onPress={() => this.props.navigation.navigate("Login")}
-                                            activeOpacity={0.7}
                                         />}
                         centerComponent={ <View style={{alignItems: 'center'}}>
                                             <Text style={styles.title}>{this.props.headerTitle}</Text>
