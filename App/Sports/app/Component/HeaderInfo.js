@@ -28,7 +28,6 @@ export class HeaderInfo extends React.Component{
     }
 
     render(){
-        console.log("렌더링 시 : " + this.state.isMain)
         return(
             <View>
                 <Header

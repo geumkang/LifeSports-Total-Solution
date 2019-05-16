@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 
 export class SelectStatus extends React.Component{
@@ -13,8 +13,6 @@ export class SelectStatus extends React.Component{
         const statusList = this.props.statusList;
         const styleList = [];        
         
-        console.log(statusList)
-
         for(i = 0; i < 4; i++){
             if(statusList[i][0] == 'S')
                 styleList[i] = styles.statusItem;
