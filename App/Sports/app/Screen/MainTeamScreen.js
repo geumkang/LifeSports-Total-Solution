@@ -49,7 +49,11 @@ export default class MainTeamScreen extends React.Component {
 
 	onPressMatchingStatus = () => {
 		this.props.navigation.navigate("MatchingStatus");
-	}
+    }
+    
+    onPressJoinBtn = () => {
+        this.props.navigation.navigate("TeamInfo", {'Team': "팀 정보 넘기기", "headerTitle": "팀원 목록"});
+    }
 
 	render() {
 		return (
@@ -103,7 +107,8 @@ export default class MainTeamScreen extends React.Component {
                                 <Button
                                     backgroundColor='#03A9F4'
                                     buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                                    title='가입하기'/>
+                                    title='가입하기'
+                                    onPress={this.onPressJoinBtn}/>
                             </Card>
 
                             <Card
@@ -116,7 +121,8 @@ export default class MainTeamScreen extends React.Component {
                                 <Button
                                     backgroundColor='#03A9F4'
                                     buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                                    title='가입하기'/>
+                                    title='가입하기'
+                                    onPress={this.onPressJoinBtn}/>
                             </Card>
                         </ScrollView>
                     </View>

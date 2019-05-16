@@ -18,6 +18,10 @@ import MatchingStatusScreen from "./app/Screen/MatchingStatusScreen"
 import MyPageScreen from "./app/Screen/MyPageScreen"
 import MainIndividualScreen from './app/Screen/MainIndividualScreen';
 import MainTeamScreen from './app/Screen/MainTeamScreen';
+import TeamInfoScreen from './app/Screen/TeamInfoScreen';
+import TeamGameResultScreen from './app/Screen/TeamGameResultScreen';
+import TeamMemberListScreen from './app/Screen/TeamMemberListScreen';
+import TeamMemberDetailScreen from './app/Screen/TeamMemberDetailScreen';
 
 export const StackNavigator = createStackNavigator({
 	Home: {
@@ -89,6 +93,26 @@ export const StackNavigator = createStackNavigator({
 	MyPage: {
 		screen : MyPageScreen,
 		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	TeamInfo: {
+		screen: createBottomTabNavigator({
+			TeamInfo: TeamInfoScreen,
+			GameResult: TeamGameResultScreen,
+			MemberList: TeamMemberListScreen
+		},
+		{
+			tabBarOptions: {
+				activeTintColor: '#e91e63',
+				labelStyle: {
+					fontSize: 12,
+				}
+			}
+		}),
+		navigationOptions: ({ navigation }) => ({ header: null })
+	},
+	TeamMemberDetail: {
+		screen : TeamMemberDetailScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })	
 	}
 }, {
 	initialRouteName: 'Home',

@@ -12,7 +12,7 @@ export class HeaderInfo extends React.Component{
     }
 
     componentDidMount(){
-        if(this.props.headerTitle == "메인"){
+        if(this.props.headerTitle == "메인" || this.props.type == "Team"){
             this.setState({isMain: 'none'});
         }
         else{

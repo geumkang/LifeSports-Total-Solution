@@ -4,7 +4,7 @@ import { View } from "react-native";
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {MemberDetail} from '../Component/MemberDetail'
 
-export default class JoinPlayerDetailScreen extends Component{
+export default class TeamMemberDetailScreen extends Component{
     constructor(props) {
         super(props);
         this.state = {

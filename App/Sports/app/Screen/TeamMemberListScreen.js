@@ -1,10 +1,18 @@
 import React, {Component} from 'react';
-import { View } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
+import { Icon } from "react-native-elements"
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {MemberList} from '../Component/MemberList'
 
-export default class JoinPlayerListScreen extends Component{
+export default class TeamMemberListScreen extends Component{
+    static navigationOptions = {
+        tabBarLabel: "팀원 정보",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="users" size={25} type="font-awesome" color={tintColor} />
+        )
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -35,7 +43,7 @@ export default class JoinPlayerListScreen extends Component{
                 <MemberList
                     playerList={this.state.playerList}
                     navigation={this.props.navigation}
-                    DetailScreen="JoinPlayerDetail"
+                    DetailScreen="TeamMemberDetail"
                 ></MemberList>
             </View>
         );

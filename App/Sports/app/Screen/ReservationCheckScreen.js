@@ -23,7 +23,8 @@ export default class ReservationCheckScreen extends Component{
     }
 
     viewPlayerList = (item) => {
-        this.props.navigation.navigate("JoinPlayerList", {"item": item});
+        // PlayerList 받아오기
+        this.props.navigation.navigate("JoinPlayerList", {"item": item, "headerTitle": "참여자 목록"});
     }
 
     render() {
