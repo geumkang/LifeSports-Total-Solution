@@ -22,7 +22,7 @@ export default class MainIndividualScreen extends React.Component {
 	
 	componentDidMount(){
         global.loginStatus = false;
-        global.hasTeam = false;
+        global.hasTeam = true;
 		this.setState({
 			reservationData: [
 				{

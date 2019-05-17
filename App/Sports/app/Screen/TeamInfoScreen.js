@@ -15,16 +15,15 @@ export default class TeamInfoScreen extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            checked: false
         }
     }
 
     render(){
-        const name = this.props.navigation.getParam("Team");
-
+        const MyTeamInfo = this.props.navigation.getParam("MyTeamInfo");
+        console.log(MyTeamInfo)
         return(
             <View style={{flex: 1}}>
-                <HeaderInfo headerTitle={name} navigation={this.props.navigation} type="Team"></HeaderInfo>
+                <HeaderInfo headerTitle={MyTeamInfo.name} navigation={this.props.navigation} type="Team"></HeaderInfo>
                 <Image source={require('../Images/team2.jpg')}
                         style={{ width: '100%', height: 200 }}/>
                 <Text style={{marginBottom: 10}}>

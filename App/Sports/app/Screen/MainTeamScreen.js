@@ -40,7 +40,15 @@ export default class MainTeamScreen extends React.Component {
 					name: '중앙대 체육관'
 				}
 			]
-		});
+        });
+
+        if(global.hasTeam){
+            this.setState({
+                MyTeamInfo: {
+                    name: '츙앙 싸커 튐'
+                }
+            })
+        }
     }
     
 	onPressReservationStatus = () => {
@@ -52,7 +60,7 @@ export default class MainTeamScreen extends React.Component {
     }
     
     onPressJoinBtn = () => {
-        this.props.navigation.navigate("TeamInfo", {'Team': "팀 정보 넘기기", "headerTitle": "팀원 목록"});
+        this.props.navigation.navigate("TeamInfo", {'MyTeamInfo': this.state.MyTeamInfo, "headerTitle": "팀원 목록"});
     }
 
 	render() {
@@ -63,36 +71,34 @@ export default class MainTeamScreen extends React.Component {
                 {global.hasTeam ? (
                     <View style={{flex: 1}}>
                         <ScrollView>
-                            <Card title="매칭 현황">
-                            {
-                                this.state.matchingData.map((u, i) => {
-                                    return (
-                                        <ListItem
-                                            key={i}
-                                            roundAvatar
-                                            title={u.name}
-                                            chevron
-                                            topDivider
-                                            bottomDivider
-                                            badge={{value: "10 / 20", 
-                                                    badgeStyle: {width: 60, height: 20, backgroundColor: "#f40057"},
-                                                    textStyle: {color: 'white', fontWeight: 'bold'}}}
-                                            onPress={()=>this.onPressMatchingStatus()}
-                                        />
-                                    );
-                                })
-                            }
+                            <Card
+                                title='삼성 디스플레이'
+                                image={require('../Images/team1.jpg')}
+                                >
+                                <Text style={{marginBottom: 10}}>
+                                    대한민국 엘리트 멤버들이 모였다. 축구는 머리로 하는 것이다!
+                                </Text>
+                                <Button
+                                    backgroundColor='#03A9F4'
+                                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                                    title='가입하기'
+                                    onPress={this.onPressJoinBtn}/>
+                            </Card>
+
+                            <Card
+                                title='한화 건설 동호회'
+                                image={require('../Images/team2.jpg')}
+                                >
+                                <Text style={{marginBottom: 10}}>
+                                    현장 노동자들의 장딴지 근육을 보았는가. 우린 잔디 구장보다 모래 바닥이 더 익숙하다!
+                                </Text>
+                                <Button
+                                    backgroundColor='#03A9F4'
+                                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                                    title='가입하기'
+                                    onPress={this.onPressJoinBtn}/>
                             </Card>
                         </ScrollView>
-                        <View style={styles.menuView}>
-                            <TouchableOpacity
-                                style={styles.selectMenu}
-                                onPress={()=>{
-                                    this.props.navigation.navigate("SelectType");
-                                }}>
-                                <Text style={styles.item}>예약하기</Text>
-                            </TouchableOpacity>
-                        </View>
                     </View>
                 ) : (        
                     <View style={{flex: 1}}>
