@@ -21,6 +21,7 @@ export default class MainIndividualScreen extends React.Component {
 	}
 	
 	componentDidMount(){
+		global.appServerIp = '3.15.50.24:80';
         global.loginStatus = false;
         global.hasTeam = true;
 		this.setState({

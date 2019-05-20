@@ -52,6 +52,44 @@ export class TimeTable extends React.Component{
         )
     }
 
+    scheduleRequest() {
+
+        const statusList = this.props.statusList;
+
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'gym_ID' : this.props.gym_ID,
+                'subj_ID' : this.state.selectedSubj_ID
+            })
+        }
+        let gymInfoList = [];
+        return fetch('http://' + global.appServerIp + '/gym', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                
+                for(var i = 0; i < responseJson.length; i++){
+                    gymInfoList.push({
+                        key: responseJson[i].gym_ID,
+                        coordinate: {
+                            latitude: responseJson[i].gym_latitude,
+                            longitude: responseJson[i].gym_longitude
+                        }                                
+                    })
+                }
+                this.setState({
+                    markers: gymInfoList
+                })
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     loadItems(day) {
         setTimeout(() => {
             for (let i = -15; i < 85; i++) {

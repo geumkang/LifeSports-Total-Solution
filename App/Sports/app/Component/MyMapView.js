@@ -9,12 +9,6 @@ import MapView, {Marker} from 'react-native-maps'
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
 
-const initialRegion = {
-    latitude: 37.492368, 
-    longitude: 126.824571,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-}
 let id = 1;
 
 export class MyMapView extends React.Component { 
@@ -30,6 +24,10 @@ export class MyMapView extends React.Component {
         this.props.hideDetail("123");
     }
 
+    updateGymInfo(gym_ID) {
+        this.props.updateGymInfo(gym_ID);
+    }
+
     map = null;
 
     state = {
@@ -42,27 +40,67 @@ export class MyMapView extends React.Component {
         ready: true,
         filteredMarkers: [],
         markers: [
-            {
-                key: 0,
-                coordinate: {
-                    longitude: 126.949892,
-                    latitude: 37.505539
-                }
-            }
-        ],
-        showDetail: this.props.showDetail
+            // {
+            //     key: 0,
+            //     coordinate: {
+            //         longitude: 126.949892,
+            //         latitude: 37.505539
+            //     }
+            // }
+        ]
     };
     
     setRegion(region) {
         if(this.state.ready) {
         setTimeout(() => this.map.mapview.animateToRegion(region), 10);
         }
-        //this.setState({ region });
+        this.setState({ region });
+    }
+
+    gyminfoRequest() {
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'GET',
+        }
+        let gymInfoList = [];
+        return fetch('http://' + global.appServerIp + '/gym', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                
+                for(var i = 0; i < responseJson.length; i++){
+                    gymInfoList.push({
+                        key: responseJson[i].gym_ID,
+                        coordinate: {
+                            latitude: responseJson[i].gym_latitude,
+                            longitude: responseJson[i].gym_longitude
+                        }                                
+                    })
+                }
+                this.setState({
+                    markers: gymInfoList
+                })
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     componentDidMount() {
         console.log('Component did mount');
         this.getCurrentPosition();
+        this.gyminfoRequest();
+        // this.setState({
+        // markers: [
+        //     ...this.state.markers,
+        //     {
+        //         coordinate: e.nativeEvent.coordinate,
+        //         key: id++
+        //     },
+        // ],
+        // });
     }
 
     getCurrentPosition() {
@@ -125,9 +163,20 @@ export class MyMapView extends React.Component {
         // });
     }
 
-    onMarkerPress(e) {
-        console.log("show")
-        this.showDetailView(e);
+    onMarkerPress(marker) {
+        this.showDetailView(marker);
+        
+        const region = {
+            latitude: marker.coordinate.latitude,
+            longitude: marker.coordinate.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+        };
+        this.setState({
+            region: region
+        })
+
+        this.updateGymInfo(marker.key);
     }
 
     render() {
@@ -142,8 +191,8 @@ export class MyMapView extends React.Component {
             region={this.state.region} 
             onMapReady={this.onMapReady}
             showsMyLocationButton={false}
-            onRegionChange={this.onRegionChange}
-            onRegionChangeComplete={this.onRegionChangeComplete}
+            // onRegionChange={this.onRegionChange}
+            // onRegionChangeComplete={this.onRegionChangeComplete}
             style={styles.map}
             textStyle={{ color: '#bc8b00' }}
             containerStyle={{backgroundColor: 'white', borderColor: '#BC8B00'}}
@@ -153,7 +202,7 @@ export class MyMapView extends React.Component {
                 <Marker
                     key={marker.key}
                     coordinate={marker.coordinate}
-                    onPress={(e) => this.onMarkerPress(e)}
+                    onPress={(e) => this.onMarkerPress(marker)}
                 />
             ))}
             

@@ -15,12 +15,6 @@ export default class SelectRegionScreen extends Component {
             showDetail: false,
             modalVisible: false,
             gymInfo: {
-                key: 0,
-                title: "국사봉 체육관",
-                detail: "어서오세용",
-                address: "서울시 동작구 상도동 머시기",
-                openTime: "09:00 ~ 18:00",
-                favorite: true
             }
         };
     }
@@ -32,25 +26,39 @@ export default class SelectRegionScreen extends Component {
         this.forceUpdate()
     }
 
+    updateGymInfo = (gym_ID) => {
+
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'gym_ID' : gym_ID
+            })
+        }
+
+        return fetch('http://' + global.appServerIp + '/gym/gyminfo', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    gymInfo: {
+                        key: responseJson[0].gym_ID,
+                        title: responseJson[0].gym_name,
+                        detail: responseJson[0].gym_info,
+                        address: responseJson[0].gym_location,
+                        openTime: responseJson[0].avail_starttime + '~' + responseJson[0].avail_endtime,
+                        favorite: true
+                    }
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     render() {
-		const list = [
-			{
-				name: '서울시',
-				bgColor: "#00f"
-			},
-			{
-				name: '경기도',
-				bgColor: "#0f0"
-            },
-            {
-				name: '충청도',
-				bgColor: "#ff0"
-            },
-            {
-				name: '경상도',
-				bgColor: "#0ff"
-			}
-        ]
         
         const detailViewStyle = StyleSheet.create({
             detailView: {
@@ -87,7 +95,8 @@ export default class SelectRegionScreen extends Component {
 
                 <MyMapView
                     showDetail={this.showDetailView}
-                    hideDetail={this.hideDetailView}/>
+                    hideDetail={this.hideDetailView}
+                    updateGymInfo={this.updateGymInfo}/>
 
                 <Modal animationType={"slide"}
                         transparent={true}
@@ -116,7 +125,7 @@ export default class SelectRegionScreen extends Component {
                                 onPress={()=>{
                                     this.hideDetailView();
                                     statusList[step] = this.state.gymInfo.title;
-                                    this.props.navigation.navigate("SelectPlan", {"statusList": statusList, "step": Number(step)+1});
+                                    this.props.navigation.navigate("SelectPlan", {"statusList": statusList, "step": Number(step)+1, "gym_ID" : this.state.gym_info.gym_ID});
                                 }}
                             />
                         </View>

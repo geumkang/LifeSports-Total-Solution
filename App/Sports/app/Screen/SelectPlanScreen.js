@@ -14,13 +14,12 @@ export default class SelectPlanScreen extends Component {
     render() {
         const statusList = this.props.navigation.getParam("statusList");
         const step = this.props.navigation.getParam("step");
-        
-        console.log(step)
+        const gym_ID = this.props.navigation.getParam("gym_ID");
         return(
             <View style={{flex: 1}}>
                 <HeaderInfo headerTitle="일정 선택" navigation={this.props.navigation}></HeaderInfo>
                 <SelectStatus statusList={statusList}></SelectStatus>
-                <TimeTable statusList={statusList} step={step} navigation={this.props.navigation}></TimeTable>
+                <TimeTable statusList={statusList} step={step} gym_ID={gym_ID} navigation={this.props.navigation}></TimeTable>
             </View>
         );
     }
