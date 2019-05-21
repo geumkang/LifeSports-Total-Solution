@@ -13,7 +13,7 @@ export class SelectMenu extends React.Component{
         const step = Number(this.props.step);
         
         return(
-            <View style={{flex: 1, backgroundColor: "#C0C0C0", paddingBottom: 10}}>
+            <View style={{flex: 1, backgroundColor: global.backgroundColor, paddingBottom: 10}}>
             {
                 menuList.map((item, i) => (
                     <TouchableOpacity 
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         marginRight: 10,
         marginLeft: 10,
-        borderRadius: 15,
         justifyContent: 'center'
     },
     item: {

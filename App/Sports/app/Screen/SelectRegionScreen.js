@@ -44,7 +44,7 @@ export default class SelectRegionScreen extends Component {
             .then((responseJson) => {
                 this.setState({
                     gymInfo: {
-                        key: responseJson[0].gym_ID,
+                        gym_ID: responseJson[0].gym_ID,
                         title: responseJson[0].gym_name,
                         detail: responseJson[0].gym_info,
                         address: responseJson[0].gym_location,
@@ -82,13 +82,12 @@ export default class SelectRegionScreen extends Component {
                 
                 <View>
                     <ListItem
-                        key={i}
                         title="자주 가는 체육관"
                         chevron
                         onPress={()=>{
                             this.props.navigation.navigate("FavoriteGymList", {"statusList": statusList, "step": Number(step)});
                         }}
-                        containerStyle={{backgroundColor: "#f40057"}}
+                        containerStyle={{backgroundColor: global.backgroundColor3}}
                         titleStyle={{color: "#fff"}}
                     />
                 </View>
@@ -125,7 +124,7 @@ export default class SelectRegionScreen extends Component {
                                 onPress={()=>{
                                     this.hideDetailView();
                                     statusList[step] = this.state.gymInfo.title;
-                                    this.props.navigation.navigate("SelectPlan", {"statusList": statusList, "step": Number(step)+1, "gym_ID" : this.state.gym_info.gym_ID});
+                                    this.props.navigation.navigate("SelectPlan", {"statusList": statusList, "step": Number(step)+1, "gym_ID" : this.state.gymInfo.gym_ID});
                                 }}
                             />
                         </View>

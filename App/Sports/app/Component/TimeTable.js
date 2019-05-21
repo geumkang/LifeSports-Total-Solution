@@ -7,7 +7,14 @@ export class TimeTable extends React.Component{
         super(props);
         this.state = {
             date: '',
-            items: {},
+            items: {
+                name: "title",
+                type: 1, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
+                startTime: '09:00',
+                endTime: '09:30',
+                currentParticipant: 15,
+                maxParticipant: 30
+            },
             marks: {}
                 // '2019-05-25': {dots: [vacation, massage, workout], selected: true, selectedColor: 'red'},
                 // '2019-05-26': {dots: [massage, workout], disabled: true}
@@ -37,7 +44,7 @@ export class TimeTable extends React.Component{
         // const workout = {key:'workout', color: 'green'};
 
         return(
-            <View style={{flex: 1, backgroundColor: "#C0C0C0", paddingBottom: 10}}>
+            <View style={{flex: 1, backgroundColor: global.backgroundColor, paddingBottom: 10}}>
                 <Agenda
                     items={this.state.items}
                     loadItemsForMonth={this.loadItems.bind(this)}
@@ -53,9 +60,6 @@ export class TimeTable extends React.Component{
     }
 
     scheduleRequest() {
-
-        const statusList = this.props.statusList;
-
         let data = {
             headers: {
                 Accept: 'application/json',
@@ -100,9 +104,31 @@ export class TimeTable extends React.Component{
                     const numItems = Math.floor(Math.random() * 5);
                     for (let j = 0; j < numItems; j++) {
                         this.state.items[strTime].push({
-                            name: 'Item for ' + strTime,
-                            height: Math.max(50, Math.floor(Math.random() * 150)),
-                            type: Math.floor((Math.random() * 3) + 1)
+                            name: "title",
+                            type: 1, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
+                            startTime: '09:00',
+                            endTime: '09:30',
+                            currentParticipant: 10,
+                            maxParticipant: 30,
+                            height: 120
+                        });
+                        this.state.items[strTime].push({
+                            name: "title",
+                            type: 2, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
+                            startTime: '09:00',
+                            endTime: '09:30',
+                            currentParticipant: 7,
+                            maxParticipant: 30,
+                            height: 120
+                        });
+                        this.state.items[strTime].push({
+                            name: "title",
+                            type: 3, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
+                            startTime: '09:00',
+                            endTime: '09:30',
+                            currentParticipant: 5,
+                            maxParticipant: 30,
+                            height: 120
                         });
                     }
                 }
@@ -128,14 +154,32 @@ export class TimeTable extends React.Component{
     }
 
     renderItem(item) {
-        const typeColor = ["#ff0", "#0ff", "#0f0"]
+        const typeColor = ["#4CAF50", "#FF9800", "#E91E63"];
+        const ratioColor = ["#388E3C", "#F57C00", "#C2185B"];
         
+        if(this.props.statusList[0] == "예약")
+            reservType = true;
+        else
+            reservType = false;
+            
+        const ratio = Math.round(Number(item.currentParticipant / item.maxParticipant) * 100) + '%'
         return (
-            <View style={[styles.item, {height: item.height, backgroundColor: typeColor[item.type - 1]}]}>
-                <TouchableOpacity style={{flex: 1}} onPress={()=>this.onPressItem(item)}>
-                    <Text>{item.name}</Text>
-                </TouchableOpacity>
-            </View>
+            reservType ? (
+                <View style={[styles.item, {height: item.height, backgroundColor: typeColor[item.type - 1]}]}>
+                    <TouchableOpacity style={{flex: 1}} onPress={()=>this.onPressItem(item)}>
+                        <View style={{width: ratio, height: '100%', position: 'absolute', backgroundColor: ratioColor[item.type - 1]}}></View>
+                        <Text style={styles.time}>{item.startTime} ~ {item.endTime}</Text>
+                        <Text style={styles.title}>{item.name}</Text>    
+                        <Text style={styles.content}>{item.currentParticipant} / {item.maxParticipant}</Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                <View style={[styles.item, {height: item.height, backgroundColor: typeColor[item.type - 1]}]}>
+                    <TouchableOpacity style={{flex: 1}} onPress={()=>this.onPressItem(item)}>
+                        <Text>{item.name}</Text>
+                    </TouchableOpacity>
+                </View> 
+            )
         );
     }
     
@@ -160,7 +204,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flex: 1,
         borderRadius: 5,
-        padding: 10,
         marginRight: 10,
         marginTop: 17
     },
@@ -171,5 +214,28 @@ const styles = StyleSheet.create({
         padding: 10,
         marginRight: 10,
         marginTop: 17
+    },
+    time: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: "#fff",
+        marginTop: 12,
+        marginBottom: 5,
+        marginLeft: 10
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: "#fff",
+        marginBottom: 5,
+        marginLeft: 10
+    },
+    content: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: "#fff",
+        marginBottom: 5,
+        marginLeft: 10
     }
+    
 });

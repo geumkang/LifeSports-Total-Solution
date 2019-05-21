@@ -21,9 +21,7 @@ export default class MainIndividualScreen extends React.Component {
 	}
 	
 	componentDidMount(){
-		global.appServerIp = '3.15.50.24:80';
-        global.loginStatus = false;
-        global.hasTeam = true;
+		
 		this.setState({
 			reservationData: [
 				{
@@ -55,7 +53,7 @@ export default class MainIndividualScreen extends React.Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle="메인" navigation={this.props.navigation}></HeaderInfo>
 				<ScrollView>
 					<Card title="예약 현황">
@@ -70,8 +68,8 @@ export default class MainIndividualScreen extends React.Component {
 									topDivider
 									bottomDivider
 									badge={{value: "D-3", 
-											badgeStyle: {width: 50, height: 20, backgroundColor: "#f40057"},
-											textStyle: {color: 'white', fontWeight: 'bold'}}}
+											badgeStyle: {width: 50, height: 20, backgroundColor: global.pointColor},
+											textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
                             		onPress={()=>this.onPressReservationStatus()}
 								/>
 							);
@@ -91,8 +89,8 @@ export default class MainIndividualScreen extends React.Component {
 									topDivider
 									bottomDivider
 									badge={{value: "10 / 20", 
-											badgeStyle: {width: 60, height: 20, backgroundColor: "#f40057"},
-											textStyle: {color: 'white', fontWeight: 'bold'}}}
+											badgeStyle: {width: 60, height: 20, backgroundColor: global.pointColor},
+											textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
                             		onPress={()=>this.onPressMatchingStatus()}
 								/>
 							);
@@ -127,14 +125,14 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginRight: 10,
         marginLeft: 10,
-		borderRadius: 15,
+		borderRadius: 50,
         justifyContent: 'center'
 	},
 	item: {
         fontSize: 30,
         fontWeight: "bold",
         textAlign: 'center',
-        color: "#000"
+		color: "#000"
     },
 	title: {
         justifyContent: 'center',

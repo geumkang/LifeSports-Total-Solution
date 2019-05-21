@@ -33,14 +33,14 @@ export class HeaderInfo extends React.Component{
                 <Header
                     containerStyle={{marginTop: Platform.OS === 'ios' ? 0 : - 20}}
                     innerContainerStyles={{flexDirection: 'row'}}
-                    backgroundColor='#f40057'
+                    backgroundColor= {global.themeColor}
                     leftComponent={<Icon
                                         name="user-circle"
                                         type='font-awesome'
                                         size={30}
                                         color='white'
                                         containerStyle={{marginLeft: 10}}
-                                        underlayColor={"#f40057"}
+                                        underlayColor={global.themeColor}
                                         onPress={this.nextPage}
                                     />}
                     centerComponent={ <View style={{alignItems: 'center'}}>
@@ -51,7 +51,7 @@ export class HeaderInfo extends React.Component{
                                         type='ionicon' 
                                         color={'#fff'} 
                                         iconStyle={{marginRight: 10}}
-                                        underlayColor={'#f40057'}
+                                        underlayColor={global.themeColor}
                                         onPress={() => this.props.navigation.goBack()}
                                         containerStyle={{display: this.state.isMain}}/>}
                 />

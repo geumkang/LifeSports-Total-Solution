@@ -17,11 +17,11 @@ export class SelectStatus extends React.Component{
             if(statusList[i][0] == 'S')
                 styleList[i] = styles.statusItem;
             else
-                styleList[i] = styles.statusItemSelected;
+                styleList[i] = [styles.statusItemSelected, {color: global.pointColor}];
         }
 
         return(
-            <View style={styles.statusView}>
+            <View style={[styles.statusView, {backgroundColor: global.themeColor}]}>
                 <Text style={styleList[0]}>{statusList[0]}</Text>
                 <Text style={styleList[1]}>{statusList[1]}</Text>
                 <Text style={styleList[2]}>{statusList[2]}</Text>
@@ -35,18 +35,21 @@ const styles = StyleSheet.create({
     statusView: {
         width: '100%',
         height: 40,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginTop: -1
     },
     statusItem: {
         flex: 1,
         textAlign: 'center',
         textAlignVertical: 'center',
-        color: "#000"
+        color: "#fff",
+        fontSize: 15
     },
     statusItemSelected: {
         flex: 1,
         textAlign: 'center',
         textAlignVertical: 'center',
-        color: "#00f"
+        color: "#00f",
+        fontSize: 15
     }
 });

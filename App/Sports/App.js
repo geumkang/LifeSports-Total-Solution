@@ -23,6 +23,16 @@ import TeamGameResultScreen from './app/Screen/TeamGameResultScreen';
 import TeamMemberListScreen from './app/Screen/TeamMemberListScreen';
 import TeamMemberDetailScreen from './app/Screen/TeamMemberDetailScreen';
 
+global.backgroundColor = "#EDF0F2"		// 배경
+global.backgroundColor2 = "#D2DBE0"		// 진한 배경
+global.backgroundColor3 = "#232F34"		// Primary 800
+global.pointColor = "#F9AA33";
+global.themeColor = "#344955";
+global.fontPointColor = "#000";
+global.appServerIp = '3.15.50.24:80';
+global.loginStatus = false;
+global.hasTeam = true;
+
 export const StackNavigator = createStackNavigator({
 	Home: {
 		screen: createBottomTabNavigator({
@@ -30,7 +40,7 @@ export const StackNavigator = createStackNavigator({
 			Team: MainTeamScreen
 		},{
 			tabBarOptions: {
-				activeTintColor: '#e91e63',
+				activeTintColor: global.themeColor,
 				labelStyle: {
 					fontSize: 12,
 				}
@@ -102,7 +112,7 @@ export const StackNavigator = createStackNavigator({
 		},
 		{
 			tabBarOptions: {
-				activeTintColor: '#e91e63',
+				activeTintColor: global.themeColor,
 				labelStyle: {
 					fontSize: 12,
 				}

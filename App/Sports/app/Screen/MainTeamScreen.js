@@ -45,7 +45,7 @@ export default class MainTeamScreen extends React.Component {
         if(global.hasTeam){
             this.setState({
                 MyTeamInfo: {
-                    name: '츙앙 싸커 튐'
+                    name: '축구왕 통키'
                 }
             })
         }
@@ -72,7 +72,7 @@ export default class MainTeamScreen extends React.Component {
                     <View style={{flex: 1}}>
                         <ScrollView>
                             <Card
-                                title='삼성 디스플레이'
+                                title='축구왕 통키'
                                 image={require('../Images/team1.jpg')}
                                 >
                                 <Text style={{marginBottom: 10}}>
@@ -86,7 +86,7 @@ export default class MainTeamScreen extends React.Component {
                             </Card>
 
                             <Card
-                                title='한화 건설 동호회'
+                                title='한화 건설 축구 동호회'
                                 image={require('../Images/team2.jpg')}
                                 >
                                 <Text style={{marginBottom: 10}}>

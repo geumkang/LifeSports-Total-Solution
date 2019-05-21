@@ -41,7 +41,7 @@ export default class ReservationCheckScreen extends Component{
                                         onPressComplete={()=>this.onPressComplete()}/>
         }
         else if(statusList[0] == "예약"){ //  && selectItem.type == 2
-            reserveType = <NewReservation item={selectItem}
+            reserveType = <JoinReservation item={selectItem}
                                         checked={this.state.checked}
                                         onPressCheckBox={()=>this.onPressCheckBox()}
                                         onPressComplete={()=>this.onPressComplete()}/>
