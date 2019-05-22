@@ -1,14 +1,14 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from "react-native";
-import { Card, ListItem, Icon, Button, Image } from "react-native-elements"
+import { Card, ListItem, Icon, Button, SearchBar } from "react-native-elements"
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 
-export default class MainTeamScreen extends React.Component {
+export default class MainTeamRecommendScreen extends React.Component {
     static navigationOptions = {
-        tabBarLabel: "팀 정보",
+        tabBarLabel: "팀 추천",
         tabBarIcon: ({ tintColor }) => (
-          <Icon name="users" size={25} type="font-awesome" color={tintColor} />
+          <Icon name="star" size={25} type="font-awesome" color={tintColor} />
         )
     }
 
@@ -54,7 +54,7 @@ export default class MainTeamScreen extends React.Component {
 	onPressReservationStatus = () => {
 		this.props.navigation.navigate("ReservationStatus");
 	}
-
+    
 	onPressMatchingStatus = () => {
 		this.props.navigation.navigate("MatchingStatus");
     }
@@ -63,11 +63,24 @@ export default class MainTeamScreen extends React.Component {
         this.props.navigation.navigate("TeamInfo", {'MyTeamInfo': this.state.MyTeamInfo, "headerTitle": "팀원 목록"});
     }
 
+    updateSearch = search => {
+        this.setState({ search });
+    };
+
 	render() {
+        const { search } = this.state;
+
 		return (
 			<View style={{flex: 1, backgroundColor: global.backgroundColor}}>
 				<HeaderInfo headerTitle="메인" navigation={this.props.navigation}></HeaderInfo>
-
+                <SearchBar
+                    containerStyle={{marginTop: -1, backgroundColor: global.backgroundColor3}}
+                    inputContainerStyle={{marginTop: -1, height: 30, backgroundColor: global.backgroundColor3}}
+                    inputStyle={{fontSize: 16, marginTop: 3}}
+                    placeholder="새로운 팀 찾기"
+                    onChangeText={this.updateSearch}
+                    value={search}
+                />
                 {global.hasTeam ? (
                     <View style={{flex: 1}}>
                         <ScrollView>
@@ -141,31 +154,5 @@ export default class MainTeamScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-	menuView: {
-		flex: 1,
-		flexDirection: 'row'
-	},
-	selectMenu: {
-        flex: 1,
-        backgroundColor: "#fff",
-        marginTop: 15,
-        marginBottom: 5,
-        marginRight: 10,
-        marginLeft: 10,
-		borderRadius: 15,
-        justifyContent: 'center'
-	},
-	item: {
-        fontSize: 30,
-        fontWeight: "bold",
-        textAlign: 'center',
-        color: "#000"
-    },
-	title: {
-        justifyContent: 'center',
-        color: '#fff',
-        alignContent:'center',
-        textAlignVertical: 'center',
-        fontSize: 20
-    }
+	
 });

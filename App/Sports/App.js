@@ -17,11 +17,14 @@ import ReservationStatusScreen from "./app/Screen/ReservationStatusScreen"
 import MatchingStatusScreen from "./app/Screen/MatchingStatusScreen"
 import MyPageScreen from "./app/Screen/MyPageScreen"
 import MainIndividualScreen from './app/Screen/MainIndividualScreen';
-import MainTeamScreen from './app/Screen/MainTeamScreen';
+import MainMyTeamScreen from './app/Screen/MainMyTeamScreen';
+import MainTeamRecommendScreen from './app/Screen/MainTeamRecommendScreen';
 import TeamInfoScreen from './app/Screen/TeamInfoScreen';
 import TeamGameResultScreen from './app/Screen/TeamGameResultScreen';
 import TeamMemberListScreen from './app/Screen/TeamMemberListScreen';
 import TeamMemberDetailScreen from './app/Screen/TeamMemberDetailScreen';
+import RegisterTeamScreen from './app/Screen/RegisterTeamScreen';
+import RatingGameScreen from './app/Screen/RatingGameScreen';
 
 global.backgroundColor = "#EDF0F2"		// 배경
 global.backgroundColor2 = "#D2DBE0"		// 진한 배경
@@ -42,7 +45,8 @@ export const StackNavigator = createStackNavigator({
 	Home: {
 		screen: createBottomTabNavigator({
 			Individual: MainIndividualScreen,
-			Team: MainTeamScreen
+			Team: MainMyTeamScreen,
+			TeamRecommend: MainTeamRecommendScreen
 		},{
 			tabBarOptions: {
 				activeTintColor: global.themeColor,
@@ -128,7 +132,15 @@ export const StackNavigator = createStackNavigator({
 	TeamMemberDetail: {
 		screen : TeamMemberDetailScreen,
 		navigationOptions: ({ navigation }) => ({ header: null })	
-	}
+	},
+	RegisterTeam: {
+		screen : RegisterTeamScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })	
+	},
+	RatingGame: {
+		screen : RatingGameScreen,
+		navigationOptions: ({ navigation }) => ({ header: null })	
+	},
 }, {
 	initialRouteName: 'Home',
 });

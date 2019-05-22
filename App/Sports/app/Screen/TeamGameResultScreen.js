@@ -8,7 +8,7 @@ export default class TeamGameResultScreen extends Component{
     static navigationOptions = {
         tabBarLabel: "경기 전적",
         tabBarIcon: ({ tintColor }) => (
-          <Icon name="users" size={25} type="font-awesome" color={tintColor} />
+          <Icon name="flag" size={25} type="font-awesome" color={tintColor} />
         )
     }
 

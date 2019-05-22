@@ -96,7 +96,8 @@ export default class MainIndividualScreen extends React.Component {
     }
     
 	onPressReservationStatus = () => {
-		this.props.navigation.navigate("ReservationStatus");
+		this.props.navigation.navigate("RatingGame");
+		//this.props.navigation.navigate("ReservationStatus");
 	}
 
 	onPressMatchingStatus = () => {
@@ -156,7 +157,15 @@ export default class MainIndividualScreen extends React.Component {
 						onPress={()=>{
 							this.props.navigation.navigate("SelectType");
 						}}>
-						<Text style={styles.item}>예약하기</Text>
+						<View style={{flexDirection: 'row', justifyContent: 'center'}}>
+							<Icon
+								name='paper-plane'
+								type='font-awesome'
+								color="#000"
+								size={18}
+								iconStyle={styles.icon} />
+							<Text style={styles.item}>예약하기</Text>
+						</View>
 					</TouchableOpacity>
 				</View>
 			</View>  
@@ -193,5 +202,9 @@ const styles = StyleSheet.create({
         alignContent:'center',
         textAlignVertical: 'center',
         fontSize: 20
-    }
+	},
+	icon: {
+		marginTop: 7,
+		marginRight: 15
+	}
 });
