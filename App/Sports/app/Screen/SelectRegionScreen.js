@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { View, Text, Button, StyleSheet, Modal, TouchableOpacity } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements'
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { ListItem, Icon, Button } from 'react-native-elements'
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {SelectStatus} from '../Component/SelectStatus'
@@ -67,8 +67,10 @@ export default class SelectRegionScreen extends Component {
                 paddingBottom: 20,
                 paddingLeft: 15,
                 paddingRight: 15,
+                borderTopLeftRadius: 12,
+                borderTopRightRadius: 12,
                 width: '100%',
-                backgroundColor: "#fff"
+                backgroundColor: global.backgroundColor3
             }
         });
 
@@ -108,7 +110,7 @@ export default class SelectRegionScreen extends Component {
                     </View>
                     <View style={detailViewStyle.detailView}>
                         <View style={{height: 35, flexDirection: 'row', marginBottom: 5}}>
-                            <Text style={styles.Header}>{this.state.gymInfo.title}</Text>
+                            <Text style={styles.Header} adjustsFontSizeToFit={true} numberOfLines={1}>{this.state.gymInfo.title}</Text>
                             {
                                 this.state.gymInfo.favorite ?
                                 <Icon iconStyle={styles.Icon} name='favorite' color="#f40057"
@@ -120,7 +122,8 @@ export default class SelectRegionScreen extends Component {
                             
                             <Button
                                 title="NEXT STEP"
-                                style={styles.nextBtn}
+                                buttonStyle={{backgroundColor: global.pointColor}}
+                                titleStyle={{color: "#000"}}
                                 onPress={()=>{
                                     this.hideDetailView();
                                     statusList[step] = this.state.gymInfo.title;
@@ -154,15 +157,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         textAlignVertical: 'center',
-        color: "#000"
+        color: "#fff"
     },
     Title: {
         flex: 1,
         fontWeight: 'bold',
-        fontSize: 15,
+        fontSize: 14,
         textAlign: 'center',
         textAlignVertical: 'center',
-        color: "#000"
+        color: "#fff"
     },
     Icon:{
         paddingTop: 5,
@@ -171,9 +174,9 @@ const styles = StyleSheet.create({
     Detail: {
         paddingLeft: 15,
         flex: 1,
-        fontSize: 15,
+        fontSize: 14,
         textAlignVertical: 'center',
-        color: "#000"
+        color: "#fff"
     },
     nextBtn:{
     }

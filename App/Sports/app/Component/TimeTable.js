@@ -176,7 +176,10 @@ export class TimeTable extends React.Component{
             ) : (
                 <View style={[styles.item, {height: item.height, backgroundColor: typeColor[item.type - 1]}]}>
                     <TouchableOpacity style={{flex: 1}} onPress={()=>this.onPressItem(item)}>
-                        <Text>{item.name}</Text>
+                        <View style={{width: ratio, height: '100%', position: 'absolute', backgroundColor: ratioColor[item.type - 1]}}></View>
+                        <Text style={styles.time}>{item.startTime} ~ {item.endTime}</Text>
+                        <Text style={styles.title}>{item.name}</Text>    
+                        <Text style={styles.content}>{item.currentParticipant} / {item.maxParticipant}</Text>
                     </TouchableOpacity>
                 </View> 
             )

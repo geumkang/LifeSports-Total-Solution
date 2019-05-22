@@ -60,11 +60,11 @@ export default class TeamGameResultScreen extends Component{
         const MyTeamInfo = this.props.navigation.getParam("MyTeamInfo");
 
         return(
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle="경기 전적" navigation={this.props.navigation}></HeaderInfo>
                 
-                <View style={styles.statisticsContainer}>
-                    <Text style={styles.score}>123 승 33 패</Text>
+                <View style={[styles.statisticsContainer, {backgroundColor: global.backgroundColor3}]}>
+                    <Text style={[styles.score, {color: global.pointColor}]}>123 승 33 패</Text>
                 </View>
 
                 <Divider style={{height: 2, backgroundColor: "#e1e8ee"}}/>
@@ -85,7 +85,7 @@ export default class TeamGameResultScreen extends Component{
                                                     <Text style={item.win ? styles.winnerTeamName : styles.loserTeamName}>{MyTeamInfo.name}</Text>
                                                 </View>
                                                 <View style={{flex: 1}}>
-                                                    <Text style={styles.score}>{item.myTeamScore} : {item.oppositeTeamScore}</Text>
+                                                    <Text style={[styles.score, {color: global.pointColor}]}>{item.myTeamScore} : {item.oppositeTeamScore}</Text>
                                                 </View>
                                                 <View style={{flex: 1}}>
                                                     <Image
@@ -127,7 +127,8 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 10
+        marginBottom: 10,
+        marginTop: -1
     },
     titleContainer: {
         width: '100%',
@@ -152,7 +153,6 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
     },
     score:{
-        color: '#e91e63',
         fontSize: 33,
         fontWeight: 'bold',
         textAlign: 'center',

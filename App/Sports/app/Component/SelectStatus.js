@@ -14,7 +14,7 @@ export class SelectStatus extends React.Component{
         const styleList = [];        
         
         for(i = 0; i < 4; i++){
-            if(statusList[i][0] == 'S')
+            if(statusList[i] == '유형' || statusList[i] == '종목' || statusList[i] == '장소' || statusList[i] == '시간')
                 styleList[i] = styles.statusItem;
             else
                 styleList[i] = [styles.statusItemSelected, {color: global.pointColor}];
@@ -22,10 +22,10 @@ export class SelectStatus extends React.Component{
 
         return(
             <View style={[styles.statusView, {backgroundColor: global.themeColor}]}>
-                <Text style={styleList[0]}>{statusList[0]}</Text>
-                <Text style={styleList[1]}>{statusList[1]}</Text>
-                <Text style={styleList[2]}>{statusList[2]}</Text>
-                <Text style={styleList[3]}>{statusList[3]}</Text>
+                <Text style={styleList[0]} numberOfLines={1}>{statusList[0]}</Text>
+                <Text style={styleList[1]} numberOfLines={1}>{statusList[1]}</Text>
+                <Text style={styleList[2]} numberOfLines={1}>{statusList[2]}</Text>
+                <Text style={styleList[3]} numberOfLines={1}>{statusList[3]}</Text>
             </View>
         );
     }

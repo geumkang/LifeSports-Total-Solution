@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Input } from 'react-native-elements'
+import { Input, Button } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {HeaderInfo} from '../Component/HeaderInfo'
 
@@ -23,7 +23,7 @@ export default class SelectTypeScreen extends Component {
 
     render() {
 		return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle="회원 가입" navigation={this.props.navigation}></HeaderInfo>
                 
                 <View style={styles.container}>
@@ -50,6 +50,12 @@ export default class SelectTypeScreen extends Component {
                         stateKey="email"
                         updateText={this.updateText}
                     ></InputComponent>
+
+                    <Button
+                        title="회원 가입"
+                        buttonStyle={{backgroundColor: global.pointColor}}
+                        titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
+                        onPress={this.onPressNextStep}/>
                 </View>
             </View>
         );
@@ -67,7 +73,7 @@ function InputComponent(props) {
                     <Icon
                         name={props.iconName}
                         size={24}
-                        color='black'
+                        color={global.backgroundColor4}
                     />
                 }
                 leftIconContainerStyle={{marginRight: 20}}
@@ -84,8 +90,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#DCDCDC'
+        alignItems: 'center'
     },
     inputContainer: {
         width:350,

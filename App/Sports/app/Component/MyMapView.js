@@ -17,15 +17,18 @@ export class MyMapView extends React.Component {
     }
 
     showDetailView(e) {
-        this.props.showDetail("123");
+        if(this.props.showDetail != undefined)
+            this.props.showDetail("123");
     }
 
     hideDetailView(e) {
-        this.props.hideDetail("123");
+        if(this.props.hideDetail != undefined)
+            this.props.hideDetail("123");
     }
 
     updateGymInfo(gym_ID) {
-        this.props.updateGymInfo(gym_ID);
+        if(this.props.updateGymInfo != undefined)
+            this.props.updateGymInfo(gym_ID);
     }
 
     map = null;

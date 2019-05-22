@@ -5,29 +5,74 @@ import {
     View,
     TextInput,
     Button,
-    TouchableHighlight,
+    TouchableOpacity,
     Image,
     Alert
 } from 'react-native';
-
+import * as Keychain from 'react-native-keychain';
 import {HeaderInfo} from '../Component/HeaderInfo'
 
 export default class LoginScreen extends Component {
     constructor(props) {
         super(props);
         state = {
-            email : '',
-            password: '',
         }
     }
 
-    onPressLogin = () => {
-        // if login success
-        global.loginStatus = true;
-        this.props.navigation.popToTop();
+    componentDidMount(){
+        this.setState({
+            id : '',
+            password: ''
+        })
+    }
 
-        //else
-        //Alert.alert("Alert", "이메일이나 비밀번호가 일치하지 않습니다");
+    storeLoginInfo = async () => {
+        const username = this.state.id;
+        const password = this.state.password;
+
+        await Keychain.setGenericPassword(username, password);
+    }
+
+    onPressLogin = () => {
+        if(this.state.id == ''){
+            Alert.alert('ERROR', 'ID를 입력해주세요');
+            return;
+        }
+        else if(this.state.password == ''){
+            Alert.alert('ERROR', '비밀번호를 입력해주세요');
+            return;
+        }
+
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'ID' : this.state.id,
+                'PWD' : this.state.password
+            })
+        }
+
+        return fetch('http://' + global.appServerIp + '/user/login', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if(responseJson[0] == undefined){
+                    Alert.alert('ERROR', 'ID나 비밀번호가 맞지 않습니다');
+                }
+                else{
+                    global.UDID = responseJson[0].UDID;
+                    global.ID = responseJson[0].ID;
+                    global.name = responseJson[0].name;
+                    global.loginStatus = true;
+                    this.props.navigation.popToTop();
+                    this.storeLoginInfo();
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     onPressRegister = () => {
@@ -38,7 +83,7 @@ export default class LoginScreen extends Component {
         return (
         <View style={{flex: 1}}>
             <HeaderInfo headerTitle="로그인" navigation={this.props.navigation}></HeaderInfo>
-            <View style={styles.container}>
+            <View style={[styles.container, {backgroundColor: global.backgroundColor}]}>
                 
                 <View style={{flex: 2}}>
                     
@@ -48,10 +93,10 @@ export default class LoginScreen extends Component {
                 <View style={styles.inputContainer}>
                     <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
                     <TextInput style={styles.inputs}
-                        placeholder="Email"
+                        placeholder="ID"
                         keyboardType="email-address"
                         underlineColorAndroid='transparent'
-                        onChangeText={(email) => this.setState({email})}/>
+                        onChangeText={(id) => this.setState({id})}/>
                 </View>
                 
                 <View style={styles.inputContainer}>
@@ -63,13 +108,13 @@ export default class LoginScreen extends Component {
                         onChangeText={(password) => this.setState({password})}/>
                 </View>
 
-                <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onPressLogin()}>
-                    <Text style={styles.loginText}>Login</Text>
-                </TouchableHighlight>
+                <TouchableOpacity style={[styles.buttonContainer, styles.loginButton, {backgroundColor: global.pointColor}]} onPress={() => this.onPressLogin()}>
+                    <Text style={[styles.loginText, {color: "#000"}]}>Login</Text>
+                </TouchableOpacity>
 
-                <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onPressRegister()}>
-                    <Text>Register</Text>
-                </TouchableHighlight>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onPressRegister()}>
+                    <Text style={{color: global.backgroundColor4, fontSize: 16}}>Register</Text>
+                </TouchableOpacity>
             </View>
         </View>
         );
@@ -119,6 +164,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#00b5ec",
     },
     loginText: {
-        color: 'white',
+        fontSize: 16
     }
 });

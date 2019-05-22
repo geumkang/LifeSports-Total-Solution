@@ -22,7 +22,7 @@ export default class TeamInfoScreen extends Component{
         const MyTeamInfo = this.props.navigation.getParam("MyTeamInfo");
         console.log(MyTeamInfo)
         return(
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle={MyTeamInfo.name} navigation={this.props.navigation} type="Team"></HeaderInfo>
                 <Image source={require('../Images/team2.jpg')}
                         style={{ width: '100%', height: 200 }}/>

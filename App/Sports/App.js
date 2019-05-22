@@ -26,12 +26,17 @@ import TeamMemberDetailScreen from './app/Screen/TeamMemberDetailScreen';
 global.backgroundColor = "#EDF0F2"		// 배경
 global.backgroundColor2 = "#D2DBE0"		// 진한 배경
 global.backgroundColor3 = "#232F34"		// Primary 800
+global.backgroundColor4 = "#4A6572"		// Primary 600
 global.pointColor = "#F9AA33";
 global.themeColor = "#344955";
 global.fontPointColor = "#000";
+
 global.appServerIp = '3.15.50.24:80';
 global.loginStatus = false;
 global.hasTeam = true;
+global.UDID = '';
+global.ID = '';
+global.name = '';
 
 export const StackNavigator = createStackNavigator({
 	Home: {

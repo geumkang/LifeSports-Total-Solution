@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
-import { CheckBox } from 'react-native-elements'
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { CheckBox, Button } from 'react-native-elements'
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {SelectStatus} from '../Component/SelectStatus'
@@ -69,24 +69,27 @@ function NewReservation(props){
                     <Text style={styles.Title}>예약자</Text>
                     <Text style={styles.Title}>팀명</Text>
                     <Text style={styles.Title}>예약시간</Text>
+                    <Text style={styles.Title}>끼어들기</Text>
                 </View>
-                <View style={{flex: 4}}>
+                <View style={{flex: 3.5}}>
                     <Text style={styles.Detail}>12</Text>
                     <Text style={styles.Detail}>꺕꺄뺘</Text>
                     <Text style={styles.Detail}>09:00~11:00</Text>
+                    <CheckBox
+                        iconRight
+                        checked={props.checked}
+                        onPress={props.onPressCheckBox}
+                        checkedColor={global.pointColor}
+                        />
                 </View>
             </View>
         
-            <CheckBox
-                center
-                iconRight
-                title='끼어들기 허용'
-                checked={props.checked}
-                onPress={props.onPressCheckBox}
-                />
+            
             
             <Text style={styles.Title}>예약 취소시 이러이러이러리</Text>
             <Button title="예약하기"
+                    buttonStyle={{backgroundColor: global.pointColor}}
+                    titleStyle={{color: "#000", fontWeight: 'bold'}}
                     onPress={props.onPressComplete}></Button>
         </View>
     );
@@ -111,6 +114,8 @@ function JoinReservation(props){
             </View>
             <Text style={styles.Title}>경기 취소시 이러이러이러리</Text>
             <Button title="참여하기"
+                    buttonStyle={{backgroundColor: global.pointColor}}
+                    titleStyle={{color: "#000", fontWeight: 'bold'}}
                     onPress={props.onPressComplete}></Button>
         </View>
     );
@@ -130,12 +135,16 @@ function Matching(props){
                     <Text style={styles.Detail}>12</Text>
                     <Text style={styles.Detail}>10/20</Text>
                     <Button title="확인하기"
+                            buttonStyle={{backgroundColor: global.pointColor}}
+                            titleStyle={{color: "#000", fontWeight: 'bold'}}
                             onPress={props.onPressNextBtn}></Button>
                     <Text style={styles.Detail}>09:00~11:00</Text>
                 </View>
             </View>
             <Text style={styles.Title}>경기 취소시 이러이러이러리</Text>
             <Button title="참여하기"
+                    buttonStyle={{backgroundColor: global.pointColor}}
+                    titleStyle={{color: "#000", fontWeight: 'bold'}}
                     onPress={props.onPressComplete}></Button>
         </View>
     );
@@ -153,7 +162,7 @@ const styles = StyleSheet.create({
     Title: {
         flex: 1,
         fontWeight: 'bold',
-        fontSize: 15,
+        fontSize: 16,
         textAlign: 'center',
         textAlignVertical: 'center',
         color: "#000"
@@ -161,7 +170,7 @@ const styles = StyleSheet.create({
     Detail: {
         paddingLeft: 15,
         flex: 1,
-        fontSize: 15,
+        fontSize: 16,
         textAlignVertical: 'center',
         color: "#000"
     },

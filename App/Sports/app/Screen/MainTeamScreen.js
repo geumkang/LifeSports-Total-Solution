@@ -65,7 +65,7 @@ export default class MainTeamScreen extends React.Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1, backgroundColor: global.backgroundColor}}>
 				<HeaderInfo headerTitle="메인" navigation={this.props.navigation}></HeaderInfo>
 
                 {global.hasTeam ? (
@@ -75,12 +75,12 @@ export default class MainTeamScreen extends React.Component {
                                 title='축구왕 통키'
                                 image={require('../Images/team1.jpg')}
                                 >
-                                <Text style={{marginBottom: 10}}>
+                                <Text style={{marginBottom: 10, color: "#000"}}>
                                     대한민국 엘리트 멤버들이 모였다. 축구는 머리로 하는 것이다!
                                 </Text>
                                 <Button
-                                    backgroundColor='#03A9F4'
-                                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                                    buttonStyle={{backgroundColor: global.pointColor}}
+                                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
                                     title='가입하기'
                                     onPress={this.onPressJoinBtn}/>
                             </Card>
@@ -89,12 +89,12 @@ export default class MainTeamScreen extends React.Component {
                                 title='한화 건설 축구 동호회'
                                 image={require('../Images/team2.jpg')}
                                 >
-                                <Text style={{marginBottom: 10}}>
+                                <Text style={{marginBottom: 10, color: "#000"}}>
                                     현장 노동자들의 장딴지 근육을 보았는가. 우린 잔디 구장보다 모래 바닥이 더 익숙하다!
                                 </Text>
                                 <Button
-                                    backgroundColor='#03A9F4'
-                                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                                    buttonStyle={{backgroundColor: global.pointColor}}
+                                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
                                     title='가입하기'
                                     onPress={this.onPressJoinBtn}/>
                             </Card>
@@ -107,12 +107,13 @@ export default class MainTeamScreen extends React.Component {
                                 title='삼성 디스플레이'
                                 image={require('../Images/team1.jpg')}
                                 >
-                                <Text style={{marginBottom: 10}}>
+                                <Text style={{marginBottom: 10, color: "#000"}}>
                                     대한민국 엘리트 멤버들이 모였다. 축구는 머리로 하는 것이다!
                                 </Text>
                                 <Button
-                                    backgroundColor='#03A9F4'
-                                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                                    buttonStyle={{backgroundColor: global.pointColor}}
+                                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
+                                    // buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
                                     title='가입하기'
                                     onPress={this.onPressJoinBtn}/>
                             </Card>
@@ -121,12 +122,12 @@ export default class MainTeamScreen extends React.Component {
                                 title='한화 건설 동호회'
                                 image={require('../Images/team2.jpg')}
                                 >
-                                <Text style={{marginBottom: 10}}>
+                                <Text style={{marginBottom: 10, color: "#000"}}>
                                     현장 노동자들의 장딴지 근육을 보았는가. 우린 잔디 구장보다 모래 바닥이 더 익숙하다!
                                 </Text>
                                 <Button
-                                    backgroundColor='#03A9F4'
-                                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                                    buttonStyle={{backgroundColor: global.pointColor}}
+                                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
                                     title='가입하기'
                                     onPress={this.onPressJoinBtn}/>
                             </Card>

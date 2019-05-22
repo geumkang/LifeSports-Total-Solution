@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { ListItem } from 'react-native-elements'
+import { ListItem, Card } from 'react-native-elements'
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 
@@ -51,21 +51,26 @@ export default class FavoriteGymListScreen extends Component {
 
     render() {
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle="즐겨찾기" navigation={this.props.navigation}></HeaderInfo>
                 <View style={{flex: 1}}>
-                    {
-                        this.state.fevoriteGymList.map((gym, i) => (
-                        <ListItem
-                            key={i}
-                            roundAvatar
-                            title={gym.name}
-                            subtitle={gym.address}
-                            chevron
-                            onPress={()=>this.nextPage(gym)}
-                        />
-                        ))
-                    }
+                {
+                    this.state.fevoriteGymList.map((gym, i) => (
+                        <Card
+                            containerStyle={{padding: 0}}>
+                            <ListItem
+                                key={i}
+                                roundAvatar
+                                title={gym.name}
+                                subtitle={gym.address}
+                                chevron
+                                titleStyle={{color: "#000", fontWeight: 'bold', marginBottom: 5}}
+                                subtitleStyle={{color: "#000"}}
+                                onPress={()=>this.nextPage(gym)}
+                            />
+                        </Card>
+                    ))
+                }
                 </View>
             </View>
         );

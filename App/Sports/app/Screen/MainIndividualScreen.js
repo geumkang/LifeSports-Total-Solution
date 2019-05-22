@@ -1,8 +1,11 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from "react-native";
+import * as Keychain from 'react-native-keychain';
+
 import { Card, ListItem, Icon } from "react-native-elements"
 
 import {HeaderInfo} from '../Component/HeaderInfo'
+
 
 export default class MainIndividualScreen extends React.Component {
     static navigationOptions = {
@@ -20,8 +23,54 @@ export default class MainIndividualScreen extends React.Component {
 		}
 	}
 	
+
+	
+	getData = async () => {
+		try {
+			try {
+				// Retrieve the credentials
+				const credentials = await Keychain.getGenericPassword();
+				if (credentials) {
+					console.log('Credentials successfully loaded for user ' + credentials.username);
+
+					let data = {
+						headers: {
+							Accept: 'application/json',
+							'Content-Type': 'application/json',
+						},
+						method: 'POST',
+						body: JSON.stringify({
+							'ID' : credentials.username,
+							'PWD' : credentials.password
+						})
+					}
+	
+					return fetch('http://' + global.appServerIp + '/user/login', data)
+						.then((response) => response.json())
+						.then((responseJson) => {
+							global.UDID = responseJson[0].UDID;
+							global.ID = responseJson[0].ID;
+							global.name = responseJson[0].name;
+							global.loginStatus = true;
+						})
+						.catch((error) => {
+							console.error(error);
+						});
+					
+				} else {
+					console.log('No credentials stored');
+				}
+			} catch (error) {
+				console.log('Keychain couldn\'t be accessed!', error);
+			}
+			
+			
+		} catch(e) {
+			// error reading value
+		}
+	}
+
 	componentDidMount(){
-		
 		this.setState({
 			reservationData: [
 				{
@@ -40,7 +89,10 @@ export default class MainIndividualScreen extends React.Component {
 					name: '중앙대 체육관'
 				}
 			]
-        });
+		});
+		
+		
+		this.getData();
     }
     
 	onPressReservationStatus = () => {
@@ -64,12 +116,12 @@ export default class MainIndividualScreen extends React.Component {
 									key={i}
 									roundAvatar
 									title={u.name}
-									chevron
 									topDivider
 									bottomDivider
 									badge={{value: "D-3", 
 											badgeStyle: {width: 50, height: 20, backgroundColor: global.pointColor},
 											textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
+									titleStyle={{color: "#000"}}
                             		onPress={()=>this.onPressReservationStatus()}
 								/>
 							);
@@ -85,12 +137,12 @@ export default class MainIndividualScreen extends React.Component {
 									key={i}
 									roundAvatar
 									title={u.name}
-									chevron
 									topDivider
 									bottomDivider
 									badge={{value: "10 / 20", 
 											badgeStyle: {width: 60, height: 20, backgroundColor: global.pointColor},
 											textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
+									titleStyle={{color: "#000"}}
                             		onPress={()=>this.onPressMatchingStatus()}
 								/>
 							);
@@ -100,7 +152,7 @@ export default class MainIndividualScreen extends React.Component {
                 </ScrollView>
 				<View style={styles.menuView}>
 					<TouchableOpacity
-						style={styles.selectMenu}
+						style={[styles.selectMenu, {backgroundColor: global.pointColor}]}
 						onPress={()=>{
 							this.props.navigation.navigate("SelectType");
 						}}>
@@ -115,12 +167,13 @@ export default class MainIndividualScreen extends React.Component {
 
 const styles = StyleSheet.create({
 	menuView: {
-		flex: 1,
+		width: '100%',
+		height: 80,
+		justifyContent: 'center',
 		flexDirection: 'row'
 	},
 	selectMenu: {
-        flex: 1,
-        backgroundColor: "#fff",
+        flex: 0.5,
         marginTop: 15,
         marginBottom: 10,
         marginRight: 10,
@@ -129,7 +182,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
 	},
 	item: {
-        fontSize: 30,
+        fontSize: 24,
         fontWeight: "bold",
         textAlign: 'center',
 		color: "#000"

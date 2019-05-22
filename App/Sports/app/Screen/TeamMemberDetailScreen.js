@@ -15,7 +15,7 @@ export default class TeamMemberDetailScreen extends Component{
         const player = this.props.navigation.getParam("player");
 
         return(
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle={player.name} navigation={this.props.navigation}></HeaderInfo>
                 <MemberDetail
                     player={player}

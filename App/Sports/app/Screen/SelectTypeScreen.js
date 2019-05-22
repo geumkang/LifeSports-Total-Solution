@@ -18,7 +18,7 @@ export default class SelectTypeScreen extends Component {
 			}
 		]
 		
-		const statusList = ['Step1', 'Step2', 'Step3', 'Step4'];
+		const statusList = ['유형', '종목', '장소', '시간'];
 		const step = 0;
 		return (
 			<View style={{flex: 1}}>

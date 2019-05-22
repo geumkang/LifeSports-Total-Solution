@@ -37,7 +37,7 @@ export default class TeamMemberListScreen extends Component{
 
     render(){
         return(
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle={this.state.headerTitle} navigation={this.props.navigation}></HeaderInfo>
 
                 <MemberList
