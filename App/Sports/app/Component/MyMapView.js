@@ -60,37 +60,6 @@ export class MyMapView extends React.Component {
         this.setState({ region });
     }
 
-    gyminfoRequest() {
-        let data = {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'GET',
-        }
-        let gymInfoList = [];
-        return fetch('http://' + global.appServerIp + '/gym', data)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                
-                for(var i = 0; i < responseJson.length; i++){
-                    gymInfoList.push({
-                        key: responseJson[i].gym_ID,
-                        coordinate: {
-                            latitude: responseJson[i].gym_latitude,
-                            longitude: responseJson[i].gym_longitude
-                        }                                
-                    })
-                }
-                this.setState({
-                    markers: gymInfoList
-                })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-
     componentDidMount() {
         console.log('Component did mount');
         this.getCurrentPosition();
@@ -211,6 +180,50 @@ export class MyMapView extends React.Component {
             
         </MapView>
         );
+    }
+
+    gyminfoRequest() {
+        let sport = this.props.statusList[1];
+        if(sport == '축구')
+            sportType = 1
+        else if(sport == '농구')
+            sportType = 2
+        else if(sport == '야구')
+            sportType = 3
+        else if(sport == '배드민턴')
+            sportType = 4
+
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'subj_ID' : sportType
+            })
+        }
+        let gymInfoList = [];
+        return fetch('http://' + global.appServerIp + '/gym/gymbysport', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson)
+                for(var i = 0; i < responseJson.length; i++){
+                    gymInfoList.push({
+                        key: responseJson[i].gym_ID,
+                        coordinate: {
+                            latitude: responseJson[i].gym_latitude,
+                            longitude: responseJson[i].gym_longitude
+                        }                                
+                    })
+                }
+                this.setState({
+                    markers: gymInfoList
+                })
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 }
 

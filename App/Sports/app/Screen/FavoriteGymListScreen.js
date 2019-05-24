@@ -9,20 +9,14 @@ export default class FavoriteGymListScreen extends Component {
         super(props);
         this.state = {
             refreshing: false,
-            fevoriteGymList: [
-                {
-                    key: '1',
-                    name: '국사봉 체육관',
-                    address: '동작구 상도동 123-12'
-                },
-                {
-                    key: '2',
-                    name: '중앙대 체육관',
-                    address: '동작구 상도동 123-123'
-                }
+            favoriteGymList: [
             ]
         }
     }
+
+    componentDidMount(){
+        this.getFavoriteList();
+    }    
 
     onEndReached = () => {
         this.setState(state => ({
@@ -32,15 +26,15 @@ export default class FavoriteGymListScreen extends Component {
         }));
     };
 
-    onRefresh = () => {
-        this.setState({
-            data: {
-                key: '1',
-                name: '국사봉 체육관2',
-                address: '동작구 상도동 123-12'
-            }
-        });
-    }
+    // onRefresh = () => {
+    //     this.setState({
+    //         data: {
+    //             key: '1',
+    //             name: '국사봉 체육관2',
+    //             address: '동작구 상도동 123-12'
+    //         }
+    //     });
+    // }
 
     nextPage = (gym) => {
         const statusList = this.props.navigation.getParam("statusList");
@@ -55,7 +49,7 @@ export default class FavoriteGymListScreen extends Component {
                 <HeaderInfo headerTitle="즐겨찾기" navigation={this.props.navigation}></HeaderInfo>
                 <View style={{flex: 1}}>
                 {
-                    this.state.fevoriteGymList.map((gym, i) => (
+                    this.state.favoriteGymList.map((gym, i) => (
                         <Card
                             containerStyle={{padding: 0}}>
                             <ListItem
@@ -74,5 +68,51 @@ export default class FavoriteGymListScreen extends Component {
                 </View>
             </View>
         );
+    }
+
+    
+    getFavoriteList = () => {
+        const statusList = this.props.navigation.getParam("statusList");
+        let sport = statusList[1];
+        if(sport == '축구')
+            sportType = 1
+        else if(sport == '농구')
+            sportType = 2
+        else if(sport == '야구')
+            sportType = 3
+        else if(sport == '배드민턴')
+            sportType = 4
+
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'UDID' : global.UDID,
+                'subj_ID': sportType
+            })
+        }
+        return fetch('http://' + global.appServerIp + '/gym/favorite', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                let list = [];
+                for(let i = 0; i < responseJson.length; i++){
+                    list.push({
+                        gym_ID: responseJson[i].gym_ID,
+                        name: responseJson[i].gym_name,
+                        address: responseJson[i].gym_location
+                    });
+                }
+
+                this.setState({
+                    favoriteGymList : list
+                });
+                console.log('favorite List : ', list);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 }

@@ -49,8 +49,8 @@ export class TimeTable extends React.Component{
                     items={this.state.items}
                     loadItemsForMonth={this.loadItems.bind(this)}
                     selected={this.date}
-                    renderItem={this.renderItem.bind(this)}
-                    renderEmptyDate={this.renderEmptyDate.bind(this)}
+                    // renderItem={this.renderItem.bind(this)}
+                    // renderEmptyDate={this.renderEmptyDate.bind(this)}
                     rowHasChanged={this.rowHasChanged.bind(this)}
                     markedDates={this.state.marks}
                     markingType={'multi-dot'}
@@ -60,6 +60,23 @@ export class TimeTable extends React.Component{
     }
 
     scheduleRequest() {
+        let reservType, sportType = 1;
+        if(this.props.statusList[0] == "예약")
+            reservType = '/schedule/scheduletypereserv';
+        else
+            reservType = '/schedule/scheduletypematch';
+
+        if(this.props.statusList[1] == "축구")
+            sportType = 1
+        else if(this.props.statusList[1] == "농구")
+            sportType = 2
+        else if(this.props.statusList[1] == "야구")
+            sportType = 3
+        else if(this.props.statusList[1] == "배드민턴")
+            sportType = 4
+
+        console.log(this.props.sportType, reservType)
+
         let data = {
             headers: {
                 Accept: 'application/json',
@@ -68,26 +85,37 @@ export class TimeTable extends React.Component{
             method: 'POST',
             body: JSON.stringify({
                 'gym_ID' : this.props.gym_ID,
-                'subj_ID' : this.state.selectedSubj_ID
+                'subj_ID' : sportType
             })
         }
-        let gymInfoList = [];
-        return fetch('http://' + global.appServerIp + '/gym', data)
+        let scheduleList = [];
+        return fetch('http://' + global.appServerIp + reservType, data)
             .then((response) => response.json())
             .then((responseJson) => {
                 
+                console.log(responseJson)
                 for(var i = 0; i < responseJson.length; i++){
-                    gymInfoList.push({
-                        key: responseJson[i].gym_ID,
-                        coordinate: {
-                            latitude: responseJson[i].gym_latitude,
-                            longitude: responseJson[i].gym_longitude
-                        }                                
+                    const strTime = this.timeToString(responseJson[i].starttime)
+                    console.log(strTime)
+                    this.state.items.push({
+                        strTime: {
+                            scheduleID: responseJson[i].schedule_ID,
+                            name: responseJson[i].schedule_name,
+                            gymID : responseJson[i].gym_ID,
+                            startTime: responseJson[i].starttime,
+                            endTime: responseJson[i].endtime,
+                            curStatus: responseJson[i].cur_status,
+                            scheduleType: responseJson[i].schedule_type,
+                            height: 120
+                        }
                     })
                 }
+
+                const newItems = {};
+                Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
                 this.setState({
-                    markers: gymInfoList
-                })
+                    items: newItems
+                });
             })
             .catch((error) => {
                 console.error(error);
@@ -95,52 +123,52 @@ export class TimeTable extends React.Component{
     }
 
     loadItems(day) {
-        setTimeout(() => {
-            for (let i = -15; i < 85; i++) {
-                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-                const strTime = this.timeToString(time);
-                if (!this.state.items[strTime]) {
-                    this.state.items[strTime] = [];
-                    const numItems = Math.floor(Math.random() * 5);
-                    for (let j = 0; j < numItems; j++) {
-                        this.state.items[strTime].push({
-                            name: "title",
-                            type: 1, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
-                            startTime: '09:00',
-                            endTime: '09:30',
-                            currentParticipant: 10,
-                            maxParticipant: 30,
-                            height: 120
-                        });
-                        this.state.items[strTime].push({
-                            name: "title",
-                            type: 2, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
-                            startTime: '09:00',
-                            endTime: '09:30',
-                            currentParticipant: 7,
-                            maxParticipant: 30,
-                            height: 120
-                        });
-                        this.state.items[strTime].push({
-                            name: "title",
-                            type: 3, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
-                            startTime: '09:00',
-                            endTime: '09:30',
-                            currentParticipant: 5,
-                            maxParticipant: 30,
-                            height: 120
-                        });
-                    }
-                }
-            }
+        this.scheduleRequest()
+        // setTimeout(() => {
+        //     for (let i = -15; i < 85; i++) {
+        //         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+        //         const strTime = this.timeToString(time);
+        //         if (!this.state.items[strTime]) {
+        //             this.state.items[strTime] = [];
+        //             const numItems = Math.floor(Math.random() * 5);
+        //             for (let j = 0; j < numItems; j++) {
+        //                 this.state.items[strTime].push({
+        //                     name: "title",
+        //                     type: 1, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
+        //                     startTime: '09:00',
+        //                     endTime: '09:30',
+        //                     currentParticipant: 10,
+        //                     maxParticipant: 30,
+        //                     height: 120
+        //                 });
+        //                 this.state.items[strTime].push({
+        //                     name: "title",
+        //                     type: 2, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
+        //                     startTime: '09:00',
+        //                     endTime: '09:30',
+        //                     currentParticipant: 7,
+        //                     maxParticipant: 30,
+        //                     height: 120
+        //                 });
+        //                 this.state.items[strTime].push({
+        //                     name: "title",
+        //                     type: 3, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
+        //                     startTime: '09:00',
+        //                     endTime: '09:30',
+        //                     currentParticipant: 5,
+        //                     maxParticipant: 30,
+        //                     height: 120
+        //                 });
+        //             }
+        //         }
+        //     }
             // console.log(this.state.items);
-            const newItems = {};
-            Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
-            this.setState({
-                items: newItems
-            });
-        }, 1000);
-        console.log(`Load Items for ${day.year}-${day.month}`);
+        //     const newItems = {};
+        //     Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
+        //     this.setState({
+        //         items: newItems
+        //     });
+        // }, 1000);
     }
     
     onPressItem = (item) => {
@@ -162,15 +190,16 @@ export class TimeTable extends React.Component{
         else
             reservType = false;
             
-        const ratio = Math.round(Number(item.currentParticipant / item.maxParticipant) * 100) + '%'
+        let ratio;
+        if(!reservType)
+            ratio = Math.round(Number(item.currentParticipant / item.maxParticipant) * 100) + '%'
         return (
             reservType ? (
                 <View style={[styles.item, {height: item.height, backgroundColor: typeColor[item.type - 1]}]}>
                     <TouchableOpacity style={{flex: 1}} onPress={()=>this.onPressItem(item)}>
-                        <View style={{width: ratio, height: '100%', position: 'absolute', backgroundColor: ratioColor[item.type - 1]}}></View>
+                        {/* {item.cur_status} ? <View style={{width: ratio, height: '100%', position: 'absolute', backgroundColor: ratioColor[item.type - 1]}}></View> */}
                         <Text style={styles.time}>{item.startTime} ~ {item.endTime}</Text>
-                        <Text style={styles.title}>{item.name}</Text>    
-                        <Text style={styles.content}>{item.currentParticipant} / {item.maxParticipant}</Text>
+                        <Text style={styles.title}>{item.name}</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
@@ -186,11 +215,11 @@ export class TimeTable extends React.Component{
         );
     }
     
-    renderEmptyDate() {
-        return (
-            <View style={styles.emptyDate}><Text>이 날은 운영하지 않습니다</Text></View>
-        );
-    }
+    // renderEmptyDate() {
+    //     return (
+    //         <View style={styles.emptyDate}><Text>이 날은 운영하지 않습니다</Text></View>
+    //     );
+    // }
     
     rowHasChanged(r1, r2) {
         return r1.name !== r2.name;

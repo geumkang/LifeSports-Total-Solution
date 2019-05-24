@@ -22,44 +22,16 @@ export default class SelectRegionScreen extends Component {
     showDetailView = () => this.setState({ modalVisible: true })
     hideDetailView = () => this.setState({ modalVisible: false })
     toggleFavorite = () => {
-        this.state.gymInfo.favorite = !this.state.gymInfo.favorite
-        this.forceUpdate()
+        this.updateFavorite();
     }
 
-    updateGymInfo = (gym_ID) => {
-
-        let data = {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                'gym_ID' : gym_ID
-            })
-        }
-
-        return fetch('http://' + global.appServerIp + '/gym/gyminfo', data)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({
-                    gymInfo: {
-                        gym_ID: responseJson[0].gym_ID,
-                        title: responseJson[0].gym_name,
-                        detail: responseJson[0].gym_info,
-                        address: responseJson[0].gym_location,
-                        openTime: responseJson[0].avail_starttime + '~' + responseJson[0].avail_endtime,
-                        favorite: true
-                    }
-                });
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+    hasFavoriteGym = () => {
+        //for(let i = 0; i < this.state.favori
     }
+
+    
 
     render() {
-        
         const detailViewStyle = StyleSheet.create({
             detailView: {
                 flex: 1,
@@ -97,7 +69,8 @@ export default class SelectRegionScreen extends Component {
                 <MyMapView
                     showDetail={this.showDetailView}
                     hideDetail={this.hideDetailView}
-                    updateGymInfo={this.updateGymInfo}/>
+                    updateGymInfo={this.updateGymInfo}
+                    statusList={statusList}/>
 
                 <Modal animationType={"slide"}
                         transparent={true}
@@ -147,7 +120,74 @@ export default class SelectRegionScreen extends Component {
                 </Modal>
 			</View>
 		);
-	}
+    }
+    
+    updateGymInfo = (gym_ID) => {
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'gym_ID' : gym_ID,
+                'UDID' : global.UDID
+            })
+        }
+
+        return fetch('http://' + global.appServerIp + '/gym/gyminfo', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson)
+                this.setState({
+                    gymInfo: {
+                        gym_ID: responseJson[0].gym_ID,
+                        title: responseJson[0].gym_name,
+                        detail: responseJson[0].gym_info,
+                        address: responseJson[0].gym_location,
+                        openTime: responseJson[0].avail_starttime + '~' + responseJson[0].avail_endtime,
+                        favorite: responseJson[0].isfavorite
+                    }
+                });
+
+                this.forceUpdate();
+
+                console.log('gymInfo : ', this.state.gymInfo)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    updateFavorite = () => {
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'gym_ID' : this.state.gymInfo.gym_ID,
+                'UDID' : global.UDID
+            })
+        }
+
+        if(this.state.gymInfo.favorite == 1){
+            fetch('http://' + global.appServerIp + '/gym/favoritedel', data)
+            .then((response) => {
+                console.log(response)
+                this.updateGymInfo(this.state.gymInfo.gym_ID)
+            })
+        }
+        else{
+            fetch('http://' + global.appServerIp + '/gym/favoriteins', data)
+            .then((response) => {
+                console.log(response)
+                this.updateGymInfo(this.state.gymInfo.gym_ID)
+            })
+        }
+        return
+    }
 }
 
 const styles = StyleSheet.create({

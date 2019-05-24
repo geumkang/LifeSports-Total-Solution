@@ -96,8 +96,8 @@ export default class MainIndividualScreen extends React.Component {
     }
     
 	onPressReservationStatus = () => {
-		this.props.navigation.navigate("RatingGame");
-		//this.props.navigation.navigate("ReservationStatus");
+		// this.props.navigation.navigate("RatingGame");
+		this.props.navigation.navigate("ReservationStatus");
 	}
 
 	onPressMatchingStatus = () => {
