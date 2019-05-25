@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text, ScrollView, ActivityIndicator } from "react-native";
 import * as Keychain from 'react-native-keychain';
 
 import { Card, ListItem, Icon } from "react-native-elements"
@@ -18,6 +18,8 @@ export default class MainIndividualScreen extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			spinnerReserv: true,
+			spinnerMatch: true,
 			reservationList: [],
 			matchingData: []
 		}
@@ -97,8 +99,11 @@ export default class MainIndividualScreen extends React.Component {
                 <HeaderInfo headerTitle="메인" navigation={this.props.navigation}></HeaderInfo>
 				<ScrollView>
 					<Card title="예약 현황">
-						<ScrollView>
+						<ScrollView style={{width: '100%', height: 150}}>
 						{
+							this.state.spinnerReserv ? 
+								<ActivityIndicator size="large" color={global.pointColor}/>
+							:
 							this.state.reservationList.map((item, i) => {
 								return (
 									<ListItem
@@ -121,29 +126,32 @@ export default class MainIndividualScreen extends React.Component {
 					</Card>
 
 					<Card title="매칭 현황">
-						<ScrollView>
+						<ScrollView style={{width: '100%', height: 150}}>
 						{
-						this.state.matchingData.map((item, i) => {
-							if(item.currentParticipant >= item.minParticipant)
-								value = item.dday;
-							else
-								value = item.currentParticipant + "/" + item.maxParticipant;
-							return (
-								<ListItem
-									key={i}
-									roundAvatar
-									title={item.name}
-									subtitle={item.time}
-									topDivider
-									bottomDivider
-									badge={{value: value,
-											badgeStyle: {width: 60, height: 20, backgroundColor: global.pointColor},
-											textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
-									titleStyle={{color: "#000"}}
-                            		onPress={()=>this.onPressMatchingStatus(item)}
-								/>
-							);
-						})
+							this.state.spinnerMatch ? 
+								<ActivityIndicator size="large" color={global.pointColor}/>
+							:
+							this.state.matchingData.map((item, i) => {
+								if(item.currentParticipant >= item.minParticipant)
+									value = item.dday;
+								else
+									value = item.currentParticipant + "/" + item.maxParticipant;
+								return (
+									<ListItem
+										key={i}
+										roundAvatar
+										title={item.name}
+										subtitle={item.time}
+										topDivider
+										bottomDivider
+										badge={{value: value,
+												badgeStyle: {width: 60, height: 20, backgroundColor: global.pointColor},
+												textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
+										titleStyle={{color: "#000"}}
+										onPress={()=>this.onPressMatchingStatus(item)}
+									/>
+								);
+							})
 						}
 						</ScrollView>
 					</Card>
@@ -196,7 +204,8 @@ export default class MainIndividualScreen extends React.Component {
                 }
 
                 this.setState({
-                    reservationList : list
+					reservationList : list,
+					spinnerReserv: false
                 });
                 console.log('Reservation Status : ', list);
             })
@@ -235,9 +244,10 @@ export default class MainIndividualScreen extends React.Component {
                 }
 
                 this.setState({
-                    reservationList : list
+					reservationList : list,
+					spinnerMatch: false
                 });
-                console.log('Reservation Status : ', list);
+				console.log('Matching Status : ', list);
             })
             .catch((error) => {
 				console.error(error);
@@ -278,5 +288,8 @@ const styles = StyleSheet.create({
 	icon: {
 		marginTop: 7,
 		marginRight: 15
+	},
+	spinnerTextStyle: {
+		color: '#FFF'
 	}
 });

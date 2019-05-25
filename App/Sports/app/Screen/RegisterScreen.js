@@ -50,12 +50,12 @@ export default class SelectTypeScreen extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson)
-                if(responseJson[0]){
+                if(responseJson[0].isduplicated == 0){
                     Alert.alert('OK', '사용 가능한 ID입니다.');
-                    this.setState({duplicate: responseJson[0]})
+                    this.setState({duplicate: responseJson[0].isduplicated})
                 }
                 else{
-                    Alert.alert('ERROR', '사용 불가능한 ID입니다.');
+                    Alert.alert('ERROR', '이미 존재하는 ID입니다.');
                 }
             })
             .catch((error) => {
@@ -121,7 +121,7 @@ export default class SelectTypeScreen extends Component {
                     onPress={this.onPressNextStep}/>
             </View>
         );
-    }    
+    }
 }
 
 function InputComponent(props) {

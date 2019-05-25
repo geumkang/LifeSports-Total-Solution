@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { ListItem } from 'react-native-elements'
 
 export class MemberList extends Component{
@@ -24,6 +24,7 @@ export class MemberList extends Component{
                         title={player.name}
                         subtitle={player.subtitle}
                         chevron
+                        titleStyle={styles.title}
                         onPress={()=>this.viewPlayerDetail(player)}
                     />
                     ))
@@ -32,3 +33,9 @@ export class MemberList extends Component{
         );
     }
 }
+
+const styles = StyleSheet.create({
+    title: {
+        color: '#000'
+    }
+});
