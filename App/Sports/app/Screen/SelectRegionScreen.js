@@ -5,6 +5,7 @@ import { ListItem, Icon, Button } from 'react-native-elements'
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {SelectStatus} from '../Component/SelectStatus'
 import {MyMapView} from '../Component/MyMapView'
+import Util from '../Component/Util'
 
 export default class SelectRegionScreen extends Component {
     constructor(props) {
@@ -70,7 +71,8 @@ export default class SelectRegionScreen extends Component {
                     showDetail={this.showDetailView}
                     hideDetail={this.hideDetailView}
                     updateGymInfo={this.updateGymInfo}
-                    statusList={statusList}/>
+                    statusList={statusList}
+                    gyminfoRequest={this.gyminfoRequest}/>
 
                 <Modal animationType={"slide"}
                         transparent={true}
@@ -187,6 +189,41 @@ export default class SelectRegionScreen extends Component {
             })
         }
         return
+    }
+
+    gyminfoRequest(sportType, that) {
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'subj_ID' : sportType
+            })
+        }
+        let gymInfoList = [];
+        return fetch('http://' + global.appServerIp + '/gym/gymbysport', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson)
+                for(var i = 0; i < responseJson.length; i++){
+                    gymInfoList.push({
+                        key: responseJson[i].gym_ID,
+                        coordinate: {
+                            latitude: responseJson[i].gym_latitude,
+                            longitude: responseJson[i].gym_longitude
+                        }                                
+                    })
+                    
+                }
+                that.setState({
+                    markers: gymInfoList
+                })
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 }
 

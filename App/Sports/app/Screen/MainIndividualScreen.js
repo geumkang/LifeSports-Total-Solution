@@ -5,7 +5,7 @@ import * as Keychain from 'react-native-keychain';
 import { Card, ListItem, Icon } from "react-native-elements"
 
 import {HeaderInfo} from '../Component/HeaderInfo'
-
+import Util from '../Component/Util'
 
 export default class MainIndividualScreen extends React.Component {
     static navigationOptions = {
@@ -17,14 +17,14 @@ export default class MainIndividualScreen extends React.Component {
 
 	constructor(props){
 		super(props);
-		this.state ={
-			reservationData: [],
+		this.state = {
+			reservationList: [],
 			matchingData: []
 		}
 	}
 	
 
-	
+	// Get Login Info
 	getData = async () => {
 		try {
 			try {
@@ -53,6 +53,10 @@ export default class MainIndividualScreen extends React.Component {
 							global.name = responseJson[0].name;
 							global.loginStatus = true;
 						})
+						.then(() => {
+							this.getReservationList();
+							this.getMatchingList();
+						})
 						.catch((error) => {
 							console.error(error);
 						});
@@ -72,36 +76,19 @@ export default class MainIndividualScreen extends React.Component {
 
 	componentDidMount(){
 		this.setState({
-			reservationData: [
-				{
-					name: '국사봉 체육관'
-				},
-				{
-					name: '중앙대 체육관'
-				}
-			],
-
-			matchingData: [
-				{
-					name: '국사봉 체육관'
-				},
-				{
-					name: '중앙대 체육관'
-				}
-			]
+			reservationList: [],
+			matchingData: []
 		});
-		
-		
 		this.getData();
     }
     
-	onPressReservationStatus = () => {
+	onPressReservationStatus = (item) => {
 		// this.props.navigation.navigate("RatingGame");
-		this.props.navigation.navigate("ReservationStatus");
+		this.props.navigation.navigate("ReservationStatus", {'scheduleID': item.scheduleID});
 	}
 
-	onPressMatchingStatus = () => {
-		this.props.navigation.navigate("MatchingStatus");
+	onPressMatchingStatus = (item) => {
+		this.props.navigation.navigate("MatchingStatus", {'scheduleID': item.scheduleID});
 	}
 
 	render() {
@@ -110,45 +97,55 @@ export default class MainIndividualScreen extends React.Component {
                 <HeaderInfo headerTitle="메인" navigation={this.props.navigation}></HeaderInfo>
 				<ScrollView>
 					<Card title="예약 현황">
-					{
-						this.state.reservationData.map((u, i) => {
-							return (
-								<ListItem
-									key={i}
-									roundAvatar
-									title={u.name}
-									topDivider
-									bottomDivider
-									badge={{value: "D-3", 
-											badgeStyle: {width: 50, height: 20, backgroundColor: global.pointColor},
-											textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
-									titleStyle={{color: "#000"}}
-                            		onPress={()=>this.onPressReservationStatus()}
-								/>
-							);
-						})
-					}
+						<ScrollView>
+						{
+							this.state.reservationList.map((item, i) => {
+								return (
+									<ListItem
+										key={i}
+										roundAvatar
+										title={item.name}
+										subtitle={item.time}
+										topDivider
+										bottomDivider
+										badge={{value: item.dday, 
+												badgeStyle: {width: 50, height: 20, backgroundColor: global.pointColor},
+												textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
+										titleStyle={{color: "#000"}}
+										onPress={()=>this.onPressReservationStatus(item)}
+									/>
+								);
+							})
+						}
+						</ScrollView>
 					</Card>
 
 					<Card title="매칭 현황">
-					{
-						this.state.matchingData.map((u, i) => {
+						<ScrollView>
+						{
+						this.state.matchingData.map((item, i) => {
+							if(item.currentParticipant >= item.minParticipant)
+								value = item.dday;
+							else
+								value = item.currentParticipant + "/" + item.maxParticipant;
 							return (
 								<ListItem
 									key={i}
 									roundAvatar
-									title={u.name}
+									title={item.name}
+									subtitle={item.time}
 									topDivider
 									bottomDivider
-									badge={{value: "10 / 20", 
+									badge={{value: value,
 											badgeStyle: {width: 60, height: 20, backgroundColor: global.pointColor},
 											textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
 									titleStyle={{color: "#000"}}
-                            		onPress={()=>this.onPressMatchingStatus()}
+                            		onPress={()=>this.onPressMatchingStatus(item)}
 								/>
 							);
 						})
-					}
+						}
+						</ScrollView>
 					</Card>
                 </ScrollView>
 				<View style={styles.menuView}>
@@ -171,6 +168,81 @@ export default class MainIndividualScreen extends React.Component {
 			</View>  
 		);
 	}
+
+	getReservationList = () => {
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'UDID' : global.UDID
+            })
+        }
+        return fetch('http://' + global.appServerIp + '/schedule/reservationstatus', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                let list = [];
+                for(let i = 0; i < responseJson.length; i++){
+                    list.push({
+                        gym_ID: responseJson[i].gym_ID,
+                        name: responseJson[i].gym_name,
+						address: responseJson[i].gym_location,
+						time: Util.ISOToDate(responseJson[i].starttime) + " " + Util.dateToTime(responseJson[i].starttime),
+						dday: "D" + responseJson[i].dday,
+						scheduleID: responseJson[i].schedule_ID
+                    });
+                }
+
+                this.setState({
+                    reservationList : list
+                });
+                console.log('Reservation Status : ', list);
+            })
+            .catch((error) => {
+				console.error(error);
+            });
+	}
+	
+	getMatchingList = () => {
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'UDID' : global.UDID
+            })
+        }
+        return fetch('http://' + global.appServerIp + '/schedule/matchingstatus', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                let list = [];
+                for(let i = 0; i < responseJson.length; i++){
+                    list.push({
+                        gym_ID: responseJson[i].gym_ID,
+                        name: responseJson[i].gym_name,
+						address: responseJson[i].gym_location,
+						time: Util.ISOToDate(responseJson[i].starttime) + " " + Util.dateToTime(responseJson[i].starttime),
+						dday: "D" + responseJson[i].dday,
+						currentParticipant: responseJson[i].cur_participant,
+						maxParticipant: responseJson[i].max_participant,
+						minParticipant:responseJson[i].min_participant,
+						scheduleID: responseJson[i].schedule_ID
+                    });
+                }
+
+                this.setState({
+                    reservationList : list
+                });
+                console.log('Reservation Status : ', list);
+            })
+            .catch((error) => {
+				console.error(error);
+            });
+    }
 }
 
 

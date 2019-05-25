@@ -4,25 +4,18 @@ import { Button } from "react-native-elements"
 
 import {HeaderInfo} from '../Component/HeaderInfo'
 import {MyMapView} from '../Component/MyMapView'
+import Util from '../Component/Util'
 
 export default class ReservationStatusScreen extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            title: '',
-            detail: '',
-            address: '',
-            openTime: ''
+            scheduleInfo:{}
         }
     }
 
     componentDidMount() {
-        this.setState({
-            title: '예약경기1',
-            detail: '국사봉체육관',
-            address: '국사국사',
-            openTime: '09:00 ~ 11:00'
-        })
+        this.scheduleinfoRequest();
     }
 
     render(){
@@ -44,36 +37,109 @@ export default class ReservationStatusScreen extends Component{
             <View style={{flex: 1}}>
                 <HeaderInfo headerTitle="예약 정보" navigation={this.props.navigation}></HeaderInfo>
                 <View style={{flex: 1}}>
-                    <MyMapView/>
+                    <MyMapView
+                        gyminfoRequest={this.gyminfoRequest}
+                        scheduleID={this.props.navigation.getParam("scheduleID")}/>
                 </View>
 
                 <View style={{flex: 2}}>
                     <View style={detailViewStyle.detailView}>
                         <View style={{height: 35, flexDirection: 'row', marginBottom: 5}}>
-                            <Text style={styles.Header} adjustsFontSizeToFit={true} numberOfLines={1}>{this.state.title}</Text>
+                            <Text style={styles.Header} adjustsFontSizeToFit={true} numberOfLines={1}>{this.state.scheduleInfo.scheduleName}</Text>
                         </View>
                         <View style={{flex: 1, flexDirection: 'row'}}>
                             <View style={{flex: 1}}>
-                                <Text style={styles.Title}>소개</Text>
+                                <Text style={styles.Title}>체육관</Text>
+                                <Text style={styles.Title}>시설명</Text>
                                 <Text style={styles.Title}>주소</Text>
                                 <Text style={styles.Title}>운영 시간</Text>
-                                <Text style={styles.Title}>운영 시간</Text>
-                                <Text style={styles.Title}>운영 시간</Text>
-                                <Text style={styles.Title}>운영 시간</Text>
+                                <Text style={styles.Title}>팀??</Text>
+                                <Text style={styles.Title}>팀??</Text>
                             </View>
                             <View style={{flex: 4}}>
-                                <Text style={styles.Detail}>{this.state.detail}</Text>
-                                <Text style={styles.Detail}>{this.state.address}</Text>
-                                <Text style={styles.Detail}>{this.state.openTime}</Text>
-                                <Text style={styles.Detail}>{this.state.openTime}</Text>
-                                <Text style={styles.Detail}>{this.state.openTime}</Text>
-                                <Text style={styles.Detail}>{this.state.openTime}</Text>
+                                <Text style={styles.Detail}>{this.state.scheduleInfo.gymName}</Text>
+                                <Text style={styles.Detail}>{this.state.scheduleInfo.facName}</Text>
+                                <Text style={styles.Detail}>{this.state.scheduleInfo.address}</Text>
+                                <Text style={styles.Detail}>{this.state.scheduleInfo.time}</Text>
+                                <Text style={styles.Detail}>{this.state.scheduleInfo.time}</Text>
+                                <Text style={styles.Detail}>{this.state.scheduleInfo.time}</Text>
                             </View>
                         </View>
                     </View>
                 </View>
             </View>
         );
+    }
+    
+    gyminfoRequest(that, scheduleID) {
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'schedule_ID' : scheduleID
+            })
+        }
+        
+        let gymInfo = [];
+        return fetch('http://' + global.appServerIp + '/schedule/detail', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson)
+                for(var i = 0; i < responseJson.length; i++){
+                    gymInfo.push({
+                        key: responseJson[i].gym_ID,
+                        coordinate: {
+                            latitude: responseJson[i].gym_latitude,
+                            longitude: responseJson[i].gym_longitude
+                        }                                
+                    })
+                }
+                that.setState({
+                    markers: gymInfo
+                })
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    scheduleinfoRequest() {
+        const scheduleID = this.props.navigation.getParam("scheduleID");
+        console.log(scheduleID)
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'schedule_ID' : scheduleID
+            })
+        }
+        let scheduleInfo = [];
+        return fetch('http://' + global.appServerIp + '/schedule/detail', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                scheduleInfo={
+                    scheduleName: responseJson[0].schedule_name,
+                    gymName: responseJson[0].gym_name,
+                    facName: responseJson[0].fac_name,
+                    address: responseJson[0].gym_location,
+                    time: Util.ISOToDate(responseJson[0].starttime) + " " + Util.dateToTime(responseJson[0].starttime),
+                    //팀정보
+                }
+                this.setState({
+                    scheduleInfo: scheduleInfo
+                })
+
+                console.log('ScheduleInfo: ', responseJson)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 }
 

@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { ListItem, Card } from 'react-native-elements'
 
 import {HeaderInfo} from '../Component/HeaderInfo'
+import Util from '../Component/Util'
 
 export default class FavoriteGymListScreen extends Component {
     constructor(props) {
@@ -73,15 +74,7 @@ export default class FavoriteGymListScreen extends Component {
     
     getFavoriteList = () => {
         const statusList = this.props.navigation.getParam("statusList");
-        let sport = statusList[1];
-        if(sport == '축구')
-            sportType = 1
-        else if(sport == '농구')
-            sportType = 2
-        else if(sport == '야구')
-            sportType = 3
-        else if(sport == '배드민턴')
-            sportType = 4
+        sportType = Util.sportType(statusList[1]);
 
         let data = {
             headers: {

@@ -1,24 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 import { Agenda } from 'react-native-calendars';
+import Util from '../Component/Util'
 
 export class TimeTable extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
             date: '',
-            items: {
-                name: "title",
-                type: 1, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
-                startTime: '09:00',
-                endTime: '09:30',
-                currentParticipant: 15,
-                maxParticipant: 30
-            },
+            items: {},
             marks: {}
-                // '2019-05-25': {dots: [vacation, massage, workout], selected: true, selectedColor: 'red'},
-                // '2019-05-26': {dots: [massage, workout], disabled: true}
-            
+                         
         }
     }
 
@@ -33,49 +25,41 @@ export class TimeTable extends React.Component{
 			day = "0" + day;
 
         this.setState({
-            date: year + '-' + month + '-' + day
+            date: year + '-' + month + '-' + day,
+            items: {}
         })
+        
+        this.scheduleRequest();
         
     }
 
     render(){
-        // const vacation = {key:'vacation', color: 'red', selectedDotColor: 'blue'};
-        // const massage = {key:'massage', color: 'blue', selectedDotColor: 'blue'};
-        // const workout = {key:'workout', color: 'green'};
-
+        console.log("Start Render")
         return(
             <View style={{flex: 1, backgroundColor: global.backgroundColor, paddingBottom: 10}}>
                 <Agenda
                     items={this.state.items}
-                    loadItemsForMonth={this.loadItems.bind(this)}
-                    selected={this.date}
-                    // renderItem={this.renderItem.bind(this)}
+                    // loadItemsForMonth={this.loadItems.bind(this)}
+                    selected={this.state.date}
+                    renderItem={this.renderItem.bind(this)}
                     // renderEmptyDate={this.renderEmptyDate.bind(this)}
                     rowHasChanged={this.rowHasChanged.bind(this)}
-                    markedDates={this.state.marks}
-                    markingType={'multi-dot'}
                 />
             </View>
         )
     }
 
     scheduleRequest() {
+        this.setState({
+            items: []
+        })
         let reservType, sportType = 1;
         if(this.props.statusList[0] == "예약")
             reservType = '/schedule/scheduletypereserv';
         else
             reservType = '/schedule/scheduletypematch';
 
-        if(this.props.statusList[1] == "축구")
-            sportType = 1
-        else if(this.props.statusList[1] == "농구")
-            sportType = 2
-        else if(this.props.statusList[1] == "야구")
-            sportType = 3
-        else if(this.props.statusList[1] == "배드민턴")
-            sportType = 4
-
-        console.log(this.props.sportType, reservType)
+        sportType = Util.sportType(this.props.statusList[1])    
 
         let data = {
             headers: {
@@ -92,27 +76,49 @@ export class TimeTable extends React.Component{
         return fetch('http://' + global.appServerIp + reservType, data)
             .then((response) => response.json())
             .then((responseJson) => {
-                
-                console.log(responseJson)
+
+                if(responseJson.length > 0){
+                    backupTime = Util.ISOToDate(responseJson[0].starttime)
+                    this.state.items[backupTime] = [];
+                }
                 for(var i = 0; i < responseJson.length; i++){
-                    const strTime = this.timeToString(responseJson[i].starttime)
-                    console.log(strTime)
-                    this.state.items.push({
-                        strTime: {
-                            scheduleID: responseJson[i].schedule_ID,
-                            name: responseJson[i].schedule_name,
-                            gymID : responseJson[i].gym_ID,
-                            startTime: responseJson[i].starttime,
-                            endTime: responseJson[i].endtime,
-                            curStatus: responseJson[i].cur_status,
-                            scheduleType: responseJson[i].schedule_type,
-                            height: 120
-                        }
+                    const strTime = Util.ISOToDate(responseJson[i].starttime)
+                    if(backupTime != strTime){
+                        backupTime = strTime
+                        this.state.items[strTime] = [];
+                    }
+                    this.state.items[strTime].push({
+                        scheduleID: responseJson[i].schedule_ID,
+                        name: responseJson[i].schedule_name,
+                        gymID : responseJson[i].gym_ID,
+                        startTime: Util.dateToTime(responseJson[i].starttime),
+                        endTime: Util.dateToTime(responseJson[i].endtime),
+                        curStatus: responseJson[i].cur_status,
+                        type: responseJson[i].schedule_type,
+                        height: 120,
+                        currentParticipant: responseJson[i].cur_participant,
+                        maxParticipant: responseJson[i].max_participant,
+                        MyTeamName: responseJson[i].reserv_team_name,
+                        opponentTeamName: responseJson[i].opponent_team_name,
+                        isSolo: responseJson[i].is_solo
+                        //min_participant
                     })
                 }
+                this.state.items['2019-05-24'] = [];
+                this.state.items['2019-05-24'].push({
+                    scheduleID: responseJson[0].schedule_ID,
+                    name: responseJson[0].schedule_name,
+                    gymID : responseJson[0].gym_ID,
+                    startTime: Util.dateToTime(responseJson[0].starttime),
+                    endTime: Util.dateToTime(responseJson[0].endtime),
+                    curStatus: responseJson[0].cur_status,
+                    type: 4,
+                    height: 120
+                })
 
                 const newItems = {};
                 Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
+                console.log("라라라라랄")
                 this.setState({
                     items: newItems
                 });
@@ -122,68 +128,19 @@ export class TimeTable extends React.Component{
             });
     }
 
-    loadItems(day) {
-        this.scheduleRequest()
-        // setTimeout(() => {
-        //     for (let i = -15; i < 85; i++) {
-        //         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        //         const strTime = this.timeToString(time);
-        //         if (!this.state.items[strTime]) {
-        //             this.state.items[strTime] = [];
-        //             const numItems = Math.floor(Math.random() * 5);
-        //             for (let j = 0; j < numItems; j++) {
-        //                 this.state.items[strTime].push({
-        //                     name: "title",
-        //                     type: 1, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
-        //                     startTime: '09:00',
-        //                     endTime: '09:30',
-        //                     currentParticipant: 10,
-        //                     maxParticipant: 30,
-        //                     height: 120
-        //                 });
-        //                 this.state.items[strTime].push({
-        //                     name: "title",
-        //                     type: 2, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
-        //                     startTime: '09:00',
-        //                     endTime: '09:30',
-        //                     currentParticipant: 7,
-        //                     maxParticipant: 30,
-        //                     height: 120
-        //                 });
-        //                 this.state.items[strTime].push({
-        //                     name: "title",
-        //                     type: 3, // 예약 빈거 : 1 / 예약 찬거 : 2 / 휴무 : 0  ///  매칭 : 1 / 휴무 : 0
-        //                     startTime: '09:00',
-        //                     endTime: '09:30',
-        //                     currentParticipant: 5,
-        //                     maxParticipant: 30,
-        //                     height: 120
-        //                 });
-        //             }
-        //         }
-        //     }
-            // console.log(this.state.items);
-        //     const newItems = {};
-        //     Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
-        //     this.setState({
-        //         items: newItems
-        //     });
-        // }, 1000);
-    }
-    
     onPressItem = (item) => {
         const statusList = this.props.statusList;
         const step = Number(this.props.step);
         statusList[step] = item.name;
         
-        // ...예약 정보 로드 {"statusList": statusList}
-
         this.props.navigation.navigate("ReservationCheck", {"statusList": statusList, "step": Number(step)+1, "item": item});
     }
 
     renderItem(item) {
-        const typeColor = ["#4CAF50", "#FF9800", "#E91E63"];
-        const ratioColor = ["#388E3C", "#F57C00", "#C2185B"];
+        console.log('아이템:', item)
+        console.log("렌더 아이템");
+        const typeColor = ["#4CAF50", "#FF9800", "#E91E63", "#2196F3"];
+        const ratioColor = ["#388E3C", "#F57C00", "#C2185B", "#1976D2"];
         
         if(this.props.statusList[0] == "예약")
             reservType = true;
@@ -193,6 +150,7 @@ export class TimeTable extends React.Component{
         let ratio;
         if(!reservType)
             ratio = Math.round(Number(item.currentParticipant / item.maxParticipant) * 100) + '%'
+        console.log(ratio)
         return (
             reservType ? (
                 <View style={[styles.item, {height: item.height, backgroundColor: typeColor[item.type - 1]}]}>
@@ -225,10 +183,22 @@ export class TimeTable extends React.Component{
         return r1.name !== r2.name;
     }
     
-    timeToString(time) {
-        const date = new Date(time);
-        return date.toISOString().split('T')[0];
-    }
+    // timeToString(time) {
+    //     const date = new Date(time);
+    //     return date.toISOString().split('T')[0];
+    // }
+
+    // dateToTime(date) {
+    //     date = new Date(date);
+        
+    //     hour = date.getHours();
+    //     hour = ("0" + hour).slice(-2)
+        
+    //     minute = date.getMinutes();
+    //     minute = ("0" + minute).slice(-2)
+        
+    //     return hour + ':' + minute;
+    // }
 }
 
 const styles = StyleSheet.create({
