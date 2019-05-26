@@ -21,7 +21,7 @@ export default class MainIndividualScreen extends React.Component {
 			spinnerReserv: true,
 			spinnerMatch: true,
 			reservationList: [],
-			matchingData: []
+			matchingList: []
 		}
 	}
 	
@@ -79,7 +79,7 @@ export default class MainIndividualScreen extends React.Component {
 	componentDidMount(){
 		this.setState({
 			reservationList: [],
-			matchingData: []
+			matchingList: []
 		});
 		this.getData();
     }
@@ -131,7 +131,7 @@ export default class MainIndividualScreen extends React.Component {
 							this.state.spinnerMatch ? 
 								<ActivityIndicator size="large" color={global.pointColor}/>
 							:
-							this.state.matchingData.map((item, i) => {
+							this.state.matchingList.map((item, i) => {
 								if(item.currentParticipant >= item.minParticipant)
 									value = item.dday;
 								else
@@ -159,7 +159,7 @@ export default class MainIndividualScreen extends React.Component {
 				<View style={styles.menuView}>
 					<TouchableOpacity
 						style={[styles.selectMenu, {backgroundColor: global.pointColor}]}
-						onPress={()=>{
+						onPress={(	)=>{
 							this.props.navigation.navigate("SelectType");
 						}}>
 						<View style={{flexDirection: 'row', justifyContent: 'center'}}>
@@ -244,7 +244,7 @@ export default class MainIndividualScreen extends React.Component {
                 }
 
                 this.setState({
-					reservationList : list,
+					matchingList : list,
 					spinnerMatch: false
                 });
 				console.log('Matching Status : ', list);

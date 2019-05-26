@@ -1,8 +1,9 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from "react-native";
+import { View, ActivityIndicator, StyleSheet, Text, ScrollView } from "react-native";
 import { Card, ListItem, Icon, Button, SearchBar } from "react-native-elements"
 
 import {HeaderInfo} from '../Component/HeaderInfo'
+import {ImageCard} from '../Component/ImageCard'
 
 export default class MainTeamRecommendScreen extends React.Component {
     static navigationOptions = {
@@ -15,40 +16,19 @@ export default class MainTeamRecommendScreen extends React.Component {
     constructor(props){
 		super(props);
 		this.state ={
-			reservationData: [],
-			matchingData: []
+            teamInfo: [],
+            search: '',
+            spinner: false
 		}
 	}
 	
 	componentDidMount(){
-		global.loginStatus = false;
 		this.setState({
-			reservationData: [
-				{
-					name: '국사봉 체육관'
-				},
-				{
-					name: '중앙대 체육관'
-				}
-			],
-
-			matchingData: [
-				{
-					name: '국사봉 체육관'
-				},
-				{
-					name: '중앙대 체육관'
-				}
-			]
+            teamInfo: [],
+            search: '',
+            spinner: false
         });
 
-        if(global.hasTeam){
-            this.setState({
-                MyTeamInfo: {
-                    name: '축구왕 통키'
-                }
-            })
-        }
     }
     
 	onPressReservationStatus = () => {
@@ -60,12 +40,29 @@ export default class MainTeamRecommendScreen extends React.Component {
     }
     
     onPressJoinBtn = () => {
-        this.props.navigation.navigate("TeamInfo", {'MyTeamInfo': this.state.MyTeamInfo, "headerTitle": "팀원 목록"});
+        this.props.navigation.navigate("TeamInfo", {'MyTeamInfo': this.state.teamInfo, "headerTitle": "팀원 목록"});
     }
 
     updateSearch = search => {
-        this.setState({ search });
+        this.setState({search});
+        console.log(search)
+        if(search != '')
+            this.teamInfoRequest();
     };
+
+    renderTeam() {
+        return this.state.teamInfo.map((item) => {
+            return (
+                <ImageCard
+                    imagePath={require('../Images/team1.jpg')}
+                    title={item.name}
+                    detail='대한민국 엘리트 멤버들이 모였다. 축구는 머리로 하는 것이다!'
+                    btnTitle='가입하기'
+                    onPressBtn={()=>this.onPressJoinBtn(item)}
+                ></ImageCard>
+            );
+        });
+    }
 
 	render() {
         const { search } = this.state;
@@ -81,78 +78,89 @@ export default class MainTeamRecommendScreen extends React.Component {
                     onChangeText={this.updateSearch}
                     value={search}
                 />
-                {global.hasTeam ? (
-                    <View style={{flex: 1}}>
-                        <ScrollView>
-                            <Card
-                                title='축구왕 통키'
-                                image={require('../Images/team1.jpg')}
-                                >
-                                <Text style={{marginBottom: 10, color: "#000"}}>
-                                    대한민국 엘리트 멤버들이 모였다. 축구는 머리로 하는 것이다!
-                                </Text>
-                                <Button
-                                    buttonStyle={{backgroundColor: global.pointColor}}
-                                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
-                                    title='가입하기'
-                                    onPress={this.onPressJoinBtn}/>
-                            </Card>
-
-                            <Card
-                                title='한화 건설 축구 동호회'
-                                image={require('../Images/team2.jpg')}
-                                >
-                                <Text style={{marginBottom: 10, color: "#000"}}>
-                                    현장 노동자들의 장딴지 근육을 보았는가. 우린 잔디 구장보다 모래 바닥이 더 익숙하다!
-                                </Text>
-                                <Button
-                                    buttonStyle={{backgroundColor: global.pointColor}}
-                                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
-                                    title='가입하기'
-                                    onPress={this.onPressJoinBtn}/>
-                            </Card>
-                        </ScrollView>
-                    </View>
-                ) : (        
-                    <View style={{flex: 1}}>
-                        <ScrollView>
-                            <Card
-                                title='삼성 디스플레이'
-                                image={require('../Images/team1.jpg')}
-                                >
-                                <Text style={{marginBottom: 10, color: "#000"}}>
-                                    대한민국 엘리트 멤버들이 모였다. 축구는 머리로 하는 것이다!
-                                </Text>
-                                <Button
-                                    buttonStyle={{backgroundColor: global.pointColor}}
-                                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
-                                    // buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                                    title='가입하기'
-                                    onPress={this.onPressJoinBtn}/>
-                            </Card>
-
-                            <Card
-                                title='한화 건설 동호회'
-                                image={require('../Images/team2.jpg')}
-                                >
-                                <Text style={{marginBottom: 10, color: "#000"}}>
-                                    현장 노동자들의 장딴지 근육을 보았는가. 우린 잔디 구장보다 모래 바닥이 더 익숙하다!
-                                </Text>
-                                <Button
-                                    buttonStyle={{backgroundColor: global.pointColor}}
-                                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
-                                    title='가입하기'
-                                    onPress={this.onPressJoinBtn}/>
-                            </Card>
-                        </ScrollView>
-                    </View>
-                )}
+                <View style={{flex: 1}}>
+                    <ScrollView>
+                        {
+                        this.state.spinner ?
+                        (
+                            <View style={{marginTop: 30}}>
+                                <ActivityIndicator size="large" color={global.pointColor}/>
+                            </View>
+                        ) : (
+                            this.state.exist ? 
+                                this.renderTeam()
+                            :
+                            <View style={{marginTop: 50, alignContent: 'center'}}>
+                                <Text style={styles.exist}>검색 결과가 존재하지 않습니다</Text>
+                            </View>
+                        )
+                        }
+                    </ScrollView>
+                </View>
 			</View>  
 		);
-	}
+    }
+    
+    teamInfoRequest = () => {
+        this.setState({spinner: true})
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'searchword' : this.state.search
+            })
+        }
+        let teamInfo = []
+        return fetch('http://' + global.appServerIp + '/team/teamsearch', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if(responseJson.length > 0){
+                    global.hasTeam = true;
+                    this.setState({teamCount : responseJson.length});
+                }
+
+                for(var i = 0; i < responseJson.length; i++){
+                    side = i % 2
+
+                    teamInfo.push({
+                        ID: responseJson[i].team_ID,
+                        name: responseJson[i].team_name,
+                        MMR: responseJson[i].team_MMR,
+                        winRate: responseJson[i].winning_rate,
+                        mainSubj: responseJson[i].team_main_subj
+                    });
+                }
+
+                if(responseJson.length != 0){
+                    this.setState({
+                        teamInfo: teamInfo,
+                        exist: true,
+                        spinner: false
+                    })
+                }
+                else{
+                    this.setState({
+                        teamInfo: teamInfo,
+                        exist: false,
+                        spinner: false
+                    })
+                }
+
+                console.log('Search TeamInfo: ', responseJson)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 }
 
 
 const styles = StyleSheet.create({
-	
+	exist: {
+        fontSize: 16,
+        textAlign: 'center'
+    }
 });

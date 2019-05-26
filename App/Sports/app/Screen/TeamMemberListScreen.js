@@ -67,7 +67,8 @@ export default class TeamMemberListScreen extends Component{
                     list.push({
                         UDID: responseJson[i].UDID,
                         ID: responseJson[i].ID,
-						name: responseJson[i].name
+                        name: responseJson[i].name,
+                        detail: responseJson[i].MMR
                     });
                 }
 

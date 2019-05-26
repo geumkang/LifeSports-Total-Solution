@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import { View, StyleSheet } from "react-native";
-import { ListItem } from 'react-native-elements'
+import { View, StyleSheet, ScrollView } from "react-native";
+import { ListItem, Avatar } from 'react-native-elements'
+
+import Util from './Util'
 
 export class MemberList extends Component{
     constructor(props) {
@@ -16,19 +18,30 @@ export class MemberList extends Component{
     render(){
         return(
             <View style={{flex: 1}}>
+                <ScrollView>
                 {
                     this.props.playerList.map((player, i) => (
+                        
+                    
                     <ListItem
                         key={i}
-                        leftAvatar={{ source: { uri: player.avatar_url } }}
+                        // leftAvatar={{ source: require('../Images/Bronze.png') }}
+                        leftAvatar={
+                            <Avatar
+                                rounded
+                                source={require('../Images/Ruby.png')}
+                                avatarStyle={{backgroundColor: 'white'}}
+                            />
+                        }
                         title={player.name}
-                        subtitle={player.subtitle}
+                        subtitle={player.detail}
                         chevron
                         titleStyle={styles.title}
                         onPress={()=>this.viewPlayerDetail(player)}
                     />
                     ))
                 }
+                </ScrollView>
             </View>
         );
     }

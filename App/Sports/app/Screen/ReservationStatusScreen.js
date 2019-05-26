@@ -44,7 +44,7 @@ export default class ReservationStatusScreen extends Component{
 
                 <View style={{flex: 2}}>
                     <View style={detailViewStyle.detailView}>
-                        <View style={{height: 35, flexDirection: 'row', marginBottom: 5}}>
+                        <View style={{height: 35, flexDirection: 'row', marginBottom: 10}}>
                             <Text style={styles.Header} adjustsFontSizeToFit={true} numberOfLines={1}>{this.state.scheduleInfo.scheduleName}</Text>
                         </View>
                         <View style={{flex: 1, flexDirection: 'row'}}>
@@ -52,8 +52,8 @@ export default class ReservationStatusScreen extends Component{
                                 <Text style={styles.Title}>체육관</Text>
                                 <Text style={styles.Title}>시설명</Text>
                                 <Text style={styles.Title}>주소</Text>
-                                <Text style={styles.Title}>운영 시간</Text>
-                                <Text style={styles.Title}>팀??</Text>
+                                <Text style={styles.Title}>예약 일시</Text>
+                                <Text style={styles.Title}>종목</Text>
                                 <Text style={styles.Title}>팀??</Text>
                             </View>
                             <View style={{flex: 4}}>
@@ -61,7 +61,7 @@ export default class ReservationStatusScreen extends Component{
                                 <Text style={styles.Detail}>{this.state.scheduleInfo.facName}</Text>
                                 <Text style={styles.Detail}>{this.state.scheduleInfo.address}</Text>
                                 <Text style={styles.Detail}>{this.state.scheduleInfo.time}</Text>
-                                <Text style={styles.Detail}>{this.state.scheduleInfo.time}</Text>
+                                <Text style={styles.Detail}>{this.state.scheduleInfo.subject}</Text>
                                 <Text style={styles.Detail}>{this.state.scheduleInfo.time}</Text>
                             </View>
                         </View>
@@ -82,7 +82,7 @@ export default class ReservationStatusScreen extends Component{
                 'schedule_ID' : scheduleID
             })
         }
-        
+
         let gymInfo = [];
         return fetch('http://' + global.appServerIp + '/schedule/detail', data)
             .then((response) => response.json())
@@ -128,8 +128,9 @@ export default class ReservationStatusScreen extends Component{
                     gymName: responseJson[0].gym_name,
                     facName: responseJson[0].fac_name,
                     address: responseJson[0].gym_location,
-                    time: Util.ISOToDate(responseJson[0].starttime) + " " + Util.dateToTime(responseJson[0].starttime),
-                    //팀정보
+                    time: Util.ISOToDate(responseJson[0].starttime) + " " + Util.dateToTime(responseJson[0].starttime) + " ~ " + Util.dateToTime(responseJson[0].endtime),
+                    subject: Util.sportTypeToName(responseJson[0].subj_ID),
+                    //팀정보    
                 }
                 this.setState({
                     scheduleInfo: scheduleInfo

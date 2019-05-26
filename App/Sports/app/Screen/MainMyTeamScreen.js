@@ -129,7 +129,7 @@ export default class MainMyTeamScreen extends React.Component {
                     side = i % 2
 
                     MyTeamInfo.push({
-                        ID: 1,
+                        ID: responseJson[i].team_ID,
                         name: responseJson[i].team_name,
                         MMR: responseJson[i].team_MMR,
                         winRate: responseJson[i].winning_rate,
