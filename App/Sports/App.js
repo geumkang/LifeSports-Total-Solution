@@ -40,6 +40,8 @@ global.hasTeam = true;
 global.UDID = '';
 global.ID = '';
 global.name = '';
+global.MMR = '';
+global.gender = '';
 
 export const StackNavigator = createStackNavigator({
 	Home: {
