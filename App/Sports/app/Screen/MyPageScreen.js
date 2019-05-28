@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements'
 import * as Keychain from 'react-native-keychain';
 
 import {HeaderInfo} from '../Component/HeaderInfo'
-import {MemberDetail} from '../Component/MemberDetail';
+import {MemberProfile} from '../Component/MemberProfile';
 
 export default class MyPageScreen extends Component {
     constructor(props) {
@@ -22,22 +22,28 @@ export default class MyPageScreen extends Component {
         global.UDID = '';
         global.ID = '';
         global.name = '';
-
+        global.gender = '';
+        global.MMR = '';
+        this.props.navigation.popToTop();
         // 메인 화면 정보 초기화
     }
 
     render(){
+        const player = this.props.navigation.getParam("player");
+
         return(
             <View style={{flex: 1}}>
                 <HeaderInfo headerTitle="마이 페이지" navigation={this.props.navigation}></HeaderInfo>
-                <MemberDetail
-                    UDID={global.UDID}
-                ></MemberDetail>
-                <Button
-                    title="로그아웃"
-                    buttonStyle={{backgroundColor: global.pointColor}}
-                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
-                    onPress={this.logout}/>
+                <ScrollView>
+                    <MemberProfile
+                        player={player}
+                    ></MemberProfile>
+                    <Button
+                        title="로그아웃"
+                        buttonStyle={{backgroundColor: global.pointColor, marginTop: 15}}
+                        titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
+                        onPress={this.logout}/>
+                </ScrollView>
             </View>
         );
     }

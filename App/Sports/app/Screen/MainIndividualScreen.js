@@ -53,7 +53,11 @@ export default class MainIndividualScreen extends React.Component {
 							global.UDID = responseJson[0].UDID;
 							global.ID = responseJson[0].ID;
 							global.name = responseJson[0].name;
+							global.MMR = responseJson[0].MMR;
+                    		global.gender = responseJson[0].gender;
 							global.loginStatus = true;
+
+							console.log('User Login Info : ', responseJson)
 						})
 						.then(() => {
 							this.getReservationList();

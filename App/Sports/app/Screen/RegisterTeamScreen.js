@@ -1,69 +1,50 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { Input, Button } from 'react-native-elements'
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { Input, Button, ButtonGroup } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {HeaderInfo} from '../Component/HeaderInfo'
 
 export default class RegisterTeamScreen extends Component {
     constructor(props) {
         super(props);
-        state = {
+        this.state = {
+            selectedIndex: 0
         }
+        this.updateIndex = this.updateIndex.bind(this)
     }
 
     componentDidMount(){
         this.setState({
-            id: '',
             name: '',
-            password: '',
-            email: '',
-            duplicate: false
+            duplicate: 1
         })
+    }
+
+    updateIndex (selectedIndex) {
+        this.setState({selectedIndex})
     }
 
     updateText = (key, text) => {
         this.setState({[key]: text})
     }
 
-    onPressNextStep = () => {
-        this.props.navigation.navigate("Register2", {state: this.state});
-    }
-
-    checkIdDuplicate = () => {
-        if(this.state.id == ''){
-            Alert.alert('ERROR', 'ID를 입력해주세요');
-            return;
-        }
+    onPressRegister = () => {
         
-        let data = {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                'ID' : this.state.id
-            })
-        }
+        if(this.state.duplicate == 1)
+            Alert.alert('ERROR', '팀 명 중복 체크를 진행해주세요');
 
-        return fetch('http://' + global.appServerIp + '/user/checkdup', data)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log(responseJson)
-                if(responseJson[0]){
-                    Alert.alert('OK', '사용 가능한 ID입니다.');
-                    this.setState({duplicate: responseJson[0]})
-                }
-                else{
-                    Alert.alert('ERROR', '사용 불가능한 ID입니다.');
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        else{
+            console.log("종목 ID : ", this.state.selectedIndex + 1)
+            this.props.navigation.goBack();
+        }
+        // 종목 this.state.selectedIndex + 1
+        //query
     }
     
     render() {
+        const buttons = ['축구', '농구', '야구', '배드민턴']
+        const { selectedIndex } = this.state
+
 		return (
             <View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle="팀 등록" navigation={this.props.navigation}></HeaderInfo>
@@ -75,53 +56,80 @@ export default class RegisterTeamScreen extends Component {
                     <View style={{flexDirection: 'row'}}>
                         <InputComponent
                             iconName="user"
-                            label="ID"
+                            label="팀 명"
                             placeholder=""
-                            stateKey="id"
+                            stateKey="name"
                             updateText={this.updateText}
-                            style={{width: 250}}
+                            style={{width: 240}}
                         ></InputComponent>
                         <View style={{height: '100%', paddingTop: 40}}>
                             <Button
                                 title="중복 체크"
                                 buttonStyle={{backgroundColor: global.pointColor, borderRadius: 50, width: 100}}
                                 titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
-                                onPress={this.checkIdDuplicate}/>
+                                onPress={this.checkNameDuplicate}/>
                         </View>
                     </View>
 
-                    <InputComponent
-                        iconName="unlock-alt"
-                        label="Password"
-                        placeholder=""
-                        stateKey="password"
-                        updateText={this.updateText}
-                    ></InputComponent>
-
-                    <InputComponent
-                        iconName="envelope"
-                        label="E-mail"
-                        placeholder=""
-                        stateKey="name"
-                        updateText={this.updateText}
-                    ></InputComponent>
-
-                    <InputComponent
-                        iconName="envelope"
-                        label="E-mail"
-                        placeholder=""
-                        stateKey="email"
-                        updateText={this.updateText}
-                    ></InputComponent>
+                    
+                    
+                    <View style={{width: '80%', height: 100, paddingTop: 40}}>
+                            <Text style={styles.title}>주 종목</Text>
+                            <ButtonGroup
+                                onPress={this.updateIndex}
+                                selectedIndex={selectedIndex}
+                                buttons={buttons}
+                                containerStyle={{width: '102%', height: 40, marginLeft: -1}}
+                                buttonStyle={{backgroundColor: global.backgroundColor3}}
+                                selectedButtonStyle={{backgroundColor: global.pointColor}}
+                                selectedTextStyle={{color: '#000'}}
+                                textStyle={{color: '#fff'}}
+                                />
+                    </View>
+                    
                 </ScrollView>
                 <Button
-                    title="Next Step"
+                    title="등록하기"
                     buttonStyle={{backgroundColor: global.pointColor}}
-                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 14}}
-                    onPress={this.onPressNextStep}/>
+                    titleStyle={{color: "#000", fontWeight: 'bold', fontSize: 16}}
+                    onPress={this.onPressRegister}/>
             </View>
         );
-    }    
+    }   
+    
+    checkNameDuplicate = () => {
+        if(this.state.name == ''){
+            Alert.alert('ERROR', 'ID를 입력해주세요');
+            return;
+        }
+        
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'team_name' : this.state.name
+            })
+        }
+
+        return fetch('http://' + global.appServerIp + '/team/checkdup', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if(responseJson[0].isduplicated == 0){
+                    Alert.alert('OK', '사용 가능한 ID입니다.');
+                    console.log('isDuplicated : ', responseJson[0].isduplicated)
+                    this.setState({duplicate: responseJson[0].isduplicated})
+                }
+                else{
+                    Alert.alert('ERROR', '이미 존재하는 ID입니다.');
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 }
 
 function InputComponent(props) {
@@ -139,7 +147,6 @@ function InputComponent(props) {
                 leftIconContainerStyle={{marginRight: 20}}
                 label={props.label}
                 placeholder={props.placeholder}
-                //keyboardType="email-address"
                 onChangeText={(text) => props.updateText(key, text)}
             />
         </View>
@@ -163,5 +170,11 @@ const styles = StyleSheet.create({
         marginLeft:16,
         borderBottomColor: '#FFFFFF',
         flex:1,
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        color: '#909CA7'
     }
 });

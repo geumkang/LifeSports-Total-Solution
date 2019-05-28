@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 
 import {HeaderInfo} from '../Component/HeaderInfo'
-import {MemberDetail} from '../Component/MemberDetail'
+import {MemberProfile} from '../Component/MemberProfile'
 
 export default class TeamMemberDetailScreen extends Component{
     constructor(props) {
@@ -17,9 +17,11 @@ export default class TeamMemberDetailScreen extends Component{
         return(
             <View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle={player.name} navigation={this.props.navigation}></HeaderInfo>
-                <MemberDetail
-                    player={player}
-                ></MemberDetail>
+                <ScrollView>
+                    <MemberProfile
+                        player={player}
+                    ></MemberProfile>
+                </ScrollView>
             </View>
         );
     }

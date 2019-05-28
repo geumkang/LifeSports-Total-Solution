@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import { View, StyleSheet, ScrollView } from "react-native";
 import { ListItem, Avatar } from 'react-native-elements'
 
-import Util from './Util'
-
 export class MemberList extends Component{
     constructor(props) {
         super(props);
@@ -34,7 +32,7 @@ export class MemberList extends Component{
                             />
                         }
                         title={player.name}
-                        subtitle={player.detail}
+                        subtitle={player.MMR}
                         chevron
                         titleStyle={styles.title}
                         onPress={()=>this.viewPlayerDetail(player)}

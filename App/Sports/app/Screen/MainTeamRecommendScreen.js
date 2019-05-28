@@ -39,15 +39,15 @@ export default class MainTeamRecommendScreen extends React.Component {
 		this.props.navigation.navigate("MatchingStatus");
     }
     
-    onPressJoinBtn = () => {
-        this.props.navigation.navigate("TeamInfo", {'MyTeamInfo': this.state.teamInfo, "headerTitle": "팀원 목록"});
+    onPressJoinBtn = (item) => {
+        this.props.navigation.navigate("TeamInfo", {'MyTeamInfo': item, "headerTitle": "팀원 목록"});
     }
 
     updateSearch = search => {
         this.setState({search});
         console.log(search)
         if(search != '')
-            this.teamInfoRequest();
+            this.teamInfoRequest(search);
     };
 
     renderTeam() {
@@ -101,7 +101,7 @@ export default class MainTeamRecommendScreen extends React.Component {
 		);
     }
     
-    teamInfoRequest = () => {
+    teamInfoRequest = (search) => {
         this.setState({spinner: true})
         let data = {
             headers: {
@@ -110,7 +110,7 @@ export default class MainTeamRecommendScreen extends React.Component {
             },
             method: 'POST',
             body: JSON.stringify({
-                'searchword' : this.state.search
+                'searchword' : search
             })
         }
         let teamInfo = []
@@ -121,7 +121,6 @@ export default class MainTeamRecommendScreen extends React.Component {
                     global.hasTeam = true;
                     this.setState({teamCount : responseJson.length});
                 }
-
                 for(var i = 0; i < responseJson.length; i++){
                     side = i % 2
 

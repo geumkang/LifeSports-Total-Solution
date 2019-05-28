@@ -29,39 +29,7 @@ export default class SelectTypeScreen extends Component {
         this.props.navigation.navigate("Register2", {state: this.state});
     }
 
-    checkIdDuplicate = () => {
-        if(this.state.id == ''){
-            Alert.alert('ERROR', 'ID를 입력해주세요');
-            return;
-        }
-        
-        let data = {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                'ID' : this.state.id
-            })
-        }
-
-        return fetch('http://' + global.appServerIp + '/user/checkdup', data)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log(responseJson)
-                if(responseJson[0].isduplicated == 0){
-                    Alert.alert('OK', '사용 가능한 ID입니다.');
-                    this.setState({duplicate: responseJson[0].isduplicated})
-                }
-                else{
-                    Alert.alert('ERROR', '이미 존재하는 ID입니다.');
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
+    
     
     render() {
 		return (
@@ -121,6 +89,40 @@ export default class SelectTypeScreen extends Component {
                     onPress={this.onPressNextStep}/>
             </View>
         );
+    }
+
+    checkIdDuplicate = () => {
+        if(this.state.id == ''){
+            Alert.alert('ERROR', 'ID를 입력해주세요');
+            return;
+        }
+        
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'ID' : this.state.id
+            })
+        }
+
+        return fetch('http://' + global.appServerIp + '/user/checkdup', data)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson)
+                if(responseJson[0].isduplicated == 0){
+                    Alert.alert('OK', '사용 가능한 ID입니다.');
+                    this.setState({duplicate: responseJson[0].isduplicated})
+                }
+                else{
+                    Alert.alert('ERROR', '이미 존재하는 ID입니다.');
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 }
 

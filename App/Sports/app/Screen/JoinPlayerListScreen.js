@@ -60,7 +60,8 @@ export default class JoinPlayerListScreen extends Component{
                         UDID: responseJson[i].UDID,
                         ID: responseJson[i].ID,
                         name: responseJson[i].name,
-                        detail: responseJson[i].MMR
+                        gender: responseJson[i].gender,
+                        MMR: responseJson[i].MMR
                     });
                 }
 

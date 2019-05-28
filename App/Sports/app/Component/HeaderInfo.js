@@ -23,8 +23,17 @@ export class HeaderInfo extends React.Component{
     nextPage = () => {
         if(!global.loginStatus)
             this.props.navigation.navigate("Login");
-        else
-            this.props.navigation.navigate("MyPage");
+        else{
+            player = {
+                UDID: global.UDID,
+                ID: global.ID,
+                name: global.name,
+                gender: global.gender,
+                MMR: global.MMR
+            };
+            this.props.navigation.navigate("MyPage", {"player": player});
+        }
+            
     }
 
     render(){

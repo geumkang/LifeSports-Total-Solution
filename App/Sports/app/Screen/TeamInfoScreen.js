@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { Image, Icon } from "react-native-elements"
+import { Icon } from "react-native-elements"
 
 import {HeaderInfo} from '../Component/HeaderInfo'
+import {TeamProfile} from '../Component/TeamProfile';
 
 export default class TeamInfoScreen extends Component{
     static navigationOptions = {
@@ -19,19 +20,15 @@ export default class TeamInfoScreen extends Component{
     }
 
     render(){
-        const MyTeamInfo = this.props.navigation.getParam("MyTeamInfo");
-        console.log(MyTeamInfo)
         return(
-            <View style={{flex: 1, backgroundColor: global.backgroundColor}}>
-                <HeaderInfo headerTitle={MyTeamInfo.name} navigation={this.props.navigation} type="Team"></HeaderInfo>
+            <View style={{flex: 1}}>
+                <HeaderInfo headerTitle="팀 정보" navigation={this.props.navigation}></HeaderInfo>
                 <ScrollView>
-                    <Image source={require('../Images/team2.jpg')}
-                            style={{ width: '100%', height: 200 }}/>
-                    <Text style={{marginBottom: 10}}>
-                        현장 노동자들의 장딴지 근육을 보았는가. 우린 잔디 구장보다 모래 바닥이 더 익숙하다!
-                    </Text>
+                    <TeamProfile
+                        teamInfo={this.props.navigation.getParam("MyTeamInfo")}
+                    />
                 </ScrollView>
             </View>
         );
     }
-}
+}   
