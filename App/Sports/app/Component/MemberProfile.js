@@ -72,7 +72,7 @@ export class MemberProfile extends Component{
                         <Divider style={{backgroundColor: global.themeColor}}/>
                         <View style={{flexDirection: 'row'}}>
                             <View style={{flex: 1, alignItems: 'center', paddingLeft: 50}}>
-                                <Image style={styles.rankImage} source={require('../Images/Gold.png')}/>
+                                <Image style={styles.rankImage} source={Util.MMRToURL(this.props.player.MMR)}/>
                             </View>
                             <View style={{flex: 1.5, justifyContent: 'center', alignItems: 'center', paddingRight: 40, paddingTop: 5}}>
                                 <Text style={styles.rankText}>{Util.MMRToName(this.props.player.MMR)}</Text>

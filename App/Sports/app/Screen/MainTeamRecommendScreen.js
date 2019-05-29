@@ -44,10 +44,12 @@ export default class MainTeamRecommendScreen extends React.Component {
     }
 
     updateSearch = search => {
-        this.setState({search});
-        console.log(search)
-        if(search != '')
-            this.teamInfoRequest(search);
+        if(global.UDID != ''){
+            this.setState({search});
+            console.log(search)
+            if(search != '')
+                this.teamInfoRequest(search);
+        }
     };
 
     renderTeam() {

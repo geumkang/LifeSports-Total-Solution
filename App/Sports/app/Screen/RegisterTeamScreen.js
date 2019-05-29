@@ -35,8 +35,10 @@ export default class RegisterTeamScreen extends Component {
 
         else{
             console.log("종목 ID : ", this.state.selectedIndex + 1)
-            this.props.navigation.goBack();
+            this.registerTeamRequest()
+            
         }
+        
         // 종목 this.state.selectedIndex + 1
         //query
     }
@@ -129,6 +131,28 @@ export default class RegisterTeamScreen extends Component {
             .catch((error) => {
                 console.error(error);
             });
+    }
+
+    registerTeamRequest = () => {
+        let data = {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                'team_name' : this.state.name,
+                'subj_ID': this.state.selectedIndex + 1,
+                'UDID': global.UDID
+            })
+        }
+
+        return fetch('http://' + global.appServerIp + '/team/create', data)
+            .then((response) => {
+                console.log("Register Team : ", response)
+                global.refresh = true;
+                this.props.navigation.goBack();
+            })
     }
 }
 

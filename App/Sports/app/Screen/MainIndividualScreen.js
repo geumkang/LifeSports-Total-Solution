@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet, Text, ScrollView, ActivityIndicator } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text, ScrollView, ActivityIndicator, Alert } from "react-native";
 import * as Keychain from 'react-native-keychain';
 
 import { Card, ListItem, Icon } from "react-native-elements"
@@ -21,10 +21,11 @@ export default class MainIndividualScreen extends React.Component {
 			spinnerReserv: true,
 			spinnerMatch: true,
 			reservationList: [],
-			matchingList: []
+			matchingList: [],
+			ReservExist: false,
+			MatchExist: false
 		}
 	}
-	
 
 	// Get Login Info
 	getData = async () => {
@@ -69,24 +70,40 @@ export default class MainIndividualScreen extends React.Component {
 					
 				} else {
 					console.log('No credentials stored');
+					this.getReservationList();
+					this.getMatchingList();
 				}
 			} catch (error) {
 				console.log('Keychain couldn\'t be accessed!', error);
 			}
-			
-			
 		} catch(e) {
 			// error reading value
 		}
 	}
 
 	componentDidMount(){
-		this.setState({
-			reservationList: [],
-			matchingList: []
-		});
 		this.getData();
-    }
+		
+		this.focusListener = this.props.navigation.addListener('willFocus', () => {
+			if(global.refresh){
+				global.refresh = false;
+				this.setState({
+					spinnerReserv: true,
+					spinnerMatch: true,
+					reservationList: [],
+					matchingList: [],
+					ReservExist: false,
+					MatchExist: false
+				})
+				this.getReservationList();
+				this.getMatchingList();
+			}
+		})
+	}
+	
+	componentWillUnmount() {
+		this.focusListener.remove();
+	}
     
 	onPressReservationStatus = (item) => {
 		// this.props.navigation.navigate("RatingGame");
@@ -95,6 +112,11 @@ export default class MainIndividualScreen extends React.Component {
 
 	onPressMatchingStatus = (item) => {
 		this.props.navigation.navigate("MatchingStatus", {'scheduleID': item.scheduleID});
+	}
+
+	updateSchedule(){
+		this.getReservationList();
+		this.getMatchingList();
 	}
 
 	render() {
@@ -108,23 +130,31 @@ export default class MainIndividualScreen extends React.Component {
 							this.state.spinnerReserv ? 
 								<ActivityIndicator size="large" color={global.pointColor}/>
 							:
-							this.state.reservationList.map((item, i) => {
-								return (
-									<ListItem
-										key={i}
-										roundAvatar
-										title={item.name}
-										subtitle={item.time}
-										topDivider
-										bottomDivider
-										badge={{value: item.dday, 
-												badgeStyle: {width: 50, height: 20, backgroundColor: global.pointColor},
-												textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
-										titleStyle={{color: "#000"}}
-										onPress={()=>this.onPressReservationStatus(item)}
-									/>
-								);
-							})
+							(
+								this.state.ReservExist ? (
+									this.state.reservationList.map((item, i) => {
+										return (
+											<ListItem
+												key={i}
+												roundAvatar
+												title={item.name}
+												subtitle={item.time}
+												topDivider
+												bottomDivider
+												badge={{value: item.dday, 
+														badgeStyle: {width: 50, height: 20, backgroundColor: global.pointColor},
+														textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
+												titleStyle={{color: "#000"}}
+												onPress={()=>this.onPressReservationStatus(item)}
+											/>
+										);
+									})
+								) : (
+									<View style={{width: '100%', height: 125, justifyContent: 'center', alignItems: 'center'}}>
+										<Text style={styles.exist}>예약이 존재하지 않습니다</Text>
+									</View>
+								)
+							)
 						}
 						</ScrollView>
 					</Card>
@@ -135,27 +165,35 @@ export default class MainIndividualScreen extends React.Component {
 							this.state.spinnerMatch ? 
 								<ActivityIndicator size="large" color={global.pointColor}/>
 							:
-							this.state.matchingList.map((item, i) => {
-								if(item.currentParticipant >= item.minParticipant)
-									value = item.dday;
-								else
-									value = item.currentParticipant + "/" + item.maxParticipant;
-								return (
-									<ListItem
-										key={i}
-										roundAvatar
-										title={item.name}
-										subtitle={item.time}
-										topDivider
-										bottomDivider
-										badge={{value: value,
-												badgeStyle: {width: 60, height: 20, backgroundColor: global.pointColor},
-												textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
-										titleStyle={{color: "#000"}}
-										onPress={()=>this.onPressMatchingStatus(item)}
-									/>
-								);
-							})
+							(
+								this.state.MatchExist ? (
+									this.state.matchingList.map((item, i) => {
+										if(item.currentParticipant >= item.minParticipant)
+											value = item.dday;
+										else
+											value = item.currentParticipant + "/" + item.maxParticipant;
+										return (
+											<ListItem
+												key={i}
+												roundAvatar
+												title={item.name}
+												subtitle={item.time}
+												topDivider
+												bottomDivider
+												badge={{value: value,
+														badgeStyle: {width: 60, height: 20, backgroundColor: global.pointColor},
+														textStyle: {color: global.fontPointColor, fontWeight: 'bold'}}}
+												titleStyle={{color: "#000"}}
+												onPress={()=>this.onPressMatchingStatus(item)}
+											/>
+										);
+									})
+								) : (
+									<View style={{width: '100%', height: 125, justifyContent: 'center', alignItems: 'center'}}>
+										<Text style={styles.exist}>매칭이 존재하지 않습니다</Text>
+									</View>
+								)
+							)
 						}
 						</ScrollView>
 					</Card>
@@ -163,8 +201,11 @@ export default class MainIndividualScreen extends React.Component {
 				<View style={styles.menuView}>
 					<TouchableOpacity
 						style={[styles.selectMenu, {backgroundColor: global.pointColor}]}
-						onPress={(	)=>{
-							this.props.navigation.navigate("SelectType");
+						onPress={()=>{
+							if(global.UDID == '')
+								Alert.alert('NEED LOGIN', '로그인을 진행해 주세요');
+							else
+								this.props.navigation.navigate("SelectType");
 						}}>
 						<View style={{flexDirection: 'row', justifyContent: 'center'}}>
 							<Icon
@@ -182,80 +223,106 @@ export default class MainIndividualScreen extends React.Component {
 	}
 
 	getReservationList = () => {
-        let data = {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                'UDID' : global.UDID
-            })
-        }
-        return fetch('http://' + global.appServerIp + '/schedule/reservationstatus', data)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                let list = [];
-                for(let i = 0; i < responseJson.length; i++){
-                    list.push({
-                        gym_ID: responseJson[i].gym_ID,
-                        name: responseJson[i].gym_name,
-						address: responseJson[i].gym_location,
-						time: Util.ISOToDate(responseJson[i].starttime) + " " + Util.dateToTime(responseJson[i].starttime),
-						dday: "D" + responseJson[i].dday,
-						scheduleID: responseJson[i].schedule_ID
-                    });
-                }
+		if(global.UDID == ''){
+			this.setState({
+				spinnerReserv: false
+			})
+		}
+		else{
+			let data = {
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+				body: JSON.stringify({
+					'UDID' : global.UDID
+				})
+			}
+			return fetch('http://' + global.appServerIp + '/schedule/reservationstatus', data)
+				.then((response) => response.json())
+				.then((responseJson) => {
+					let list = [];
+					for(let i = 0; i < responseJson.length; i++){
+						list.push({
+							gym_ID: responseJson[i].gym_ID,
+							name: responseJson[i].gym_name,
+							address: responseJson[i].gym_location,
+							time: Util.ISOToDate(responseJson[i].starttime) + " " + Util.dateToTime(responseJson[i].starttime),
+							dday: "D" + responseJson[i].dday,
+							scheduleID: responseJson[i].schedule_ID
+						});
+					}
 
-                this.setState({
-					reservationList : list,
-					spinnerReserv: false
-                });
-                console.log('Reservation Status : ', list);
-            })
-            .catch((error) => {
-				console.error(error);
-            });
+					if(list.length > 0)
+						ReservExist = true
+					else
+						ReservExist = false
+
+					this.setState({
+						reservationList : list,
+						spinnerReserv: false,
+						ReservExist: ReservExist
+					});
+					console.log('Reservation Status : ', list);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		}
 	}
 	
 	getMatchingList = () => {
-        let data = {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                'UDID' : global.UDID
-            })
-        }
-        return fetch('http://' + global.appServerIp + '/schedule/matchingstatus', data)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                let list = [];
-                for(let i = 0; i < responseJson.length; i++){
-                    list.push({
-                        gym_ID: responseJson[i].gym_ID,
-                        name: responseJson[i].gym_name,
-						address: responseJson[i].gym_location,
-						time: Util.ISOToDate(responseJson[i].starttime) + " " + Util.dateToTime(responseJson[i].starttime),
-						dday: "D" + responseJson[i].dday,
-						currentParticipant: responseJson[i].cur_participant,
-						maxParticipant: responseJson[i].max_participant,
-						minParticipant:responseJson[i].min_participant,
-						scheduleID: responseJson[i].schedule_ID
-                    });
-                }
+		if(global.UDID == ''){
+			this.setState({
+				spinnerMatch: false
+			})
+		}
+		else{
+			let data = {
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+				body: JSON.stringify({
+					'UDID' : global.UDID
+				})
+			}
+			return fetch('http://' + global.appServerIp + '/schedule/matchingstatus', data)
+				.then((response) => response.json())
+				.then((responseJson) => {
+					let list = [];
+					for(let i = 0; i < responseJson.length; i++){
+						list.push({
+							gym_ID: responseJson[i].gym_ID,
+							name: responseJson[i].gym_name,
+							address: responseJson[i].gym_location,
+							time: Util.ISOToDate(responseJson[i].starttime) + " " + Util.dateToTime(responseJson[i].starttime),
+							dday: "D" + responseJson[i].dday,
+							currentParticipant: responseJson[i].cur_participant,
+							maxParticipant: responseJson[i].max_participant,
+							minParticipant:responseJson[i].min_participant,
+							scheduleID: responseJson[i].schedule_ID
+						});
+					}
+					
+					if(list.length > 0)
+						MatchExist = true
+					else
+						MatchExist = false
 
-                this.setState({
-					matchingList : list,
-					spinnerMatch: false
-                });
-				console.log('Matching Status : ', list);
-            })
-            .catch((error) => {
-				console.error(error);
-            });
+					this.setState({
+						matchingList : list,
+						spinnerMatch: false,
+						MatchExist: MatchExist
+					});
+					console.log('Matching Status : ', list);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		}
     }
 }
 
@@ -295,5 +362,11 @@ const styles = StyleSheet.create({
 	},
 	spinnerTextStyle: {
 		color: '#FFF'
-	}
+	},
+	exist: {
+        fontSize: 16,
+		textAlign: 'center',
+		textAlignVertical: 'center'
+    }
 });
+

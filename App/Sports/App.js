@@ -36,12 +36,13 @@ global.fontPointColor = "#000";
 
 global.appServerIp = '3.15.50.24:80';
 global.loginStatus = false;
-global.hasTeam = true;
+global.hasTeam = false;
 global.UDID = '';
 global.ID = '';
 global.name = '';
 global.MMR = '';
 global.gender = '';
+global.refresh = false;
 
 export const StackNavigator = createStackNavigator({
 	Home: {

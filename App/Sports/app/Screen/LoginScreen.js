@@ -68,6 +68,7 @@ export default class LoginScreen extends Component {
                     global.MMR = responseJson[0].MMR;
                     global.gender = responseJson[0].gender;
                     global.loginStatus = true;
+                    global.refresh = true;
                     this.props.navigation.popToTop();
                     this.storeLoginInfo();
                 }

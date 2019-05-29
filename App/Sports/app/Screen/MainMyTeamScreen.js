@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text, ScrollView, Alert } from "react-native";
 import { Card, ListItem, Icon, Button, Image } from "react-native-elements"
 
 import {HeaderInfo} from '../Component/HeaderInfo'
@@ -16,17 +16,33 @@ export default class MainMyTeamScreen extends React.Component {
     constructor(props){
 		super(props);
 		this.state ={
-			MyTeamInfo: []
+            MyTeamInfo: [],
+            hasTeam: true
 		}
 	}
 	
 	componentDidMount(){
         this.setState({
-			MyTeamInfo: []
+            MyTeamInfo: [],
+            hasTeam: true
         });
 
         this.teamInfoRequest();
+
+        this.focusListener = this.props.navigation.addListener('willFocus', () => {
+			if(global.refresh){
+				global.refresh = false;
+				this.setState({
+					MyTeamInfo: []
+				})
+				this.teamInfoRequest();
+			}
+		})
     }
+
+    componentWillUnmount() {
+		this.focusListener.remove();
+	}
     
 	onPressTeam = (item) => {
         this.props.navigation.navigate("TeamInfo", {'MyTeamInfo': item, "headerTitle": "팀원 목록"});
@@ -54,41 +70,42 @@ export default class MainMyTeamScreen extends React.Component {
 			<View style={{flex: 1, backgroundColor: global.backgroundColor}}>
 				<HeaderInfo headerTitle="메인" navigation={this.props.navigation}></HeaderInfo>
                 <ScrollView>
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{flex: 1}}>
-                            {this.renderTeam(0)}
-                        </View>
-                        
-                        <View style={{flex: 1}}>
-                            {this.renderTeam(1)}
-                            {/* <ImageCard
-                                imagePath={require('../Images/team2.jpg')}
-                                title='한화 건설 축구 동호회'
-                                detail='현장 노동자들의 장딴지 근육을 보았는가. 우린 잔디 구장보다 모래 바닥이 더 익숙하다!'
-                                btnTitle='들어가기'
-                                onPressBtn={this.onPressTeam}
-                                twoSide
-                                right
-                            ></ImageCard>
-
-                            <ImageCard
-                                imagePath={require('../Images/team2.jpg')}
-                                title='한화 건설 축구 동호회'
-                                detail='현장 노동자들의 장딴지 근육을 보았는가. 우린 잔디 구장보다 모래 바닥이 더 익숙하다!'
-                                btnTitle='들어가기'
-                                onPressBtn={this.onPressTeam}
-                                twoSide
-                                right
-                            ></ImageCard> */}
-                        </View>
-
-                    </View>
+                    {
+                        this.state.hasTeam ?
+                        (
+                            <View style={{flexDirection: 'row'}}>
+                                <View style={{flex: 1}}>
+                                    {this.renderTeam(0)}
+                                </View>
+                                
+                                <View style={{flex: 1}}>
+                                    {this.renderTeam(1)}
+                                    {/* <ImageCard
+                                        imagePath={require('../Images/team2.jpg')}
+                                        title='한화 건설 축구 동호회'
+                                        detail='현장 노동자들의 장딴지 근육을 보았는가. 우린 잔디 구장보다 모래 바닥이 더 익숙하다!'
+                                        btnTitle='들어가기'
+                                        onPressBtn={this.onPressTeam}
+                                        twoSide
+                                        right
+                                    ></ImageCard> */}
+                                </View>
+                            </View>
+                        ) : (
+                            <View style={{marginTop: 50, alignContent: 'center'}}>
+                                <Text style={styles.exist}>팀이 존재하지 않습니다</Text>
+                            </View>
+                        )
+                    }
                 </ScrollView>
                 <View style={styles.menuView}>
                     <TouchableOpacity
                         style={[styles.selectMenu, {backgroundColor: global.pointColor}]}
                         onPress={()=>{
-                            this.props.navigation.navigate("RegisterTeam");
+                            if(global.UDID == '')
+								Alert.alert('NEED LOGIN', '로그인을 진행해 주세요');
+							else
+                                this.props.navigation.navigate("RegisterTeam");
                         }}>
                         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                             <Icon
@@ -137,8 +154,15 @@ export default class MainMyTeamScreen extends React.Component {
                         side: side
                     });
                 }
+
+                if(MyTeamInfo.length > 0)
+                    hasTeam = true
+                else
+                    hasTeam = false
+                
                 this.setState({
-                    MyTeamInfo: MyTeamInfo
+                    MyTeamInfo: MyTeamInfo,
+                    hasTeam: hasTeam
                 })
 
                 console.log('MyTeamInfo: ', responseJson)
@@ -181,6 +205,10 @@ const styles = StyleSheet.create({
 	icon: {
 		marginTop: 6,
 		marginRight: 15
-	}
+    },
+    exist: {
+        fontSize: 16,
+        textAlign: 'center'
+    }
 });
 	

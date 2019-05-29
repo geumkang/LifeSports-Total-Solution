@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, Dimensions } from "react-nat
 import { Avatar, Divider } from "react-native-elements"
 import { LineChart } from 'react-native-chart-kit'
 import Carousel from 'react-native-snap-carousel'
+import Util from './Util'
 
 export class TeamProfile extends Component{
     constructor(props) {
@@ -57,7 +58,7 @@ export class TeamProfile extends Component{
                     <Divider style={{backgroundColor: global.themeColor}}/>
                     <View style={{flexDirection: 'row'}}>
                         <View style={{flex: 1, alignItems: 'center', paddingLeft: 50}}>
-                            <Image style={styles.rankImage} source={require('../Images/Gold.png')}/>
+                            <Image style={styles.rankImage} source={Util.MMRToURL(this.props.teamInfo.MMR)}/>
                         </View>
                         <View style={{flex: 1.5, justifyContent: 'center', alignItems: 'center', paddingRight: 40, paddingTop: 5}}>
                             <Text style={styles.rankText}>{Util.MMRToName(this.props.teamInfo.MMR)}</Text>

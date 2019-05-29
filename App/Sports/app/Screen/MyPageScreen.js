@@ -18,13 +18,15 @@ export default class MyPageScreen extends Component {
         await Keychain.resetGenericPassword()
         console.log("Credentials removed Successfully")
         global.loginStatus = false;
-        global.hasTeam = true;
+        global.hasTeam = false;
         global.UDID = '';
         global.ID = '';
         global.name = '';
         global.gender = '';
         global.MMR = '';
+        global.refresh = true;
         this.props.navigation.popToTop();
+        
         // 메인 화면 정보 초기화
     }
 

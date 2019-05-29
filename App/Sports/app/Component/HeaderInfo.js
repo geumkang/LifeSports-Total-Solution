@@ -33,7 +33,6 @@ export class HeaderInfo extends React.Component{
             };
             this.props.navigation.navigate("MyPage", {"player": player});
         }
-            
     }
 
     render(){
