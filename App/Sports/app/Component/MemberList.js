@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { ListItem, Avatar, SearchBar } from 'react-native-elements'
 import Util from './Util'
 
@@ -7,7 +7,8 @@ export class MemberList extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            playerList: []
+            playerList: [],
+            exist: true
         }
     }
     
@@ -32,7 +33,13 @@ export class MemberList extends Component{
                 if(playerList[i].name.includes(search) == true)
                     list.push(playerList[i]);
             }
-            this.setState({playerList: list})
+            if(list.length != 0)
+                this.setState({
+                    playerList: list,
+                    exist: true
+                })
+            else
+                this.setState({exist: false})
         }
     };
 
@@ -51,23 +58,28 @@ export class MemberList extends Component{
                 />
                 <ScrollView>
                 {
-                    this.state.playerList.map((player, i) => (
-                        <ListItem
-                            key={i}
-                            leftAvatar={
-                                <Avatar
-                                    rounded
-                                    source={Util.MMRToURL(player.MMR)}
-                                    avatarStyle={{backgroundColor: 'white'}}
-                                />
-                            }
-                            title={player.name}
-                            subtitle={player.MMR}
-                            chevron
-                            titleStyle={styles.title}
-                            onPress={()=>this.viewPlayerDetail(player)}
-                        />
-                    ))
+                    this.state.exist ?
+                        this.state.playerList.map((player, i) => (
+                            <ListItem
+                                key={i}
+                                leftAvatar={
+                                    <Avatar
+                                        rounded
+                                        source={Util.MMRToURL(player.MMR)}
+                                        avatarStyle={{backgroundColor: 'white'}}
+                                    />
+                                }
+                                title={player.name}
+                                subtitle={player.MMR}
+                                chevron
+                                titleStyle={styles.title}
+                                onPress={()=>this.viewPlayerDetail(player)}
+                            />
+                        ))
+                    :
+                        <View style={{marginTop: 50, alignContent: 'center'}}>
+                            <Text style={styles.exist}>검색 결과가 존재하지 않습니다</Text>
+                        </View>
                 }
                 </ScrollView>
             </View>
@@ -78,5 +90,9 @@ export class MemberList extends Component{
 const styles = StyleSheet.create({
     title: {
         color: '#000'
+    },
+    exist: {
+        fontSize: 16,
+        textAlign: 'center'
     }
 });

@@ -60,7 +60,13 @@ export class HeaderInfo extends React.Component{
                                         color={'#fff'} 
                                         iconStyle={{marginRight: 10}}
                                         underlayColor={global.themeColor}
-                                        onPress={() => this.props.navigation.goBack()}
+                                        onPress={() => {
+                                            if(this.props.pop)
+                                                this.props.navigation.pop()
+                                            else
+                                                this.props.navigation.goBack()
+                                        }}
+                                        
                                         containerStyle={{display: this.state.isMain}}/>}
                 />
             </View>

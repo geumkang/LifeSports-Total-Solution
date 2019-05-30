@@ -6,31 +6,27 @@ import Util from '../Component/Util'
 export class TimeTable extends React.Component{
     constructor(props) {
         super(props);
+        
+        startDate = new Date();
+        endDate = new Date();
+        endDate.setDate(startDate.getDate() + 7)
+        
         this.state = {
             date: '',
             items: {},
-            marks: {}
-                         
+            marks: {},
+            startDate: startDate,
+            endDate: endDate
         }
     }
 
     componentDidMount() {
-        var year = new Date().getFullYear();
-        var month = new Date().getMonth() + 1;
-        var day = new Date().getDate();
-        
-        if (month.length == 1)
-			month = "0" + month;
-		if (day.length == 1)
-			day = "0" + day;
-
         this.setState({
-            date: year + '-' + month + '-' + day,
+            date: Util.GMTToDate(new Date()),
             items: {}
         })
         
         this.scheduleRequest();
-        
     }
 
     render(){
@@ -42,8 +38,10 @@ export class TimeTable extends React.Component{
                     // loadItemsForMonth={this.loadItems.bind(this)}
                     selected={this.state.date}
                     renderItem={this.renderItem.bind(this)}
-                    // renderEmptyDate={this.renderEmptyDate.bind(this)}
+                    renderEmptyDate={this.renderEmptyDate.bind(this)}
                     rowHasChanged={this.rowHasChanged.bind(this)}
+                    minDate={this.state.startDate}
+                    maxDate={this.state.endDate}
                 />
             </View>
         )
@@ -60,6 +58,7 @@ export class TimeTable extends React.Component{
             reservType = '/schedule/scheduletypematch';
 
         sportType = Util.sportType(this.props.statusList[1])    
+        console.log(Util.GMTToDate(this.state.startDate), Util.GMTToDate(this.state.endDate), this.state.endDate)
 
         let data = {
             headers: {
@@ -69,53 +68,60 @@ export class TimeTable extends React.Component{
             method: 'POST',
             body: JSON.stringify({
                 'gym_ID' : this.props.gym_ID,
-                'subj_ID' : sportType
+                'subj_ID' : sportType,
+                'startdate': Util.GMTToDate(this.state.startDate),
+                'enddate': Util.GMTToDate(this.state.endDate)
             })
         }
-        let scheduleList = [];
+        console.log(data)
         return fetch('http://' + global.appServerIp + reservType, data)
             .then((response) => response.json())
             .then((responseJson) => {
-
-                if(responseJson.length > 0){
-                    backupTime = Util.ISOToDate(responseJson[0].starttime)
-                    this.state.items[backupTime] = [];
+                console.log(responseJson)
+                today = new Date();
+                for(var i = 0; i < 7; i++){
+                    this.state.items[Util.GMTToDate(today)] = [];
+                    today.setDate(today.getDate() + 1);
                 }
                 for(var i = 0; i < responseJson.length; i++){
                     const strTime = Util.ISOToDate(responseJson[i].starttime)
-                    if(backupTime != strTime){
-                        backupTime = strTime
-                        this.state.items[strTime] = [];
+                    if(responseJson[i].schedule_type != 3){
+                        this.state.items[strTime].push({
+                            scheduleID: responseJson[i].schedule_ID,
+                            name: responseJson[i].schedule_name,
+                            gymID : responseJson[i].gym_ID,
+                            startTime: Util.dateToTime(responseJson[i].starttime),
+                            endTime: Util.dateToTime(responseJson[i].endtime),
+                            curStatus: responseJson[i].cur_status,
+                            type: responseJson[i].schedule_type,
+                            height: 120,
+                            currentParticipant: responseJson[i].cur_participant,
+                            maxParticipant: responseJson[i].max_participant,
+                            MyTeamName: responseJson[i].reserv_team_name,
+                            opponentTeamName: responseJson[i].opponent_team_name,
+                            isSolo: responseJson[i].is_solo,
+                            min_participant: responseJson[i].min_participant,
+                        })
                     }
-                    this.state.items[strTime].push({
-                        scheduleID: responseJson[i].schedule_ID,
-                        name: responseJson[i].schedule_name,
-                        gymID : responseJson[i].gym_ID,
-                        startTime: Util.dateToTime(responseJson[i].starttime),
-                        endTime: Util.dateToTime(responseJson[i].endtime),
-                        curStatus: responseJson[i].cur_status,
-                        type: responseJson[i].schedule_type,
-                        height: 120,
-                        currentParticipant: responseJson[i].cur_participant,
-                        maxParticipant: responseJson[i].max_participant,
-                        MyTeamName: responseJson[i].reserv_team_name,
-                        opponentTeamName: responseJson[i].opponent_team_name,
-                        isSolo: responseJson[i].is_solo
-                        //min_participant
-                    })
+                    else{
+                        this.state.items[strTime].push({
+                            scheduleID: responseJson[i].schedule_ID,
+                            name: responseJson[i].schedule_name,
+                            gymID : responseJson[i].gym_ID,
+                            startTime: Util.dateToTime(responseJson[i].starttime),
+                            endTime: Util.dateToTime(responseJson[i].endtime),
+                            curStatus: responseJson[i].cur_status,
+                            type: responseJson[i].schedule_type,
+                            height: 80,
+                            currentParticipant: responseJson[i].cur_participant,
+                            maxParticipant: responseJson[i].max_participant,
+                            MyTeamName: responseJson[i].reserv_team_name,
+                            opponentTeamName: responseJson[i].opponent_team_name,
+                            isSolo: responseJson[i].is_solo,
+                            min_participant: responseJson[i].min_participant,
+                        })
+                    }
                 }
-                this.state.items['2019-05-24'] = [];
-                this.state.items['2019-05-24'].push({
-                    scheduleID: responseJson[0].schedule_ID,
-                    name: responseJson[0].schedule_name,
-                    gymID : responseJson[0].gym_ID,
-                    startTime: Util.dateToTime(responseJson[0].starttime),
-                    endTime: Util.dateToTime(responseJson[0].endtime),
-                    curStatus: responseJson[0].cur_status,
-                    type: 4,
-                    height: 120
-                })
-
                 const newItems = {};
                 Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
                 console.log("라라라라랄")
@@ -162,22 +168,34 @@ export class TimeTable extends React.Component{
                 </View>
             ) : (
                 <View style={[styles.item, {height: item.height, backgroundColor: typeColor[item.type - 1]}]}>
-                    <TouchableOpacity style={{flex: 1}} onPress={()=>this.onPressItem(item)}>
-                        <View style={{width: ratio, height: '100%', position: 'absolute', backgroundColor: ratioColor[item.type - 1]}}></View>
-                        <Text style={styles.time}>{item.startTime} ~ {item.endTime}</Text>
-                        <Text style={styles.title}>{item.name}</Text>    
-                        <Text style={styles.content}>{item.currentParticipant} / {item.maxParticipant}</Text>
-                    </TouchableOpacity>
+                    {
+                        item.type != 3 ?
+                            <TouchableOpacity style={{flex: 1}} onPress={()=>this.onPressItem(item)}>
+                                <View style={{width: ratio, height: '100%', position: 'absolute', backgroundColor: ratioColor[item.type - 1]}}></View>
+                                <Text style={styles.time}>{item.startTime} ~ {item.endTime}</Text>
+                                <Text style={styles.title}>{item.name}</Text>
+                                <Text style={styles.content}>{item.currentParticipant} / {item.maxParticipant}</Text>
+                            </TouchableOpacity>
+                        :
+                        <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
+                            <Text style={styles.title}>이 날은 운영하지 않습니다</Text>
+                        </TouchableOpacity>
+                    }
                 </View> 
             )
         );
     }
     
-    // renderEmptyDate() {
-    //     return (
-    //         <View style={styles.emptyDate}><Text>이 날은 운영하지 않습니다</Text></View>
-    //     );
-    // }
+    renderEmptyDate() {
+        const typeColor = ["#4CAF50", "#FF9800", "#E91E63", "#2196F3"];
+        return (
+            <View style={[styles.item, {height: 80, backgroundColor: typeColor[2]}]}>
+                <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
+                    <Text style={styles.title}>일정이 없습니다</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
     
     rowHasChanged(r1, r2) {
         return r1.name !== r2.name;

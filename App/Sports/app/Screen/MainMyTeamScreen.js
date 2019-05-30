@@ -51,16 +51,31 @@ export default class MainMyTeamScreen extends React.Component {
     renderTeam(type) {
         return this.state.MyTeamInfo.map((item) => {
             if(item.side == type){
-                return (
-                    <ImageCard
-                        imagePath={require('../Images/team1.jpg')}
-                        title={item.name}
-                        detail='대한민국 엘리트 멤버들이 모였다. 축구는 머리로 하는 것이다!'
-                        btnTitle='들어가기'
-                        onPressBtn={()=>this.onPressTeam(item)}
-                        twoSide
-                    ></ImageCard>
-                );
+                if(type == 0){
+                    return (
+                        <ImageCard
+                            imagePath={require('../Images/team1.jpg')}
+                            title={item.name}
+                            detail='대한민국 엘리트 멤버들이 모였다. 축구는 머리로 하는 것이다!'
+                            btnTitle='들어가기'
+                            onPressBtn={()=>this.onPressTeam(item)}
+                            twoSide
+                        ></ImageCard>
+                    );
+                }
+                else{
+                    return (
+                        <ImageCard
+                            imagePath={require('../Images/team1.jpg')}
+                            title={item.name}
+                            detail='대한민국 엘리트 멤버들이 모였다. 축구는 머리로 하는 것이다!'
+                            btnTitle='들어가기'
+                            onPressBtn={()=>this.onPressTeam(item)}
+                            twoSide
+                            right
+                        ></ImageCard>
+                    );
+                }
             }
         });
     }

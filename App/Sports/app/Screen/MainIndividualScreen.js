@@ -23,7 +23,8 @@ export default class MainIndividualScreen extends React.Component {
 			reservationList: [],
 			matchingList: [],
 			ReservExist: false,
-			MatchExist: false
+			MatchExist: false,
+			scrollEnable: true
 		}
 	}
 
@@ -123,9 +124,13 @@ export default class MainIndividualScreen extends React.Component {
 		return (
 			<View style={{flex: 1, backgroundColor: global.backgroundColor}}>
                 <HeaderInfo headerTitle="메인" navigation={this.props.navigation}></HeaderInfo>
-				<ScrollView>
+				<ScrollView scrollEnabled={this.state.scrollEnable}>
 					<Card title="예약 현황">
-						<ScrollView style={{width: '100%', height: 150}}>
+						<ScrollView 
+							onTouchStart={(ev) => { this.setState({scrollEnable:false }); }}
+							onMomentumScrollEnd={(e) => { this.setState({ scrollEnable:true }); }}
+							onScrollEndDrag={(e) => { this.setState({ scrollEnable:true }); }}
+							style={{width: '100%', height: 150}}>
 						{
 							this.state.spinnerReserv ? 
 								<ActivityIndicator size="large" color={global.pointColor}/>
@@ -160,7 +165,11 @@ export default class MainIndividualScreen extends React.Component {
 					</Card>
 
 					<Card title="매칭 현황">
-						<ScrollView style={{width: '100%', height: 150}}>
+						<ScrollView
+							onTouchStart={(ev) => { this.setState({scrollEnable:false }); }}
+							onMomentumScrollEnd={(e) => { this.setState({ scrollEnable:true }); }}
+							onScrollEndDrag={(e) => { this.setState({ scrollEnable:true }); }}
+							style={{width: '100%', height: 150}}>
 						{
 							this.state.spinnerMatch ? 
 								<ActivityIndicator size="large" color={global.pointColor}/>

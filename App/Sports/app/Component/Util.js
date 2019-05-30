@@ -11,6 +11,19 @@ const Util = {
         return date.toISOString().split('T')[1];
     },
 
+    GMTToDate: function(date){
+        date = new Date(date);
+        
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        
+        month = ("0" + month).slice(-2)
+        day = ("0" + day).slice(-2)
+        
+        return year + '-' + month + '-' + day;
+    },
+
     dateToTime: function(date) {
         date = new Date(date);
         

@@ -22,7 +22,7 @@ export default class TeamInfoScreen extends Component{
     render(){
         return(
             <View style={{flex: 1}}>
-                <HeaderInfo headerTitle="팀 정보" navigation={this.props.navigation}></HeaderInfo>
+                <HeaderInfo headerTitle="팀 정보" navigation={this.props.navigation} pop={true}></HeaderInfo>
                 <ScrollView>
                     <TeamProfile
                         teamInfo={this.props.navigation.getParam("MyTeamInfo")}

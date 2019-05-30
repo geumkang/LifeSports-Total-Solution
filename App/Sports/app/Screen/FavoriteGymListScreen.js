@@ -41,7 +41,7 @@ export default class FavoriteGymListScreen extends Component {
         const statusList = this.props.navigation.getParam("statusList");
         const step = this.props.navigation.getParam("step");
         statusList[step] = gym.name;
-        this.props.navigation.navigate("SelectPlan", {"statusList": statusList, "step": Number(step)+1});
+        this.props.navigation.navigate("SelectPlan", {"statusList": statusList, "step": Number(step)+1, "gym_ID": gym.gym_ID});
     }
 
     render() {

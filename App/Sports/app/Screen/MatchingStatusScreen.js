@@ -74,7 +74,7 @@ export default class MatchingStatusScreen extends Component{
                                             <Text style={[styles.Detail, {color: '#F50057'}]}>{this.state.scheduleInfo.participant}</Text>
                                     }
                                     <Button title="참가자 목록"
-                                        buttonStyle={{width: 130, height: 40, backgroundColor: global.pointColor}}
+                                        buttonStyle={{width: 130, height: 35, backgroundColor: global.pointColor, marginTop: 10}}
                                         titleStyle={{color: "#000", fontWeight: 'bold'}}
                                         onPress={this.onPressJoinListBtn}></Button>
                                 </View>

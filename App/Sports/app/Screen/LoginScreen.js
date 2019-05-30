@@ -3,6 +3,7 @@ import {
     StyleSheet,
     Text,
     View,
+    KeyboardAvoidingView,
     TextInput,
     Button,
     TouchableOpacity,
@@ -86,7 +87,7 @@ export default class LoginScreen extends Component {
 
     render() {
         return (
-        <View style={{flex: 1}}>
+        <KeyboardAvoidingView style={{flex: 1}}>
             <HeaderInfo headerTitle="로그인" navigation={this.props.navigation}></HeaderInfo>
             <View style={[styles.container, {backgroundColor: global.backgroundColor}]}>
                 
@@ -121,7 +122,7 @@ export default class LoginScreen extends Component {
                     <Text style={{color: global.backgroundColor4, fontSize: 16}}>Register</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </KeyboardAvoidingView>
         );
     }
 }
